@@ -32,3 +32,7 @@ public class BootCheck implements CommandLineRunner {
         System.out.println("usuario.rows=" + usuarios);
     }
 }
+// SE CONSULTA O INSERTA DATOS DESDE LA TERMINAL CON POWERSHELL, ESPECIFICAMENTE
+// EN LA TERMINAL DE "D:\PROYECTO_SISTEMAS3\ProyectoSistemasIII\backend\pagos>"
+// Y ESTANDO AHI SE PONE ESTO EN LA TERMINAL PARA EJECUTAR LA BD:
+// .\mvnw.cmd spring-boot:run
