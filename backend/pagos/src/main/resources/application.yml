@@ -6,19 +6,15 @@ spring:
 
 ---
 spring:
-  config:
-    activate:
-      on-profile: dev
   datasource:
-    url: jdbc:mysql://localhost:3306/pagos?useSSL=false&allowPublicKeyRetrieval=true&serverTimezone=UTC
+    url: jdbc:mysql://localhost:3306/sistemapagotarjeta?useSSL=false&allowPublicKeyRetrieval=true&serverTimezone=UTC
     username: root
-    password: TU_PASSWORD
+    password: null
   jpa:
     hibernate:
-      ddl-auto: validate   # usamos Flyway para el esquema
-    show-sql: true
+      ddl-auto: validate
     properties:
-      'hibernate.format_sql': true
+      hibernate.dialect: org.hibernate.dialect.MySQL8Dialect
   flyway:
     enabled: true
     locations: classpath:db/migration
