@@ -15,7 +15,7 @@ public class BootCheck implements CommandLineRunner {
     @Override
     public void run(String... args) {
         Integer one = jdbc.queryForObject("SELECT 1", Integer.class);
-        System.out.println("✅ Conexión OK: " + one);
+        System.out.println("Conexión OK: " + one);
 
         // 👇 CAMBIA AQUÍ TUS DATOS
         String nombre = "Carlos";

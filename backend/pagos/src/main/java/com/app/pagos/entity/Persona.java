@@ -1,7 +1,15 @@
 package com.app.pagos.entity;
 
 import jakarta.persistence.*;
+import lombok.*;
 
+import java.time.LocalDateTime;
+
+@Getter
+@Setter
+@Builder
+@NoArgsConstructor
+@AllArgsConstructor
 @Entity
 @Table(name = "persona")
 public class Persona {
@@ -14,21 +22,24 @@ public class Persona {
     @Column(name = "nombre")
     private String nombre;
 
-    // getters/setters
-    public Integer getId() {
-        return id;
-    }
+    @Column(name = "correo")
+    private String correo;
 
-    public void setId(Integer id) {
-        this.id = id;
-    }
+    @Column(name = "contrasenna")
+    private String contrasenna;
 
-    public String getNombre() {
-        return nombre;
-    }
+    @Column(name = "rol")
+    private Integer rol;
 
-    public void setNombre(String nombre) {
-        this.nombre = nombre;
-    }
+    @Column(name = "activo")
+    private Boolean activo;
+
+    @Column(name = "fecha_creacion")
+    private LocalDateTime fechaCreacion;
+
+    @Column(name = "fecha_modificacion")
+    private LocalDateTime fechaModificacion;
+
+    @Column(name = "id_genero")
+    private Integer idGenero;
 }
-
