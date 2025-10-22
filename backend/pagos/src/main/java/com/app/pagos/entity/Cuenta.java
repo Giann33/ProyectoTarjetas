@@ -3,6 +3,8 @@ package com.app.pagos.entity;
 import jakarta.persistence.*;
 import java.math.BigDecimal;
 
+
+
 @Entity
 @Table(name = "cuenta") // o "cuentas" si así se llama en tu BD
 public class Cuenta {

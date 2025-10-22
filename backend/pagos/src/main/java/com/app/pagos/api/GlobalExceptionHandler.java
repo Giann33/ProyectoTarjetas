@@ -30,11 +30,18 @@ public class GlobalExceptionHandler {
         return build(HttpStatus.BAD_REQUEST, "Invalid request body", msg, req);
     }
 
+    @SuppressWarnings("null") // ✅ elimina la advertencia por análisis estático
     @ExceptionHandler(MethodArgumentTypeMismatchException.class)
     public ResponseEntity<ErrorResponse> onTypeMismatch(
             MethodArgumentTypeMismatchException ex, HttpServletRequest req) {
-        String msg = "Parameter '" + ex.getName() + "' must be of type " +
-                (ex.getRequiredType() != null ? ex.getRequiredType().getSimpleName() : "expected");
+
+        String typeName = "expected";
+        Class<?> requiredType = ex.getRequiredType();
+        if (requiredType != null) {
+            typeName = requiredType.getSimpleName();
+        }
+
+        String msg = "Parameter '" + ex.getName() + "' must be of type " + typeName;
         return build(HttpStatus.BAD_REQUEST, "Type mismatch", msg, req);
     }
 
@@ -61,3 +68,5 @@ public class GlobalExceptionHandler {
                 .body(new ErrorResponse(status.value(), error, message, req.getRequestURI()));
     }
 }
+
+
