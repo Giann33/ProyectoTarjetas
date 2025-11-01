@@ -1,3 +1,4 @@
+# backend / Spring
 HELP.md
 target/
 .mvn/wrapper/maven-wrapper.jar
@@ -32,9 +33,6 @@ build/
 ### VS Code ###
 .vscode/
 
-# --- FRONTEND NODE ---
+# ⚠️ frontend / node
 Frontend/node_modules/
-Frontend/.npm/
-Frontend/npm-debug.log*
-Frontend/.env
-#Frontend/package-lock.json
+Frontend/package-lock.json
