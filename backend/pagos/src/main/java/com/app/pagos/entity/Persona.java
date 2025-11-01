@@ -1,36 +1,45 @@
 package com.app.pagos.entity;
 
-
 import jakarta.persistence.*;
 import lombok.*;
+
 import java.time.LocalDateTime;
 
+@Getter
+@Setter
+@Builder
+@NoArgsConstructor
+@AllArgsConstructor
 @Entity
-@Table(name = "Persona", schema = "sistemapagotarjeta")
-@Getter @Setter @NoArgsConstructor @AllArgsConstructor @Builder
+@Table(name = "persona")
 public class Persona {
-  @Id
-  @GeneratedValue(strategy = GenerationType.IDENTITY)
-  private Integer idPersona;
 
-  @Column(nullable=false, length=100)
-  private String Nombre;
+    @Id
+    @GeneratedValue(strategy = GenerationType.IDENTITY)
+    @Column(name = "id_persona")
+    private Integer id;
 
-  @Column(nullable=false, unique=true, length=100)
-  private String Correo;
+    @Column(name = "nombre")
+    private String nombre;
 
-  @Column(nullable=false, length=255)
-  private String Contrasenna; // guardaremos BCrypt aquí
+    @Column(name = "correo")
+    private String correo;
 
-  @Column(nullable=false)
-  private Integer Rol; // si no quieres usar la tabla Usuario aún
+    @Column(name = "contrasenna")
+    private String contrasenna;
 
-  @Column(nullable=false)
-  private Boolean Activo;
+    @Column(name = "rol")
+    private Integer rol;
 
-  private LocalDateTime Fecha_Creacion;
-  private LocalDateTime Fecha_Modificacion;
+    @Column(name = "activo")
+    private Boolean activo;
 
-  @Column(name="catalogo_genero_idGenero", nullable=false)
-  private Integer idGenero;
+    @Column(name = "fecha_creacion")
+    private LocalDateTime fechaCreacion;
+
+    @Column(name = "fecha_modificacion")
+    private LocalDateTime fechaModificacion;
+
+    @Column(name = "id_genero")
+    private Integer idGenero;
 }

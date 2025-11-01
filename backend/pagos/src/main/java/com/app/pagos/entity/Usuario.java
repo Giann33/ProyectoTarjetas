@@ -3,6 +3,7 @@ package com.app.pagos.entity;
 import jakarta.persistence.*;
 import java.io.Serializable;
 
+
 @Entity
 @Table(name = "Usuario", schema = "sistemapagotarjeta")
 public class Usuario implements Serializable {

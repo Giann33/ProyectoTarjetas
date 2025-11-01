@@ -1,6 +1,5 @@
 package com.app.pagos.config;
 
-
 import com.app.pagos.entity.Persona;
 import com.app.pagos.repository.PersonaRepository;
 import lombok.RequiredArgsConstructor;
@@ -14,23 +13,25 @@ import java.time.LocalDateTime;
 @RequiredArgsConstructor
 public class SeedAdmin implements CommandLineRunner {
 
-  private final PersonaRepository personaRepo;
+    private final PersonaRepository personaRepo;
 
-  @Override
-  public void run(String... args) {
-    var correo = "admin@local";
-    if (personaRepo.findByCorreo(correo).isEmpty()) {
-      var encoder = new BCryptPasswordEncoder();
-      personaRepo.save(Persona.builder()
-          .Nombre("Administrador")
-          .Correo(correo)
-          .Contrasenna(encoder.encode("admin123"))
-          .Rol(1) // por ahora un entero simple
-          .Activo(true)
-          .Fecha_Creacion(LocalDateTime.now())
-          .Fecha_Modificacion(LocalDateTime.now())
-          .idGenero(1) // ajusta a un id válido en tu catálogo
-          .build());
+    @Override
+    public void run(String... args) {
+        var correo = "admin@local";
+
+        if (personaRepo.findByCorreo(correo).isEmpty()) {
+            var encoder = new BCryptPasswordEncoder();
+
+            personaRepo.save(Persona.builder()
+                    .nombre("Administrador")          // ✅ minúsculas
+                    .correo(correo)                   // ✅ minúsculas
+                    .contrasenna(encoder.encode("admin123"))
+                    .rol(1)
+                    .activo(true)
+                    .fechaCreacion(LocalDateTime.now())
+                    .fechaModificacion(LocalDateTime.now())
+                    .idGenero(1)
+                    .build());
+        }
     }
-  }
 }
