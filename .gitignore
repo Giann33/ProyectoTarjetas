@@ -36,3 +36,5 @@ build/
 # ⚠️ frontend / node
 Frontend/node_modules/
 Frontend/package-lock.json
+
+node_modules/
