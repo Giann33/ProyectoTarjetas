@@ -10,8 +10,8 @@ public class Usuario implements Serializable {
 
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
-    @Column(name = "idCliente")
-    private Integer idCliente;
+    @Column(name = "idUsuario")
+    private Integer idUsuario;
 
     @ManyToOne(fetch = FetchType.EAGER)
     @JoinColumn(name = "catalogo_rol_usuario_idRol", nullable = false)
@@ -25,8 +25,8 @@ public class Usuario implements Serializable {
     private boolean activo;
 
     // Getters/Setters
-    public Integer getIdCliente() { return idCliente; }
-    public void setIdCliente(Integer idCliente) { this.idCliente = idCliente; }
+    public Integer getIdCliente() { return idUsuario; }
+    public void setIdCliente(Integer idCliente) { this.idUsuario = idCliente; }
 
     public Rol getRol() { return rol; }
     public void setRol(Rol rol) { this.rol = rol; }

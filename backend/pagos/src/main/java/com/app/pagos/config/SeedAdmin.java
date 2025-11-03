@@ -15,6 +15,7 @@ public class SeedAdmin implements CommandLineRunner {
 
     private final PersonaRepository personaRepo;
 
+    @SuppressWarnings("null")
     @Override
     public void run(String... args) {
         var correo = "admin@local";
@@ -23,7 +24,7 @@ public class SeedAdmin implements CommandLineRunner {
             var encoder = new BCryptPasswordEncoder();
 
             personaRepo.save(Persona.builder()
-                    .nombre("Administrador")          // ✅ minúsculas
+                    .nombre("administrador")          // ✅ minúsculas
                     .correo(correo)                   // ✅ minúsculas
                     .contrasenna(encoder.encode("admin123"))
                     .rol(1)

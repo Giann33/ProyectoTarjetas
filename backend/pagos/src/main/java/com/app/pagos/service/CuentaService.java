@@ -15,8 +15,8 @@ public class CuentaService {
         this.repo = repo;
     }
 
-    public List<CuentaView> consultarPorIdPersona(int idPersona) {
-        return repo.findByIdPersona(idPersona);
+    public List<CuentaView> consultarPorIdUsuario(int idUsuario) {
+        return repo.findByIdUsuario(idUsuario);             //Hay que ver donde se usa esto
     }
 
     public List<CuentaView> consultarPorNumero(String numeroCuenta) {

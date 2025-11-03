@@ -63,6 +63,7 @@ public class GlobalExceptionHandler {
         return build(HttpStatus.INTERNAL_SERVER_ERROR, "Unexpected error", ex.getMessage(), req);
     }
 
+    @SuppressWarnings("null")
     private ResponseEntity<ErrorResponse> build(HttpStatus status, String error, String message, HttpServletRequest req) {
         return ResponseEntity.status(status)
                 .body(new ErrorResponse(status.value(), error, message, req.getRequestURI()));

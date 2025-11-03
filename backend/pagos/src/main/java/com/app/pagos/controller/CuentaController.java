@@ -25,7 +25,7 @@ public class CuentaController {
     public ResponseEntity<List<CuentaView>> consultarPorIdPersona(
             @PathVariable @Min(1) int idPersona) {
 
-        List<CuentaView> cuentas = service.consultarPorIdPersona(idPersona);
+        List<CuentaView> cuentas = service.consultarPorIdUsuario(idPersona);
         return cuentas.isEmpty()
                 ? ResponseEntity.noContent().build()
                 : ResponseEntity.ok(cuentas);

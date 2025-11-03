@@ -1,10 +1,12 @@
 package com.app.pagos.service;
 
 import com.app.pagos.dto.UsuarioView;
+import com.app.pagos.entity.Usuario;
 import com.app.pagos.repository.UsuarioRepository;
 import org.springframework.stereotype.Service;
 
 import java.util.List;
+import java.util.Optional;
 
 @Service
 public class UsuarioService {
@@ -15,14 +17,14 @@ public class UsuarioService {
         this.repo = repo;
     }
 
-    public List<UsuarioView> consultarPorId(int idPersona) {
-        return repo.findByIdPersona(idPersona);
+    public Optional<Usuario> consultarPorId(int idUsuario) {
+        return repo.findByIdUsuario(idUsuario);
     }
 
-    public List<UsuarioView> consultarPorCorreo(String correo) {
+  /*   public List<UsuarioView> consultarPorCorreo(String correo) {
         if (correo == null || correo.isBlank()) {
             return List.of();
         }
         return repo.findByCorreo(correo.trim());
-    }
+    }  */
 }

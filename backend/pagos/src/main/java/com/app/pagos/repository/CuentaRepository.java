@@ -9,29 +9,29 @@ import org.springframework.stereotype.Repository;
 import java.util.List;
 
 @Repository
-public interface CuentaRepository extends JpaRepository<Cuenta, Integer> {
+public interface CuentaRepository extends JpaRepository<Cuenta, String> {
 
     @Query("""
-        select c.id as idCuenta,
-               c.persona.id as idPersona,
-               c.numero as numeroCuenta,
-               c.tipo as tipo,
+        select c.numeroCuenta as numeroCuenta,
+               c.Usuario.id as idUsuario,
+               c.catalogo_tipo_cuenta_idTipoCuenta as idTipoCuenta,
                c.estado as estado,
-               c.saldo as saldo
+               c.saldo as saldo,
+               c.catalogo_tipo_moneda_idTipoMoneda as idTipoMoneda
         from Cuenta c
-        where c.persona.id = :idPersona
+        where c.Usuario.id = :idCliente
     """)
-    List<CuentaView> findByIdPersona(int idPersona);
+    List<CuentaView> findByIdUsuario(int idUsuario);
 
     @Query("""
-        select c.id as idCuenta,
-               c.persona.id as idPersona,
-               c.numero as numeroCuenta,
-               c.tipo as tipo,
+        select c.numeroCuenta as numeroCuenta,
+               c.Usuario.id as idCliente,
+               c.catalogo_tipo_cuenta_idTipoCuenta as idTipoCuenta,
                c.estado as estado,
-               c.saldo as saldo
+               c.saldo as saldo,
+               c.catalogo_tipo_moneda_idTipoMoneda as idTipoMoneda
         from Cuenta c
-        where upper(c.numero) = upper(:numeroCuenta)
+        where upper(c.numeroCuenta) = upper(:numeroCuenta)
     """)
     List<CuentaView> findByNumeroCuenta(String numeroCuenta);
 }

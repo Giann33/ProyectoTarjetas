@@ -4,9 +4,9 @@ import java.math.BigDecimal;
 
 public interface CuentaView {
     Integer getIdCuenta();
-    Integer getIdPersona();
+    Integer getIdUsuario();
     String getNumeroCuenta();
-    String getTipo();
-    String getEstado();
+    String getTipo();  //Cambiar?
+   // String getEstado();
     BigDecimal getSaldo();
 }

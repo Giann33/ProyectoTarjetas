@@ -3,26 +3,21 @@ package com.app.pagos.entity;
 import jakarta.persistence.*;
 import java.math.BigDecimal;
 
-
-
 @Entity
 @Table(name = "cuenta") // o "cuentas" si así se llama en tu BD
 public class Cuenta {
 
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
-    @Column(name = "id_cuenta")
-    private Integer id;
+    @Column(name = "numeroCuenta")
+    private String numeroCuenta;
 
     @ManyToOne
-    @JoinColumn(name = "id_persona")
-    private Persona persona; // 👈 debe existir la entidad Persona
+    @JoinColumn(name = "id_Usuario")
+    private Usuario Usuario;
 
-    @Column(name = "numero")
-    private String numero;
-
-    @Column(name = "tipo")
-    private String tipo;
+    @Column(name = "catalogo_tipo_cuenta_idTipoCuenta")
+    private Integer catalogo_tipo_cuenta_idTipoCuenta;
 
     @Column(name = "estado")
     private String estado;
@@ -30,37 +25,32 @@ public class Cuenta {
     @Column(name = "saldo")
     private BigDecimal saldo;
 
+    @Column(name = "catalogo_tipo_moneda_idTipoMoneda")
+    private Integer catalogo_tipo_moneda_idTipoMoneda;
+
     // Getters y Setters
-    public Integer getId() {
-        return id;
+    public String getNumeroCuenta() {
+        return numeroCuenta;
     }
 
-    public void setId(Integer id) {
-        this.id = id;
+    public void setNumeroCuenta(String numeroCuenta) {
+        this.numeroCuenta = numeroCuenta;
     }
 
-    public Persona getPersona() {
-        return persona;
+    public Usuario getUsuario() {
+        return Usuario;
     }
 
-    public void setPersona(Persona persona) {
-        this.persona = persona;
+    public void setUsuario(Usuario usuario) {
+        this.Usuario = usuario;
     }
 
-    public String getNumero() {
-        return numero;
+    public Integer getCatalogo_tipo_cuenta_idTipoCuenta() {
+        return catalogo_tipo_cuenta_idTipoCuenta;
     }
 
-    public void setNumero(String numero) {
-        this.numero = numero;
-    }
-
-    public String getTipo() {
-        return tipo;
-    }
-
-    public void setTipo(String tipo) {
-        this.tipo = tipo;
+    public void setCatalogo_tipo_cuenta_idTipoCuenta(Integer catalogo_tipo_cuenta_idTipoCuenta) {
+        this.catalogo_tipo_cuenta_idTipoCuenta = catalogo_tipo_cuenta_idTipoCuenta;
     }
 
     public String getEstado() {
@@ -78,6 +68,13 @@ public class Cuenta {
     public void setSaldo(BigDecimal saldo) {
         this.saldo = saldo;
     }
+
+    public Integer getCatalogo_tipo_moneda_idTipoMoneda() {
+        return catalogo_tipo_moneda_idTipoMoneda;
+    }
+
+    public void setCatalogo_tipo_moneda_idTipoMoneda(Integer catalogo_tipo_moneda_idTipoMoneda) {
+        this.catalogo_tipo_moneda_idTipoMoneda = catalogo_tipo_moneda_idTipoMoneda;
+    }
+
 }
-
-
