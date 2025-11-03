@@ -1,15 +1,15 @@
 package com.app.pagos.controller;
 
-import com.app.pagos.dto.UsuarioView;
+//import com.app.pagos.dto.UsuarioView;
 import com.app.pagos.entity.Usuario;
 import com.app.pagos.service.UsuarioService;
-import jakarta.validation.constraints.Email;
+//import jakarta.validation.constraints.Email;
 import jakarta.validation.constraints.Min;
 import org.springframework.http.ResponseEntity;
 import org.springframework.validation.annotation.Validated;
 import org.springframework.web.bind.annotation.*;
 
-import java.util.List;
+//import java.util.List;
 import java.util.Optional;
 
 @RestController

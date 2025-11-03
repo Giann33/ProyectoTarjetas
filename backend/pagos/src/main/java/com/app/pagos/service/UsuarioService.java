@@ -1,11 +1,11 @@
 package com.app.pagos.service;
 
-import com.app.pagos.dto.UsuarioView;
+
 import com.app.pagos.entity.Usuario;
 import com.app.pagos.repository.UsuarioRepository;
 import org.springframework.stereotype.Service;
 
-import java.util.List;
+
 import java.util.Optional;
 
 @Service

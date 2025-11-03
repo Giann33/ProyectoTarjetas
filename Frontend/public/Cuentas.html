@@ -1,0 +1,80 @@
+<!DOCTYPE html>
+<html lang="es">
+
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>Dunamys – Cuentas</title>
+  <link rel="stylesheet" href="CSS/styles.css">
+  <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.0/css/all.min.css">
+  <script src="JS/cuentas.js"></script>
+</head>
+
+<body>
+  <div class="shell">
+    <div class="panel">
+      <!-- Sidebar -->
+      <aside class="sidebar">
+        <div class="brand-aside">Dunamys</div>
+        <ul class="nav">
+          <li><button class="nav-btn"><i class="fa-solid fa-house"></i><span>General</span></button></li>
+          <li><button class="nav-btn"><i class="fa-solid fa-credit-card"></i></i><span>Tarjetas</span></button></li>
+          <li><button class="nav-btn"><i class="fa-solid fa-right-left"></i><span>Transferencias</span></button></li>
+          <li><button class="nav-btn"><i class="fa-solid fa-cart-shopping"></i><span>Historial de
+                Compras</span></button></li>
+          <li><button class="nav-btn"><i class="fa-solid fa-file-invoice"></i><span>Pagar Servicios</span></button></li>
+        </ul>
+
+        <div class="subhead">Configuración</div>
+        <ul class="nav">
+          <li><button class="nav-btn"><i class="fa-solid fa-circle-question"></i><span>Ayuda</span></button></li>
+          <li><button class="nav-btn"><i class="fa-solid fa-envelope"></i><span>Contactenos</span></button></li>
+        </ul>
+        <div class="subhead cerrar">
+          <button class="nav-btn"><i class="fa-solid fa-right-from-bracket"></i><span>Cerrar Sesión</span></button>
+        </div>
+      </aside>
+
+      <!-- Header -->
+      <header class="header">
+        <div class="logo">
+          <img src="Dunamys_Logo.png" alt="Logo Dunamys" class="logo-img">
+          <span class="word">DUNAMYS</span>
+        </div>
+      </header>
+
+      <!-- Contenido -->
+      <main class="content">
+        <div class="grid">
+          <div class="col">
+            <h3>Cuentas Personales</h3>
+            <div class="frame">
+              <div class="card" id="acc-personal">
+                <h4 id="acc1-name">CR–cuenta bancaria</h4>
+                <div class="sub" id="acc1-number">CR 09898 0687 88899 555</div>
+                <div class="line"></div>
+                <div class="amount" id="acc1-amount">C$50 000</div>
+              </div>
+            </div>
+          </div>
+
+          <div class="col">
+            <h3>Cuenta objetivos</h3>
+            <div class="frame">
+              <div class="card" id="acc-objetivos">
+                <h4 id="acc2-name">CR–cuenta bancaria</h4>
+                <div class="sub" id="acc2-number">CR 09886 6667 88869 555</div>
+                <div class="line"></div>
+                <div class="amount" id="acc2-amount">C$30 000</div>
+              </div>
+            </div>
+          </div>
+        </div>
+      </main>
+    </div>
+
+    <footer class="foot">Dunamys</footer>
+  </div>
+</body>
+
+</html>
