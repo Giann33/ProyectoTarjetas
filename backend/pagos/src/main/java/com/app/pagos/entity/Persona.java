@@ -19,7 +19,7 @@ public class Persona {
     @Column(name = "idPersona")
     private Integer idPersona;
 
-    @Column(name = "nombre")
+    @Column(name = "Nombre")
     private String Nombre;
 
     @Column(name = "Correo")

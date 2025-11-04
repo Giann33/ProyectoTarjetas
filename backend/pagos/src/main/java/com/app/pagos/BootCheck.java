@@ -3,7 +3,7 @@ package com.app.pagos;
 import org.springframework.boot.CommandLineRunner;
 import org.springframework.jdbc.core.JdbcTemplate;
 import org.springframework.stereotype.Component;
-
+/*
 @Component
 public class BootCheck implements CommandLineRunner {
     private final JdbcTemplate jdbc;
@@ -22,10 +22,12 @@ public class BootCheck implements CommandLineRunner {
         String correo = "carlos@example.com";
 
         // Upsert para no fallar si ya existe el correo (UNIQUE)
-        int rows = jdbc.update(
-                "INSERT INTO usuario (nombre, correo) VALUES (?, ?) " +
-                        "ON DUPLICATE KEY UPDATE nombre = VALUES(nombre)",
-                nombre, correo);
+        int rows = jdbc.update("""
+                    INSERT INTO sistemapagotarjeta.usuario (`Nombre`, `Correo`)
+                    VALUES (?, ?) AS new
+                    ON DUPLICATE KEY UPDATE
+                      `Nombre` = new.`Nombre`
+                """, nombre, correo);
         System.out.println("upsert rows=" + rows);
 
         Integer usuarios = jdbc.queryForObject("SELECT COUNT(*) FROM usuario", Integer.class);
@@ -36,3 +38,4 @@ public class BootCheck implements CommandLineRunner {
 // EN LA TERMINAL DE "D:\PROYECTO_SISTEMAS3\ProyectoSistemasIII\backend\pagos>"
 // Y ESTANDO AHI SE PONE ESTO EN LA TERMINAL PARA EJECUTAR LA BD:
 // .\mvnw.cmd spring-boot:run
+*/

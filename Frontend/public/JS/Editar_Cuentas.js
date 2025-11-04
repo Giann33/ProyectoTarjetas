@@ -1,29 +1,4 @@
-document.addEventListener("DOMContentLoaded", async () => {
-  try {
-    // Simulación: datos traídos de la base de datos
-    // (en un proyecto real sería fetch("https://tuservidor/api/usuario"))
-    const datosUsuario = {
-      nombre: "Sofía Retana",
-      correo: "sofia@ejemplo.com",
-      contrasena: "",
-      genero: "femenino"
-    };
 
-    // Asignar placeholders dinámicamente
-    document.getElementById("nombre").placeholder = datosUsuario.nombre || "Ingrese su nombre";
-    document.getElementById("correo").placeholder = datosUsuario.correo || "ejemplo@correo.com";
-    document.getElementById("contrasena").placeholder = "Ingrese su contraseña";
-
-    // Seleccionar el género si hay uno definido
-    const generoSelect = document.getElementById("genero");
-    if (datosUsuario.genero) {
-      generoSelect.value = datosUsuario.genero;
-    }
-
-  } catch (error) {
-    console.error("Error cargando datos:", error);
-  }
-});
 
 document.addEventListener("DOMContentLoaded", async () => {
   try {
@@ -39,7 +14,7 @@ document.addEventListener("DOMContentLoaded", async () => {
       return;
     }
 
-    const baseUrl = "http://localhost:8080";
+    const baseUrl = "http://localhost:8081";
 
     // Fetch datos de usuario
     const userResp = await fetch(`${baseUrl}/api/usuarios/${encodeURIComponent(userId)}`, {
@@ -73,6 +48,34 @@ document.addEventListener("DOMContentLoaded", async () => {
       if (numeroInput) numeroInput.value = first;
     } else if (cuentasResp.status !== 204) {
       console.warn("No se pudieron obtener cuentas:", cuentasResp.status);
+    }
+
+  } catch (error) {
+    console.error("Error cargando datos:", error);
+  }
+});
+
+
+document.addEventListener("DOMContentLoaded", async () => {
+  try {
+    // Simulación: datos traídos de la base de datos
+    // (en un proyecto real sería fetch("https://tuservidor/api/usuario"))
+    const datosUsuario = {
+      nombre: "Sofía Retana",
+      correo: "sofia@ejemplo.com",
+      contrasena: "",
+      genero: "femenino"
+    };
+
+    // Asignar placeholders dinámicamente
+    document.getElementById("nombre").placeholder = datosUsuario.nombre || "Ingrese su nombre";
+    document.getElementById("correo").placeholder = datosUsuario.correo || "ejemplo@correo.com";
+    document.getElementById("contrasena").placeholder = "Ingrese su contraseña";
+
+    // Seleccionar el género si hay uno definido
+    const generoSelect = document.getElementById("genero");
+    if (datosUsuario.genero) {
+      generoSelect.value = datosUsuario.genero;
     }
 
   } catch (error) {
