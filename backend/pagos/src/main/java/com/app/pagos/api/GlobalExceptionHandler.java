@@ -30,7 +30,7 @@ public class GlobalExceptionHandler {
         return build(HttpStatus.BAD_REQUEST, "Invalid request body", msg, req);
     }
 
-    @SuppressWarnings("null") // ✅ elimina la advertencia por análisis estático
+    @SuppressWarnings("null") //  elimina la advertencia por análisis estático
     @ExceptionHandler(MethodArgumentTypeMismatchException.class)
     public ResponseEntity<ErrorResponse> onTypeMismatch(
             MethodArgumentTypeMismatchException ex, HttpServletRequest req) {

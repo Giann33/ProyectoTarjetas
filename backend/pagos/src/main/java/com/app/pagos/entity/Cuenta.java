@@ -9,19 +9,19 @@ public class Cuenta {
 
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
-    @Column(name = "numeroCuenta")
+    @Column(name = "NumeroCuenta")
     private String numeroCuenta;
 
     @ManyToOne
-    @JoinColumn(name = "id_Usuario")
+    @JoinColumn(name = "Usuario_idUsuario")
     private Usuario Usuario;
 
     @Column(name = "catalogo_tipo_cuenta_idTipoCuenta")
     private Integer catalogo_tipo_cuenta_idTipoCuenta;
-
+/* 
     @Column(name = "estado")
     private String estado;
-
+*/
     @Column(name = "saldo")
     private BigDecimal saldo;
 
@@ -52,14 +52,14 @@ public class Cuenta {
     public void setCatalogo_tipo_cuenta_idTipoCuenta(Integer catalogo_tipo_cuenta_idTipoCuenta) {
         this.catalogo_tipo_cuenta_idTipoCuenta = catalogo_tipo_cuenta_idTipoCuenta;
     }
-
+/* 
     public String getEstado() {
         return estado;
     }
 
     public void setEstado(String estado) {
         this.estado = estado;
-    }
+    } */
 
     public BigDecimal getSaldo() {
         return saldo;

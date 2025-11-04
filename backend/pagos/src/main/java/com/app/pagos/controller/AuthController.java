@@ -1,7 +1,9 @@
 package com.app.pagos.controller;
 
+
 import com.app.pagos.dto.LoginResponse;
-import com.app.service.AuthService;
+import com.app.pagos.service.AuthService;
+
 import jakarta.validation.constraints.Email;
 import jakarta.validation.constraints.NotBlank;
 import lombok.RequiredArgsConstructor;

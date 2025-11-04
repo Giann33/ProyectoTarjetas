@@ -8,8 +8,9 @@ import java.io.Serializable;
 @Table(name = "catalogo_rol_usuario", schema = "sistemapagotarjeta")
 public class Rol implements Serializable {
 
+
     @Id
-    @Column(name = "idRol")
+    @Column(name = "idRol") // ajustar al nombre real de la columna en la BD
     private Integer idRol;
 
     @Column(name = "Descripcion", nullable = false)

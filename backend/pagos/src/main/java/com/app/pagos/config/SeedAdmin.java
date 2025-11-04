@@ -24,7 +24,7 @@ public class SeedAdmin implements CommandLineRunner {
             var encoder = new BCryptPasswordEncoder();
 
             personaRepo.save(Persona.builder()
-                    .nombre("administrador")          // ✅ minúsculas
+                    .Nombre("administrador")          // ✅ minúsculas
                     .correo(correo)                   // ✅ minúsculas
                     .contrasenna(encoder.encode("admin123"))
                     .rol(1)

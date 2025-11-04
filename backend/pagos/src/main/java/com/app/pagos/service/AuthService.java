@@ -1,4 +1,4 @@
-package com.app.service;
+package com.app.pagos.service;
 
 
 import com.app.pagos.dto.LoginResponse;
@@ -25,6 +25,6 @@ public class AuthService {
     if (!encoder.matches(passwordPlano, p.getContrasenna()))
       throw new RuntimeException("Credenciales inválidas");
 
-    return new LoginResponse(p.getId(), p.getNombre(), p.getCorreo(), p.getRol());
+    return new LoginResponse(p.getIdPersona(), p.getNombre(), p.getCorreo(), p.getRol());
   }
 }

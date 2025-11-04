@@ -13,21 +13,19 @@ public interface CuentaRepository extends JpaRepository<Cuenta, String> {
 
     @Query("""
         select c.numeroCuenta as numeroCuenta,
-               c.Usuario.id as idUsuario,
+               c.Usuario.idUsuario as idUsuario,
                c.catalogo_tipo_cuenta_idTipoCuenta as idTipoCuenta,
-               c.estado as estado,
                c.saldo as saldo,
                c.catalogo_tipo_moneda_idTipoMoneda as idTipoMoneda
         from Cuenta c
-        where c.Usuario.id = :idCliente
+        where c.Usuario.idUsuario = :idUsuario
     """)
     List<CuentaView> findByIdUsuario(int idUsuario);
 
     @Query("""
         select c.numeroCuenta as numeroCuenta,
-               c.Usuario.id as idCliente,
+               c.Usuario.idUsuario as idUsuario,
                c.catalogo_tipo_cuenta_idTipoCuenta as idTipoCuenta,
-               c.estado as estado,
                c.saldo as saldo,
                c.catalogo_tipo_moneda_idTipoMoneda as idTipoMoneda
         from Cuenta c
