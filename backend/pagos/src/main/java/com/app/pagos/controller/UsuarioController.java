@@ -23,16 +23,14 @@ public class UsuarioController {
         this.service = service;
     }
 
-    // GET /api/usuarios/id/123
-    @GetMapping("/id/{idPersona}")
-    public ResponseEntity<Optional<Usuario>> consultarPorId(
-            @PathVariable @Min(1) int idPersona) {
-
-        Optional<Usuario> usuarios = service.consultarPorId(idPersona);
-        return usuarios.isEmpty()
-                ? ResponseEntity.noContent().build()
-                : ResponseEntity.ok(usuarios);
+    // GET /api/usuarios/1
+    @GetMapping("/{id}")
+    public ResponseEntity<Usuario> consultarPorId(@PathVariable("id") @Min(1) int id) {
+        return service.consultarPorId(id)
+                .map(ResponseEntity::ok)
+                .orElse(ResponseEntity.notFound().build());
     }
+
 
     // GET /api/usuarios/correo?correo=alguien@dominio.com
   /*  @GetMapping("/correo")

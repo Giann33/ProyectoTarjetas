@@ -19,7 +19,7 @@ public interface CuentaRepository extends JpaRepository<Cuenta, Integer> {
               c.estado                                         AS estado,
               c.saldo                                          AS saldo,
               c.catalogo_tipo_moneda_idTipoMoneda              AS idTipoMoneda
-            FROM cuenta c
+            FROM sistemapagotarjeta.cuenta c
             WHERE UPPER(c.numeroCuenta) = UPPER(:numeroCuenta)
             """, nativeQuery = true)
     List<CuentaView> findByNumeroCuenta(@Param("numeroCuenta") String numeroCuenta);
@@ -32,7 +32,7 @@ public interface CuentaRepository extends JpaRepository<Cuenta, Integer> {
               c.estado                                         AS estado,
               c.saldo                                          AS saldo,
               c.catalogo_tipo_moneda_idTipoMoneda              AS idTipoMoneda
-            FROM cuenta c
+            FROM sistemapagotarjeta.cuenta c
             WHERE c.id_Usuario = :idUsuario
             """, nativeQuery = true)
     List<CuentaView> findByIdUsuario(@Param("idUsuario") Integer idUsuario);

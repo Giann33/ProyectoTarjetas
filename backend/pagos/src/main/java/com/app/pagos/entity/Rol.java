@@ -10,7 +10,7 @@ import jakarta.persistence.Table;
 public class Rol {
 
     @Id
-    @Column(name = "idRol") // <-- igual que en MySQL
+    @Column(name = "idRol") // usa el nombre exacto de tu BD
     private Integer idRol;
 
     @Column(name = "Descripcion", nullable = false)

@@ -15,6 +15,7 @@ import lombok.RequiredArgsConstructor;
 @Configuration
 @RequiredArgsConstructor
 public class SeedAdmin implements CommandLineRunner {
+
     private final UsuarioRepository usuarioRepo;
 
     @Override
@@ -24,16 +25,17 @@ public class SeedAdmin implements CommandLineRunner {
         if (!usuarioRepo.existsByCorreo(correo)) {
             var encoder = new BCryptPasswordEncoder();
 
-            usuarioRepo.save(
-                    Usuario.builder()
-                            .nombre("Administrador")
-                            .correo(correo)
-                            .contrasenna(encoder.encode("admin123"))
-                            .rol(1)
-                            .activo(true)
-                            .fechaCreacion(LocalDateTime.now())
-                            .fechaModificacion(LocalDateTime.now())
-                            .build());
+            Usuario admin = Usuario.builder()
+                    .nombre("Administrador")
+                    .correo(correo)
+                    .contrasenna(encoder.encode("admin123"))
+                    .rol(1)
+                    .activo(true)
+                    .fechaCreacion(LocalDateTime.now())
+                    .fechaModificacion(LocalDateTime.now())
+                    .build();
+
+            usuarioRepo.save(admin);
         }
     }
 }

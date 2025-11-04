@@ -13,19 +13,19 @@ import jakarta.persistence.ManyToOne;
 import jakarta.persistence.Table;
 
 @Entity
-@Table(name = "cuenta")
+@Table(name = "cuenta") // agrega schema si aplica: , schema = "sistemapagotarjeta"
 public class Cuenta {
 
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     @Column(name = "idCuenta")
-    private Integer id; // PK INT AI
+    private Integer id;
 
-    @Column(name = "numeroCuenta", nullable = false, unique = true, length = 255)
-    private String numeroCuenta; // ÚNICO (no AI)
+    @Column(name = "NumeroCuenta", nullable = false, unique = true, length = 255)
+    private String numeroCuenta;
 
     @ManyToOne
-    @JoinColumn(name = "id_Usuario")
+    @JoinColumn(name = "Usuario_idUsuario") // debe coincidir EXACTO con la columna FK en BD
     private Usuario usuario;
 
     @Column(name = "catalogo_tipo_cuenta_idTipoCuenta")
@@ -34,13 +34,13 @@ public class Cuenta {
     @Column(name = "catalogo_tipo_moneda_idTipoMoneda")
     private Integer idTipoMoneda;
 
-    @Column(name = "estado")
+    @Column(name = "Estado") // si tu columna es "estado" cámbialo a "estado"
     private String estado;
 
-    @Column(name = "saldo", precision = 38, scale = 2)
+    @Column(name = "Saldo", precision = 38, scale = 2)
     private BigDecimal saldo;
 
-    // getters/setters
+    // Getters y setters
     public Integer getId() {
         return id;
     }

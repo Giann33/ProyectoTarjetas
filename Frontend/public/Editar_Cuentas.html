@@ -1,0 +1,95 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+<meta charset="UTF-8" />
+<meta name="viewport" content="width=device-width, initial-scale=1.0" />
+<title>Dunamys – Formulario</title>
+<link rel="stylesheet" href="CSS/Editar_Cuentas.css">
+<link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.0/css/all.min.css">
+<script src="JS/Editar_Cuentas.js"></script>
+</head>
+
+
+<body>
+<div class="shell">
+<div class="panel">
+<!-- Sidebar -->
+<aside class="sidebar">
+<div class="brand-aside">Dunamys</div>
+<ul class="nav">
+          <li><button class="nav-btn"><i class="fa-solid fa-house"></i><span>General</span></button></li>
+          <li><button class="nav-btn"><i class="fa-solid fa-credit-card"></i></i><span>Tarjetas</span></button></li>
+          <li><button class="nav-btn"><i class="fa-solid fa-right-left"></i><span>Transferencias</span></button></li>
+          <li><button class="nav-btn"><i class="fa-solid fa-cart-shopping"></i><span>Historial de
+                Compras</span></button></li>
+          <li><button class="nav-btn"><i class="fa-solid fa-file-invoice"></i><span>Pagar Servicios</span></button></li>
+        </ul>
+
+
+<div class="subhead">Configuración</div>
+<ul class="nav">
+<li><button class="nav-btn"><i class="fa-solid fa-circle-question"></i><span>Ayuda</span></button></li>
+<li><button class="nav-btn"><i class="fa-solid fa-envelope"></i><span>Contactenos</span></button></li>
+</ul>
+
+
+<div class="subhead muted cerrar">
+<button class="nav-btn"><i class="fa-solid fa-right-from-bracket"></i><span>Cerrar Sesión</span></button>
+</div>
+</aside>
+
+
+<!-- Header -->
+<header class="header">
+<div class="logo" aria-label="Dunamys">
+<img src="img/Dunamys_Logo.png" alt="Logo Dunamys" class="logo-img">
+<span class="word">DUNAMYS</span>
+</div>
+</header>
+
+
+<!-- Contenido (formulario centrado) -->
+<main class="content">
+<div class="form-container">
+<h2>Editar Usuario</h2>
+<form id="registro-form">
+<div class="form-group">
+<label for="nombre">Nombre</label>
+<input type="text" id="nombre" name="nombre" placeholder="Ingrese su nombre" required>
+</div>
+
+
+<div class="form-group">
+<label for="correo">Correo</label>
+<input type="email" id="correo" name="correo" placeholder="ejemplo@correo.com" required>
+</div>
+
+
+<div class="form-group">
+<label for="contrasena">Contraseña</label>
+<input type="password" id="contrasena" name="contrasena" placeholder="Ingrese su contraseña" required>
+</div>
+
+
+<div class="form-group">
+<label for="genero">Género</label>
+<select id="genero" name="genero" required>
+<option value="">Seleccione...</option>
+<option value="femenino">Femenino</option>
+<option value="masculino">Masculino</option>
+<option value="otro">Otro</option>
+</select>
+</div>
+
+
+<button type="submit" class="btn-enviar">Actualizar</button>
+</form>
+</div>
+</main>
+</div>
+
+
+<footer class="foot">Dunamys</footer>
+</div>
+</body>
+</html>
