@@ -1,12 +1,12 @@
 package com.app.pagos.service;
 
+import java.util.Optional;
+
+// UsuarioService.java
+import org.springframework.stereotype.Service;
 
 import com.app.pagos.entity.Usuario;
 import com.app.pagos.repository.UsuarioRepository;
-import org.springframework.stereotype.Service;
-
-
-import java.util.Optional;
 
 @Service
 public class UsuarioService {
@@ -18,13 +18,6 @@ public class UsuarioService {
     }
 
     public Optional<Usuario> consultarPorId(int idUsuario) {
-        return repo.findByIdUsuario(idUsuario);
+        return repo.findById(idUsuario); // <- aquí
     }
-
-  /*   public List<UsuarioView> consultarPorCorreo(String correo) {
-        if (correo == null || correo.isBlank()) {
-            return List.of();
-        }
-        return repo.findByCorreo(correo.trim());
-    }  */
 }

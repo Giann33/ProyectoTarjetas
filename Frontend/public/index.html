@@ -1,14 +1,108 @@
-<!DOCTYPE html>
+<!doctype html>
 <html lang="es">
 
 <head>
-    <meta charset="UTF-8" />
-    <title>Frontend Pagos</title>
+    <meta charset="utf-8" />
+    <meta name="viewport" content="width=device-width,initial-scale=1" />
+    <title>Inicio de Sesión</title>
+    <!-- RUTA ABSOLUTA al CSS servido desde /public -->
+    <link rel="stylesheet" href="/CSS/styles.css">
+
 </head>
 
 <body>
-    <h1>Hola, soy el frontend en Node.js 👋</h1>
-    <p>Hablando con el backend de Spring que está en 8081.</p>
+    <main class="login-panel">
+        <header class="login-topbar">
+        </header>
+
+        <div class="login-body">
+            <form class="login-card" id="loginForm" autocomplete="on">
+                <h2 class="login-title">Inicio de Sesión</h2>
+
+                <div class="form-row">
+                    <label class="form-label" for="user">Usuario</label>
+                    <input class="form-input" id="user" name="user" placeholder="Digite usuario" required />
+                </div>
+
+                <div class="form-row">
+                    <label class="form-label" for="pass">Contraseña</label>
+                    <input class="form-input" type="password" id="pass" name="pass" placeholder="Digite contraseña" required />
+                </div>
+
+                <button class="btn-primary" type="submit">Ingresar</button>
+
+                <div class="login-actions">
+                    <a class="link" href="#">¿Olvidó contraseña?</a>
+                    <a class="link" href="#">Registrarse</a>
+                </div>
+            </form>
+        </div>
+    </main>
+
+    <script>
+        document.getElementById('loginForm').addEventListener('submit', async(e) => {
+            e.preventDefault();
+            const payload = {
+                user: e.target.user.value.trim(),
+                pass: e.target.pass.value
+            };
+            try {
+                const r = await fetch('http://localhost:8081/api/login', {
+                    method: 'POST',
+                    headers: {
+                        'Content-Type': 'application/json'
+                    },
+                    body: JSON.stringify(payload)
+                });
+                if (!r.ok) {
+                    alert('Credenciales inválidas');
+                    return;
+                }
+                window.location.href = '/dashboard.html';
+            } catch (err) {
+                console.error(err);
+                alert('No se pudo conectar con el servidor.');
+            }
+        });
+    </script>
 </body>
+<script>
+    const API_BASE = 'http://localhost:8081'; // tu Spring Boot
+
+    document.getElementById('loginForm').addEventListener('submit', async(e) => {
+        e.preventDefault();
+        const payload = {
+            user: e.target.user.value.trim(),
+            pass: e.target.pass.value
+        };
+
+        try {
+            const r = await fetch(`${API_BASE}/api/login`, {
+                method: 'POST',
+                headers: {
+                    'Content-Type': 'application/json'
+                },
+                body: JSON.stringify(payload)
+            });
+
+            if (!r.ok) {
+                const txt = await r.text().catch(() => '');
+                alert('Credenciales inválidas' + (txt ? `: ${txt}` : ''));
+                return;
+            }
+
+            // espera JSON: { token: "JWT...", user: { nombre: "Eddy", ... } }
+            const data = await r.json();
+            localStorage.setItem('token', data.token);
+            localStorage.setItem('user', JSON.stringify(data.user || {}));
+
+            // ir al dashboard
+            window.location.href = '/dashboard.html';
+        } catch (err) {
+            console.error(err);
+            alert('No se pudo conectar con el servidor.');
+        }
+    });
+</script>
 
 </html>

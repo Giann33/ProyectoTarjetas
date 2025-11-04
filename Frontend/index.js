@@ -1,14 +1,12 @@
+// Frontend/index.js
 const express = require('express');
+const path = require('path');
+
 const app = express();
-const PORT = 3000; // tu front en 3000, tu Spring está en 8081
+const PORT = process.env.PORT || 3000;
 
-// para servir archivos estáticos (html, css, js) desde la carpeta public
-app.use(express.static('public'));
-
-app.get('/api/ping', (req, res) => {
-    res.json({ ok: true, msg: 'Frontend Node.js funcionando 🚀' });
-});
+app.use(express.static(path.join(__dirname, 'public')));
 
 app.listen(PORT, () => {
-    console.log(`Servidor frontend escuchando en http://localhost:${PORT}`);
+    console.log(`Frontend sirviendo /public en http://localhost:${PORT}`);
 });

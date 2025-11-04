@@ -1,17 +1,18 @@
 package com.app.pagos.controller;
 
+import java.util.List;
+
+import org.springframework.http.ResponseEntity;
+import org.springframework.web.bind.annotation.GetMapping;
+import org.springframework.web.bind.annotation.PathVariable;
+import org.springframework.web.bind.annotation.RequestMapping;
+import org.springframework.web.bind.annotation.RestController;
+
 import com.app.pagos.dto.CuentaView;
 import com.app.pagos.service.CuentaService;
-import jakarta.validation.constraints.Min;
-import org.springframework.http.ResponseEntity;
-import org.springframework.validation.annotation.Validated;
-import org.springframework.web.bind.annotation.*;
-
-import java.util.List;
 
 @RestController
 @RequestMapping("/api/cuentas")
-@Validated
 public class CuentaController {
 
     private final CuentaService service;
@@ -20,25 +21,18 @@ public class CuentaController {
         this.service = service;
     }
 
-    // GET /api/cuentas/persona/123
-    @GetMapping("/persona/{idPersona}")
-    public ResponseEntity<List<CuentaView>> consultarPorIdPersona(
-            @PathVariable @Min(1) int idPersona) {
-
-        List<CuentaView> cuentas = service.consultarPorIdUsuario(idPersona);
-        return cuentas.isEmpty()
-                ? ResponseEntity.noContent().build()
-                : ResponseEntity.ok(cuentas);
+    @GetMapping("/por-numero/{numeroCuenta}")
+    public ResponseEntity<List<CuentaView>> porNumero(@PathVariable String numeroCuenta) {
+        return ResponseEntity.ok(service.consultarPorNumero(numeroCuenta));
     }
 
-    // GET /api/cuentas/numero?numero=XXXX
-    @GetMapping("/numero")
-    public ResponseEntity<List<CuentaView>> consultarPorNumero(
-            @RequestParam String numero) {
+    @GetMapping("/por-usuario/{idUsuario}")
+    public ResponseEntity<List<CuentaView>> porUsuario(@PathVariable int idUsuario) {
+        return ResponseEntity.ok(service.consultarPorIdUsuario(idUsuario));
+    }
 
-        List<CuentaView> cuentas = service.consultarPorNumero(numero);
-        return cuentas.isEmpty()
-                ? ResponseEntity.noContent().build()
-                : ResponseEntity.ok(cuentas);
+    @GetMapping("/existe/{numeroCuenta}")
+    public ResponseEntity<Boolean> existe(@PathVariable String numeroCuenta) {
+        return ResponseEntity.ok(service.existePorNumero(numeroCuenta));
     }
 }

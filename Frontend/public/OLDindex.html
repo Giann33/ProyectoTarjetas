@@ -1,0 +1,50 @@
+<!doctype html>
+<html lang="es">
+
+<head>
+    <meta charset="utf-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1" />
+    <title>Dunamys — Inicio de Sesión</title>
+    <link rel="stylesheet" href="styles.css" />
+</head>
+
+<body class="login-page">
+    <div class="login-wrap">
+        <header class="login-brand">
+            <img src="logo-dunamys.svg" alt="Dunamys" class="logo-img" />
+        </header>
+
+        <main class="login-card">
+            <h1>Inicio de Sesión</h1>
+
+            <form id="form-login" autocomplete="off">
+                <label class="field">
+          <span>Usuario</span>
+          <input type="text" name="usuario" placeholder="Digite usuario" required />
+        </label>
+
+                <label class="field">
+          <span>Contraseña</span>
+          <input type="password" name="password" placeholder="Digite contraseña" required />
+        </label>
+
+                <button type="submit" class="btn-primary">Ingresar</button>
+
+                <div class="login-links">
+                    <a href="#" class="muted">¿Olvidó contraseña?</a>
+                    <a href="#" class="muted">Registrarse</a>
+                </div>
+            </form>
+        </main>
+    </div>
+
+    <script>
+        // demo: evitamos navegación real
+        document.getElementById('form-login').addEventListener('submit', (e) => {
+            e.preventDefault();
+            alert('Login enviado (demo).');
+        });
+    </script>
+</body>
+
+</html>

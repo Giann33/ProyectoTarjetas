@@ -1,10 +1,12 @@
 package com.app.pagos.service;
 
-import com.app.pagos.dto.CuentaView;
-import com.app.pagos.repository.CuentaRepository;
+import java.util.Collections;
+import java.util.List;
+
 import org.springframework.stereotype.Service;
 
-import java.util.List;
+import com.app.pagos.dto.CuentaView;
+import com.app.pagos.repository.CuentaRepository;
 
 @Service
 public class CuentaService {
@@ -16,13 +18,19 @@ public class CuentaService {
     }
 
     public List<CuentaView> consultarPorIdUsuario(int idUsuario) {
-        return repo.findByIdUsuario(idUsuario);             //Hay que ver donde se usa esto
+        return repo.findByIdUsuario(idUsuario);
     }
 
     public List<CuentaView> consultarPorNumero(String numeroCuenta) {
         if (numeroCuenta == null || numeroCuenta.isBlank()) {
-            return List.of();
+            return Collections.emptyList();
         }
         return repo.findByNumeroCuenta(numeroCuenta.trim());
+    }
+
+    public boolean existePorNumero(String numeroCuenta) {
+        if (numeroCuenta == null || numeroCuenta.isBlank())
+            return false;
+        return repo.existsByNumeroCuenta(numeroCuenta.trim());
     }
 }
