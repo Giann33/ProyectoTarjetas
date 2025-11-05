@@ -1,28 +1,28 @@
 // /public/JS/auth.js
 export function getToken() {
-    return localStorage.getItem('token');
+    return localStorage.getItem('token'); // opcional (puede no existir)
+}
+
+export function getUser() {
+    const u = localStorage.getItem('user');
+    try { return u ? JSON.parse(u) : null; } catch { return null; }
 }
 
 export function isLoggedIn() {
-    const t = getToken();
-    return !!t;
+    // válido si hay token o al menos hay user guardado
+    return !!getToken() || !!getUser();
 }
 
-// Si necesitas validar contra el backend (opcional)
+// hoy NO hay /api/me; desactívalo por defecto
 export async function verifyToken(apiBase = 'http://localhost:8081') {
     const t = getToken();
-    if (!t) return false;
+    if (!t) return true; // <- permite pasar sin token
     try {
-        const r = await fetch(`${apiBase}/api/me`, {
-            headers: { Authorization: `Bearer ${t}` }
-        });
+        const r = await fetch(`${apiBase}/api/me`, { headers: { Authorization: `Bearer ${t}` } });
         return r.ok;
-    } catch {
-        return false;
-    }
+    } catch { return false; }
 }
 
-// Redirige a login si no hay token (y opcionalmente valida contra backend)
 export async function requireAuth({ validateWithServer = false, apiBase = 'http://localhost:8081' } = {}) {
     if (!isLoggedIn()) {
         window.location.replace('/');
@@ -39,7 +39,6 @@ export async function requireAuth({ validateWithServer = false, apiBase = 'http:
     return true;
 }
 
-// Helper para fetch con Bearer
 export function authFetch(url, options = {}) {
     const t = getToken();
     const headers = Object.assign({}, options.headers || {}, t ? { Authorization: `Bearer ${t}` } : {});

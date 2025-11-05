@@ -5,22 +5,27 @@
     <meta charset="utf-8" />
     <meta name="viewport" content="width=device-width,initial-scale=1" />
     <title>Dunamys — Dashboard</title>
-    <link rel="stylesheet" href="/CSS/styles.css" />
+    <!-- SOLO esta hoja -->
+    <link rel="stylesheet" href="/CSS/Cuentas.css" />
 </head>
 
 <body>
     <div class="shell">
         <div class="panel">
+            <!-- Sidebar -->
             <aside class="sidebar">
-                <div class="brand-aside">Dunamys</div>
-                <ul class="nav">
-                    <li><button class="nav-btn">General</button></li>
-                </ul>
+                <div>
+                    <div class="brand-aside">Dunamys</div>
+                    <ul class="nav">
+                        <li><button class="nav-btn"><span class="icon"></span>General</button></li>
+                    </ul>
+                </div>
                 <div class="subhead cerrar">
                     <button id="btn-logout" class="nav-btn">Cerrar Sesión</button>
                 </div>
             </aside>
 
+            <!-- Header -->
             <header class="header">
                 <div class="logo">
                     <img src="/IMG/Dunamys_Logo.png" alt="Logo Dunamys" class="logo-img" />
@@ -28,10 +33,13 @@
                 </div>
             </header>
 
+            <!-- Contenido -->
             <main class="content">
                 <h2 id="hello">Cargando usuario…</h2>
+
                 <div class="grid">
                     <div class="col">
+                        <h3>Bienvenida</h3>
                         <div class="frame">
                             <div class="card">
                                 <h4>Bienvenido</h4>
@@ -41,19 +49,25 @@
                             </div>
                         </div>
                     </div>
+                    <!-- Agrega más cols/cards si quieres -->
                 </div>
             </main>
-
         </div>
+
         <footer class="foot">Dunamys</footer>
     </div>
 
-    <script type="module">
-        import { requireAuth, authFetch, logout } from '/JS/auth.js'; const API_BASE = 'http://localhost:8081'; (async () => { await requireAuth({ validateWithServer: true, apiBase: API_BASE }); try { const r = await authFetch(`${API_BASE}/api/me`); document.getElementById('hello').textContent
-        = r.ok ? `Hola, ${(await r.json()).nombre}` : 'No se pudo cargar el usuario.'; } catch { document.getElementById('hello').textContent = 'Error conectando al servidor.'; } document.getElementById('btn-logout')?.addEventListener('click', () => {
-        logout(); location.replace('/'); }); })();
+    <script>
+        // ...
+        const btnLogout = document.getElementById('btn-logout');
+        if (btnLogout) {
+            btnLogout.addEventListener('click', () => {
+                localStorage.removeItem('user');
+                localStorage.removeItem('token'); // si luego usas JWT
+                location.replace('/');
+            });
+        }
     </script>
-
 
 </body>
 
