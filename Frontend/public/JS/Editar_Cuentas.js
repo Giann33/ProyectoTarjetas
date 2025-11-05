@@ -55,7 +55,7 @@ document.addEventListener("DOMContentLoaded", async () => {
   }
 });
 
-
+/*
 document.addEventListener("DOMContentLoaded", async () => {
   try {
     // Simulación: datos traídos de la base de datos
@@ -82,6 +82,8 @@ document.addEventListener("DOMContentLoaded", async () => {
     console.error("Error cargando datos:", error);
   }
 });
+*/
+
 
 /*
 

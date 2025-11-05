@@ -61,8 +61,7 @@ body {
 
 
 /* Sidebar */
-<<<<<<< HEAD:Frontend/public/CSS/styles.css
-=======
+
 .sidebar{
   grid-row: 1 / -1;
   background: var(--green-900);
@@ -91,8 +90,8 @@ body {
 .subhead{ margin-top: 12px; font-size:12px; opacity:.85; }
 .muted{ opacity:.65; }
 .cerrar{ margin-top: auto; }
->>>>>>> 51aa0fe21cfdc5cbed8a01b0d1dec006fbfeb551:Frontend/public/CSS/Cuentas.css
 
+/*
 .sidebar {
     grid-row: 1 / -1;
     background: var(--green-900);
@@ -126,7 +125,7 @@ body {
 
 .nav li:hover {
     background: rgba(255, 255, 255, .06);
-}
+} */
 
 .icon {
     width: 16px;
@@ -338,7 +337,7 @@ body {
     content: "";
     position: absolute;
     inset: 0;
-    background: url("/IMG/inicio_sesion.png") center bottom / cover no-repeat;
+    background: url("../IMG/inicio_sesion.png") center bottom / cover no-repeat;
     opacity: .95;
     pointer-events: none;
 }

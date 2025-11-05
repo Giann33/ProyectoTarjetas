@@ -29,8 +29,19 @@ public class CuentaService {
     }
 
     public boolean existePorNumero(String numeroCuenta) {
-        if (numeroCuenta == null || numeroCuenta.isBlank())
+        if (numeroCuenta == null)
             return false;
-        return repo.existsByNumeroCuenta(numeroCuenta.trim());
+        String trimmed = numeroCuenta.trim();
+        if (trimmed.isEmpty())
+            return false;
+
+        try {
+            Integer num = Integer.valueOf(trimmed);
+            return repo.existsByNumeroCuenta(num);
+        } catch (NumberFormatException ex) {
+            // No es un número válido
+            return false; // o lanza una excepción de negocio si prefieres
+        }
     }
+
 }

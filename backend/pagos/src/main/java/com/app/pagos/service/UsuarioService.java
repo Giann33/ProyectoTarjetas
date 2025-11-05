@@ -17,7 +17,11 @@ public class UsuarioService {
         this.repo = repo;
     }
 
+    
+
     public Optional<Usuario> consultarPorId(int idUsuario) {
         return repo.findById(idUsuario); // <- aquí
     }
 }
+
+

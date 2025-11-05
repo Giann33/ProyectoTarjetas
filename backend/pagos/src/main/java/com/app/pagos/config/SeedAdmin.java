@@ -7,7 +7,9 @@ import org.springframework.boot.CommandLineRunner;
 import org.springframework.context.annotation.Configuration;
 import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder;
 
+import com.app.pagos.entity.Persona;
 import com.app.pagos.entity.Usuario;
+import com.app.pagos.repository.PersonaRepository;
 import com.app.pagos.repository.UsuarioRepository;
 
 import lombok.RequiredArgsConstructor;
@@ -16,17 +18,17 @@ import lombok.RequiredArgsConstructor;
 @RequiredArgsConstructor
 public class SeedAdmin implements CommandLineRunner {
 
-    private final UsuarioRepository usuarioRepo;
+    private final PersonaRepository personaRepo;
 
     @Override
     public void run(String... args) {
         final String correo = "admin@local";
 
-        if (!usuarioRepo.existsByCorreo(correo)) {
+        if (!personaRepo.existsByCorreo(correo)) {
             var encoder = new BCryptPasswordEncoder();
 
-            Usuario admin = Usuario.builder()
-                    .nombre("Administrador")
+            Persona admin = Persona.builder()
+                    .Nombre("Administrador")
                     .correo(correo)
                     .contrasenna(encoder.encode("admin123"))
                     .rol(1)
@@ -35,7 +37,7 @@ public class SeedAdmin implements CommandLineRunner {
                     .fechaModificacion(LocalDateTime.now())
                     .build();
 
-            usuarioRepo.save(admin);
+            personaRepo.save(admin);
         }
     }
 }

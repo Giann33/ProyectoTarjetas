@@ -37,5 +37,5 @@ public interface CuentaRepository extends JpaRepository<Cuenta, Integer> {
             """, nativeQuery = true)
     List<CuentaView> findByIdUsuario(@Param("idUsuario") Integer idUsuario);
 
-    boolean existsByNumeroCuenta(String numeroCuenta);
+    boolean existsByNumeroCuenta(Integer numeroCuenta);
 }

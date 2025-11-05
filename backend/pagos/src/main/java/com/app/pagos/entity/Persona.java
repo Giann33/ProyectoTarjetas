@@ -1,51 +1,34 @@
 package com.app.pagos.entity;
 
-import java.time.LocalDate;
-import java.time.LocalDateTime;
+import jakarta.persistence.*;
+import lombok.*;
 
-import jakarta.persistence.Column;
-import jakarta.persistence.Entity;
-import jakarta.persistence.GeneratedValue;
-import jakarta.persistence.GenerationType;
-import jakarta.persistence.Id;
-import jakarta.persistence.Table;
-import lombok.AllArgsConstructor;
-import lombok.Builder;
-import lombok.Getter;
-import lombok.NoArgsConstructor;
-import lombok.Setter;
+import java.time.LocalDateTime;
 
 @Getter
 @Setter
+@Builder
 @NoArgsConstructor
 @AllArgsConstructor
-@Builder
 @Entity
-@Table(name = "persona", schema = "sistemapagotarjeta")
+@Table(name = "Persona")
 public class Persona {
-
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
-    @Column(name = "ID_Persona")
+    @Column(name = "idPersona")
     private Integer idPersona;
 
     @Column(name = "Nombre")
-    private String nombre;
-
-    @Column(name = "Apellido")
-    private String apellido;
+    private String Nombre;
 
     @Column(name = "Correo")
     private String correo;
 
-    @Column(name = "Telefono")
-    private String telefono;
+    @Column(name = "Contrasenna")
+    private String contrasenna;
 
-    @Column(name = "Identificacion")
-    private String identificacion;
-
-    @Column(name = "Fecha_Nacimiento")
-    private LocalDate fechaNacimiento;
+    @Column(name = "Rol")
+    private Integer rol;
 
     @Column(name = "Activo")
     private Boolean activo;
@@ -55,4 +38,8 @@ public class Persona {
 
     @Column(name = "Fecha_Modificacion")
     private LocalDateTime fechaModificacion;
+
+    @JoinColumn
+    @Column(name = "catalogo_genero_idGenero")
+    private Integer idGenero;
 }

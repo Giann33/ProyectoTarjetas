@@ -1,53 +1,60 @@
-// src/main/java/com/app/pagos/entity/Usuario.java
 package com.app.pagos.entity;
 
-import java.time.LocalDateTime;
+import jakarta.persistence.*;
+import java.io.Serializable;
 
-import jakarta.persistence.Column;
-import jakarta.persistence.Entity;
-import jakarta.persistence.GeneratedValue;
-import jakarta.persistence.GenerationType;
-import jakarta.persistence.Id;
-import jakarta.persistence.Table;
-import lombok.AllArgsConstructor;
-import lombok.Builder;
-import lombok.Getter;
-import lombok.NoArgsConstructor;
-import lombok.Setter;
-
-@Getter
-@Setter
-@NoArgsConstructor
-@AllArgsConstructor
-@Builder
 @Entity
 @Table(name = "Usuario", schema = "sistemapagotarjeta")
-public class Usuario {
+public class Usuario implements Serializable {
 
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     @Column(name = "idUsuario")
     private Integer idUsuario;
 
-    @Column(name = "Nombre", nullable = false)
-    private String nombre;
+    @ManyToOne(fetch = FetchType.EAGER)
+    @JoinColumn(name = "catalogo_rol_usuario_idRol", nullable = false)
+    private Rol rol;
 
-    @Column(name = "Correo", nullable = false, unique = true)
-    private String correo;
-
-    @Column(name = "Contrasenna", nullable = false)
-    private String contrasenna;
-
-    // Si tu columna es INT (no FK a tabla Rol), mantenla como Integer
-    @Column(name = "Rol", nullable = false)
-    private Integer rol;
+    @ManyToOne(optional = false, fetch = FetchType.LAZY)
+    @JoinColumn(name = "Persona_idUsuario", // <-- deja este si así se llama HOY en la BD
+            referencedColumnName = "idPersona", // <-- MUY IMPORTANTE: PK real en Persona
+            nullable = false)
+    private Persona persona;
 
     @Column(name = "Activo", nullable = false)
-    private Boolean activo;
+    private boolean activo;
 
-    @Column(name = "Fecha_Creacion")
-    private LocalDateTime fechaCreacion;
+    // Getters/Setters
+    public Integer getIdCliente() {
+        return idUsuario;
+    }
 
-    @Column(name = "Fecha_Modificacion")
-    private LocalDateTime fechaModificacion;
+    public void setIdCliente(Integer idCliente) {
+        this.idUsuario = idCliente;
+    }
+
+    public Rol getRol() {
+        return rol;
+    }
+
+    public void setRol(Rol rol) {
+        this.rol = rol;
+    }
+
+    public Persona getPersona() {
+        return persona;
+    }
+
+    public void setPersona(Persona persona) {
+        this.persona = persona;
+    }
+
+    public boolean isActivo() {
+        return activo;
+    }
+
+    public void setActivo(boolean activo) {
+        this.activo = activo;
+    }
 }

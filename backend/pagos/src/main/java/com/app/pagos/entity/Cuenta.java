@@ -1,93 +1,65 @@
-// src/main/java/com/app/pagos/entity/Cuenta.java
 package com.app.pagos.entity;
 
+import jakarta.persistence.*;
 import java.math.BigDecimal;
 
-import jakarta.persistence.Column;
-import jakarta.persistence.Entity;
-import jakarta.persistence.GeneratedValue;
-import jakarta.persistence.GenerationType;
-import jakarta.persistence.Id;
-import jakarta.persistence.JoinColumn;
-import jakarta.persistence.ManyToOne;
-import jakarta.persistence.Table;
-
 @Entity
-@Table(name = "cuenta") // agrega schema si aplica: , schema = "sistemapagotarjeta"
+@Table(name = "cuenta") // o "cuentas" si así se llama en tu BD
 public class Cuenta {
 
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
-    @Column(name = "idCuenta")
-    private Integer id;
-
-    @Column(name = "NumeroCuenta", nullable = false, unique = true, length = 255)
-    private String numeroCuenta;
+    @Column(name = "NumeroCuenta")
+    private Integer numeroCuenta;
 
     @ManyToOne
-    @JoinColumn(name = "Usuario_idUsuario") // debe coincidir EXACTO con la columna FK en BD
-    private Usuario usuario;
+    @JoinColumn(name = "Usuario_idUsuario")
+    private Usuario Usuario;
 
     @Column(name = "catalogo_tipo_cuenta_idTipoCuenta")
-    private Integer idTipoCuenta;
-
-    @Column(name = "catalogo_tipo_moneda_idTipoMoneda")
-    private Integer idTipoMoneda;
-
-    @Column(name = "Estado") // si tu columna es "estado" cámbialo a "estado"
+    private Integer catalogo_tipo_cuenta_idTipoCuenta;
+/* 
+    @Column(name = "estado")
     private String estado;
-
-    @Column(name = "Saldo", precision = 38, scale = 2)
+*/
+    @Column(name = "saldo")
     private BigDecimal saldo;
 
-    // Getters y setters
-    public Integer getId() {
-        return id;
-    }
+    @Column(name = "catalogo_tipo_moneda_idTipoMoneda")
+    private Integer catalogo_tipo_moneda_idTipoMoneda;
 
-    public void setId(Integer id) {
-        this.id = id;
-    }
-
-    public String getNumeroCuenta() {
+    // Getters y Setters
+    public Integer getNumeroCuenta() {
         return numeroCuenta;
     }
 
-    public void setNumeroCuenta(String numeroCuenta) {
+    public void setNumeroCuenta(Integer numeroCuenta) {
         this.numeroCuenta = numeroCuenta;
     }
 
     public Usuario getUsuario() {
-        return usuario;
+        return Usuario;
     }
 
     public void setUsuario(Usuario usuario) {
-        this.usuario = usuario;
+        this.Usuario = usuario;
     }
 
-    public Integer getIdTipoCuenta() {
-        return idTipoCuenta;
+    public Integer getCatalogo_tipo_cuenta_idTipoCuenta() {
+        return catalogo_tipo_cuenta_idTipoCuenta;
     }
 
-    public void setIdTipoCuenta(Integer idTipoCuenta) {
-        this.idTipoCuenta = idTipoCuenta;
+    public void setCatalogo_tipo_cuenta_idTipoCuenta(Integer catalogo_tipo_cuenta_idTipoCuenta) {
+        this.catalogo_tipo_cuenta_idTipoCuenta = catalogo_tipo_cuenta_idTipoCuenta;
     }
-
-    public Integer getIdTipoMoneda() {
-        return idTipoMoneda;
-    }
-
-    public void setIdTipoMoneda(Integer idTipoMoneda) {
-        this.idTipoMoneda = idTipoMoneda;
-    }
-
+/* 
     public String getEstado() {
         return estado;
     }
 
     public void setEstado(String estado) {
         this.estado = estado;
-    }
+    } */
 
     public BigDecimal getSaldo() {
         return saldo;
@@ -96,4 +68,13 @@ public class Cuenta {
     public void setSaldo(BigDecimal saldo) {
         this.saldo = saldo;
     }
+
+    public Integer getCatalogo_tipo_moneda_idTipoMoneda() {
+        return catalogo_tipo_moneda_idTipoMoneda;
+    }
+
+    public void setCatalogo_tipo_moneda_idTipoMoneda(Integer catalogo_tipo_moneda_idTipoMoneda) {
+        this.catalogo_tipo_moneda_idTipoMoneda = catalogo_tipo_moneda_idTipoMoneda;
+    }
+
 }

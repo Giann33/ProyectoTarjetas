@@ -21,6 +21,8 @@ const cuentas = [
   }
 ];
 
+
+
 // Asignar los valores a las etiquetas
 document.addEventListener("DOMContentLoaded", () => {
   document.getElementById("acc1-name").textContent   = cuentas[0].nombre;
