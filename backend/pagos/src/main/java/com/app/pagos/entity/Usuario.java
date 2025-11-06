@@ -25,13 +25,12 @@ public class Usuario implements Serializable {
     @Column(name = "Activo", nullable = false)
     private boolean activo;
 
-    // Getters/Setters
-    public Integer getIdCliente() {
-        return idUsuario;
+    public Integer getIdUsuario() {
+        return idUsuario; // o devuelve el mismo campo que usas en getIdCliente()
     }
 
-    public void setIdCliente(Integer idCliente) {
-        this.idUsuario = idCliente;
+    public void setIdUsuario(Integer idUsuario) {
+        this.idUsuario = idUsuario;
     }
 
     public Rol getRol() {

@@ -68,6 +68,14 @@ public class GlobalExceptionHandler {
         return ResponseEntity.status(status)
                 .body(new ErrorResponse(status.value(), error, message, req.getRequestURI()));
     }
+
+    @ExceptionHandler(NumberFormatException.class)
+    public ResponseEntity<String> handleNumberFormat(NumberFormatException ex) {
+        // 🔸 Este método atrapa cualquier NumberFormatException en tu app
+        return ResponseEntity
+                .badRequest()
+                .body("Formato de ID inválido: el valor debe ser numérico.");
+    }
 }
 
 

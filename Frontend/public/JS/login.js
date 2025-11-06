@@ -1,6 +1,101 @@
 // Frontend/public/JS/login.js
-const API_BASE = 'http://localhost:8081';
 
+document.addEventListener("DOMContentLoaded", () => {
+  const baseUrl = "http://localhost:8081";            // <--- ajusta si hace falta
+  const form = document.getElementById("loginForm");  // <--- id de tu <form>
+
+  // Helpers
+  const N = (v) => {
+    const n = Number(v);
+    return Number.isFinite(n) ? n : null;
+  };
+
+  form?.addEventListener("submit", async (e) => {
+    e.preventDefault();
+
+    // Ajusta los ids de tus inputs:
+ const userInput = document.getElementById("correo") || 
+                   document.getElementById("email") || 
+                   document.getElementById("usuario") || 
+                   document.getElementById("username");
+
+const passInput = document.getElementById("password") || 
+                  document.getElementById("contrasena");
+
+    const userValue = (userInput?.value || "").trim();
+    const passValue = (passInput?.value || "").trim();
+
+    if (!userValue || !passValue) {
+      alert("Completa usuario y contraseña.");
+      return;
+    }
+
+    // Construimos el payload aceptando email o username
+    const payload = { password: passValue };
+    if (userValue.includes("@")) {
+      payload.email = userValue;      // muchos backends esperan "email"
+      payload.correo = userValue;     // otros esperan "correo"
+    } else {
+      payload.username = userValue;   // "username" / "usuario"
+      payload.usuario  = userValue;
+    }
+
+    try {
+      const resp = await fetch(`${baseUrl}/auth/login`, {
+        method: "POST",
+        headers: {
+          "Content-Type": "application/json",
+          "Accept": "application/json",
+        },
+        body: JSON.stringify(payload),
+      });
+
+      if (!resp.ok) {
+        const tx = await resp.text().catch(() => "");
+        console.warn("Login fallido:", resp.status, tx);
+        alert("Usuario o contraseña incorrectos.");
+        return;
+      }
+
+      const data = await resp.json();
+
+      // Normalizamos nombres de campos del backend
+      const token =
+        data.token ?? data.accessToken ?? data.jwt ?? data.id_token ?? null;
+
+      const idUsuario = N(
+        data.idUsuario ??
+        data.idCliente ??
+        data.usuarioId ??
+        data.userId ??
+        data.usuario?.idUsuario ??
+        data.usuario?.idCliente
+      );
+
+      const personaId = N(
+        data.personaId ??
+        data.persona?.idPersona ??
+        data.profile?.personaId
+      );
+
+      // Guardamos SOLO lo que necesitamos en sesión
+      localStorage.setItem("user", JSON.stringify({ idUsuario, personaId, token }));
+
+      // (opcional) limpia claves viejas que te rompían URLs
+      localStorage.removeItem("userId"); // por si quedó "5:1" de antes
+
+      // Sanity log
+      console.log("Sesión guardada:", { idUsuario, personaId, token: !!token });
+
+      // Redirige donde corresponda:
+      window.location.href = "Cuentas.html"; // <--- tu página destino
+    } catch (err) {
+      console.error("Error en login:", err);
+      alert("No se pudo conectar con el servidor.");
+    }
+  });
+});
+/*
 document.addEventListener('DOMContentLoaded', () => {
   const form = document.querySelector('#loginForm');
   const btn  = document.querySelector('#btn-login') || document.querySelector('button[type="submit"]');
@@ -52,4 +147,4 @@ document.addEventListener('DOMContentLoaded', () => {
   form.addEventListener('invalid', (e) => {
     console.warn('Campo inválido:', e.target.name || e.target.id, e.target.validationMessage);
   }, true);
-});
+});*/

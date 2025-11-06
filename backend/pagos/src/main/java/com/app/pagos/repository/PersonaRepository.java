@@ -12,3 +12,4 @@ public interface PersonaRepository extends JpaRepository<Persona, Integer> {
 
     boolean existsByCorreo(String correo);
 }
+

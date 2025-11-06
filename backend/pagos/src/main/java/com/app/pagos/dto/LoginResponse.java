@@ -13,8 +13,8 @@ import lombok.Setter;
 @AllArgsConstructor
 @Builder
 public class LoginResponse {
+    private String Token;
     private Integer idUsuario;
-    private String nombre;
-    private String correo;
-    private String status; // o "rol" si prefieres
+    private Integer idPersona;
+
 }

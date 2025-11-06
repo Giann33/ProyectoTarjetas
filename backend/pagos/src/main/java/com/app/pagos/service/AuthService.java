@@ -2,35 +2,49 @@
 package com.app.pagos.service;
 
 import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder;
+import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.stereotype.Service;
 
+import com.app.pagos.config.JwtService;
 import com.app.pagos.dto.LoginResponse;
 import com.app.pagos.entity.Persona;
+import com.app.pagos.entity.Usuario;
 //import com.app.pagos.entity.Usuario;
 import com.app.pagos.repository.PersonaRepository;
+import com.app.pagos.repository.UsuarioRepository;
 
 import lombok.RequiredArgsConstructor;
+
 
 @Service
 @RequiredArgsConstructor
 public class AuthService {
+  private final PersonaRepository personaRepository;
+  private final UsuarioRepository usuarioRepository;
+  private final PasswordEncoder passwordEncoder; // BCrypt
+  private final JwtService jwtService;
 
-    private final PersonaRepository personaRepo;
-    private final BCryptPasswordEncoder encoder = new BCryptPasswordEncoder();
+  public LoginResponse login(String correo, String rawPassword) {
+    // normaliza el correo
+    String email = correo == null ? null : correo.trim().toLowerCase();
 
-    public LoginResponse login(String correo, String password) {
-        Persona u = personaRepo.findByCorreo(correo)
-                .orElseThrow(() -> new RuntimeException("Usuario no encontrado"));
+    Persona persona = personaRepository.findByCorreo(email)
+        .orElseThrow(() -> new RuntimeException("Correo no registrado"));
 
-        if (!encoder.matches(password, u.getContrasenna())) {
-            throw new RuntimeException("Credenciales inválidas");
-        }
-
-        // Ajusta los campos según tu LoginResponse
-        return new LoginResponse(
-                u.getIdPersona(), // o u.getId()
-                u.getNombre(),
-                u.getCorreo(),
-                "OK");
+    // si en BD la contraseña está hasheada (BCrypt), usa matches
+    if (!passwordEncoder.matches(rawPassword, persona.getContrasenna())) {
+      throw new RuntimeException("Contraseña incorrecta");
     }
+
+    Usuario usuario = usuarioRepository.findByPersona_IdPersona(persona.getIdPersona())
+        .orElseThrow(() -> new RuntimeException("Usuario no encontrado para esta persona"));
+
+    String token = jwtService.generateToken(persona.getCorreo());
+
+    return new LoginResponse(
+        token,
+        usuario.getIdUsuario(),
+        persona.getIdPersona()
+    );
+  }
 }

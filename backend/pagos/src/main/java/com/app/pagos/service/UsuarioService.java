@@ -19,8 +19,8 @@ public class UsuarioService {
 
     
 
-    public Optional<Usuario> consultarPorId(int idUsuario) {
-        return repo.findById(idUsuario); // <- aquí
+    public Optional<Usuario> consultarPorId(Integer idUsuario) {
+        return repo.findByIdUsuario(idUsuario); // <- aquí
     }
 }
 

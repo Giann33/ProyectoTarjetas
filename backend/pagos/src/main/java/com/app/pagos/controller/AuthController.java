@@ -7,7 +7,10 @@ import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RestController;
 
+import com.app.pagos.config.JwtService;
 import com.app.pagos.dto.LoginResponse;
+import com.app.pagos.repository.PersonaRepository;
+import com.app.pagos.repository.UsuarioRepository;
 import com.app.pagos.service.AuthService;
 
 import jakarta.validation.constraints.Email;
@@ -18,11 +21,14 @@ import lombok.RequiredArgsConstructor;
 record LoginRequest(@Email String correo, @NotBlank String password) {
 }
 
+
+
 @RestController
 @RequestMapping("/auth")
 @RequiredArgsConstructor
 public class AuthController {
-
+  
+  
   private final AuthService authService;
 
   @PostMapping("/login")

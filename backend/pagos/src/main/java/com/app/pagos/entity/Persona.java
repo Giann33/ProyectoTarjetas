@@ -42,4 +42,6 @@ public class Persona {
     @JoinColumn
     @Column(name = "catalogo_genero_idGenero")
     private Integer idGenero;
+
+
 }
