@@ -11,10 +11,10 @@ import java.util.Date;
 @Service
 public class JwtService {
 
-    // 🔒 Clave secreta usada para firmar los tokens
+    //  Clave secreta 
     private static final Key SECRET_KEY = Keys.secretKeyFor(SignatureAlgorithm.HS256);
 
-    // Tiempo de expiración (por ejemplo, 1 hora)
+    // Tiempo de expiración 
     private static final long EXPIRATION_TIME = 60 * 60 * 1000;
 
     /**
@@ -32,9 +32,7 @@ public class JwtService {
                 .compact();
     }
 
-    /**
-     * (Opcional) Valida el token y devuelve el sujeto (correo o user).
-     */
+ 
     public String validateToken(String token) {
         return Jwts.parserBuilder()
                 .setSigningKey(SECRET_KEY)

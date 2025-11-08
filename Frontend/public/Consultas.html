@@ -4,8 +4,9 @@
 <head>
   <meta charset="UTF-8" />
   <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-  <title>Dunamys – Cuentas</title>
+  <title>Dunamys – Panel Principal</title>
   <link rel="stylesheet" href="CSS/Base.css">
+  <link rel="stylesheet" href="CSS/Consultas.css">
   <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.0/css/all.min.css">
   <script src="JS/cuentas.js"></script>
   <script src="JS/Logout.js"></script>
@@ -20,17 +21,16 @@
         <ul class="nav">
           <li><button class="nav-btn" onclick="window.location.href='Consultas.html'"><i class="fa-solid fa-house"></i><span>Consultas</span></button></li>
           <li><button class="nav-btn" onclick="window.location.href='Mantenimientos.html'"><i class="fa-solid fa-user-pen"></i><span>Mantenimientos</span></button></li>
-          <li><button class="nav-btn"><i class="fa-solid fa-credit-card"></i></i><span>Tarjetas</span></button></li>
+          <li><button class="nav-btn"><i class="fa-solid fa-credit-card"></i><span>Tarjetas</span></button></li>
           <li><button class="nav-btn"><i class="fa-solid fa-right-left"></i><span>Transferencias</span></button></li>
-          <li><button class="nav-btn"><i class="fa-solid fa-cart-shopping"></i><span>Historial de
-                Compras</span></button></li>
+          <li><button class="nav-btn"><i class="fa-solid fa-cart-shopping"></i><span>Historial de Compras</span></button></li>
           <li><button class="nav-btn"><i class="fa-solid fa-file-invoice"></i><span>Pagar Servicios</span></button></li>
         </ul>
 
         <div class="subhead">Configuración</div>
         <ul class="nav">
           <li><button class="nav-btn"><i class="fa-solid fa-circle-question"></i><span>Ayuda</span></button></li>
-          <li><button class="nav-btn"><i class="fa-solid fa-envelope"></i><span>Contactenos</span></button></li>
+          <li><button class="nav-btn"><i class="fa-solid fa-envelope"></i><span>Contáctenos</span></button></li>
         </ul>
         <div class="subhead cerrar">
           <button class="nav-btn" id="btn-logout"><i class="fa-solid fa-right-from-bracket"></i><span>Cerrar Sesión</span></button>
@@ -45,41 +45,44 @@
         </div>
       </header>
 
-      <!-- Contenido -->
+      <!-- Contenido principal -->
       <main class="content">
-        <div class="grid">
-          <div class="col">
-            <h3>Cuentas Personales</h3>
-            <div class="frame">
-              <div class="card" id="acc-personal">
-                <h4 id="acc1-name">CR–cuenta bancaria</h4>
-                <div class="sub" id="acc1-number">CR 09898 0687 88899 555</div>
-                <div class="line"></div>
-                <div class="amount" id="acc1-amount">C$50 000</div>
-              </div>
-            </div>
-          </div>
+        <h2 class="title">Panel de Opciones</h2>
+        <div class="options-grid">
 
-          <div class="col">
-            <h3>Cuenta objetivos</h3>
-            <div class="frame">
-              <div class="card" id="acc-objetivos">
-                <h4 id="acc2-name">CR–cuenta bancaria</h4>
-                <div class="sub" id="acc2-number">CR 09886 6667 88869 555</div>
-                <div class="line"></div>
-                <div class="amount" id="acc2-amount">C$30 000</div>
-              </div>
-            </div>
-          </div>
+          <button class="option-btn" onclick="window.location.href='Editar_Cuentas.html'">
+            <i class="fa-solid fa-user-pen"></i>
+            <span>Editar Cuentas</span>
+          </button>
+
+          <button class="option-btn" onclick="window.location.href='Tarjetas.html'">
+            <i class="fa-solid fa-credit-card"></i>
+            <span>Tarjetas</span>
+          </button>
+
+          <button class="option-btn" onclick="window.location.href='Bitacoras.html'">
+            <i class="fa-solid fa-book'> </i>
+            <span> Bitácoras </span>
+          </button>
+
+          <button class="option-btn" onclick="window.location.href='Transferencias.html'">
+            <i class="fa-solid fa-right-left"></i>
+            <span>Transferencias</span>
+          </button>
+
+          <button class="option-btn" onclick="window.location.href='Servicios.html'">
+            <i class="fa-solid fa-file-invoice"></i>
+            <span>Pagar Servicios</span>
+          </button>
+
+          <button class="option-btn" onclick="window.location.href='Historial.html'">
+            <i class="fa-solid fa-clock-rotate-left"></i>
+            <span>Historial</span>
+          </button>
+
         </div>
       </main>
     </div>
 
     <footer class="foot">Dunamys</footer>
   </div>
-
-
-  
-</body>
-
-</html>

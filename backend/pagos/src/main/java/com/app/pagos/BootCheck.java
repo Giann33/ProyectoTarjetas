@@ -17,7 +17,7 @@ package com.app.pagos;
  * Integer one = jdbc.queryForObject("SELECT 1", Integer.class);
  * System.out.println("Conexión OK: " + one);
  * 
- * // 👇 CAMBIA AQUÍ TUS DATOS
+ * //  CAMBIA AQUÍ TUS DATOS
  * String nombre = "Carlos";
  * String correo = "carlos@example.com";
  * 

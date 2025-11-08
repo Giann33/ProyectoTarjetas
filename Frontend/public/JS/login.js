@@ -1,8 +1,8 @@
 // Frontend/public/JS/login.js
 
 document.addEventListener("DOMContentLoaded", () => {
-  const baseUrl = "http://localhost:8081";            // <--- ajusta si hace falta
-  const form = document.getElementById("loginForm");  // <--- id de tu <form>
+  const baseUrl = "http://localhost:8081";            
+  const form = document.getElementById("loginForm");  
 
   // Helpers
   const N = (v) => {
@@ -59,7 +59,7 @@ const passInput = document.getElementById("password") ||
 
       const data = await resp.json();
 
-      // Normalizamos nombres de campos del backend
+      // Normalizar campos del backend
       const token =
         data.token ?? data.accessToken ?? data.jwt ?? data.id_token ?? null;
 
@@ -78,7 +78,7 @@ const passInput = document.getElementById("password") ||
         data.profile?.personaId
       );
 
-      // Guardamos SOLO lo que necesitamos en sesión
+      // se guarda SOLO lo que se necesita en sesión
       localStorage.setItem("user", JSON.stringify({ idUsuario, personaId, token }));
 
       // (opcional) limpia claves viejas que te rompían URLs
