@@ -1,0 +1,183 @@
+* {
+  margin: 0;
+  padding: 0;
+  box-sizing: border-box;
+  font-family: "Poppins", sans-serif;
+}
+
+body {
+background-image: url("../IMG/background-dunamys.png") ;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+  height: 100vh;
+}
+
+header {
+  width: 100%;
+  padding: 20px 40px;
+}
+
+
+main {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  width: 100%;
+}
+
+
+.form-box {
+  background-color: #5a5a5a;
+  padding: 40px;
+  border-radius: 8px;
+  width: 320px;
+  color: white;
+  box-shadow: 0px 4px 10px rgba(0,0,0,0.2);
+  margin-top: 50px;
+}
+
+.form-box h2 {
+  text-align: center;
+  margin-bottom: 20px;
+  font-size: 22px;
+}
+
+
+
+input {
+  width: 100%;
+  padding: 10px;
+  margin-bottom: 15px;
+  border: none;
+  border-radius: 4px;
+}
+
+input::placeholder {
+  color: #aaa;
+}
+
+.btn-registrar {
+  width: 100%;
+  padding: 12px;
+  background-color: #1c6633; /* verde esmeralda */
+  border: none;
+  border-radius: 4px;
+  color: white;
+  font-size: 16px;
+  cursor: pointer;
+  transition: background-color 0.3s ease;
+}
+
+.btn-registrar:hover {
+  background-color: #155128
+}
+/*Parte de recuperar password */ 
+
+.form-box-recuperar h2 {
+  text-align: center;
+  margin-bottom: 20px;
+  font-size: 20px;
+}
+
+.btn-enviar {
+  width: 100%;
+  padding: 12px;
+  background-color: #1c6633; /* verde esmeralda */
+  border: none;
+  border-radius: 4px;
+  color: white;
+  font-size: 16px;
+  cursor: pointer;
+  transition: background-color 0.3s ease;
+}
+
+.btn-enviar:hover {
+  background-color: #155128;
+}
+
+
+body::before {
+  content: "";
+  position: absolute;
+  top: 0;
+  right: 0;
+  width: 120px;
+  height: 120px;
+  background-color: #0b5530;
+  border-bottom-left-radius: 100%;
+}
+
+body::after {
+  content: "";
+  position: absolute;
+  left: 50px;
+  bottom: 50px;
+  width: 100px;
+  height: 120px;
+  background: radial-gradient(circle at center, #1c6633 0%, transparent 70%);
+  opacity: 0.1;
+}
+
+.btn-enviar {
+  width: 100%;
+  padding: 12px;
+  background-color: #1c6633; /* verde esmeralda */
+  border: none;
+  border-radius: 4px;
+  color: white;
+  font-size: 16px;
+  cursor: pointer;
+  transition: background-color 0.3s ease;
+}
+
+.btn-enviar:hover {
+  background-color: #155128;
+
+}
+
+
+
+/* cambio password*/
+
+.container {
+  background: #fff;
+  padding: 2rem;
+  border-radius: 12px;
+  box-shadow: 0 4px 12px rgba(0,0,0,0.1);
+  width: 100%;
+  max-width: 400px;
+  text-align: center;
+}
+
+
+h2.cambio-p {
+  margin-bottom: 1.5rem;
+  color: #333;
+}
+
+input.cambio-pass[type="password"] {
+  width: 100%;
+  padding: 0.75rem;
+  margin-bottom: 1rem;
+  border: 1px solid #ccc;
+  border-radius: 8px;
+  font-size: 1rem;
+}
+
+
+
+.btn_cambiar {
+  background-color: #155128;
+  color: white;
+  padding: 0.75rem 1.5rem;
+  border: none;
+  border-radius: 8px;
+  font-size: 1rem;
+  cursor: pointer;
+  transition: background-color 0.3s ease;
+}
+
+.btn_cambiar:hover {
+  background-color: #155128; }
