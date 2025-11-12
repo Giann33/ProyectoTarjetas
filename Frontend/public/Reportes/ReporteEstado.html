@@ -1,0 +1,72 @@
+<!doctype html>
+<html lang="es">
+<head>
+  <meta charset="utf-8" />
+  <title>Reporte de estado de transacciones</title>
+  <!-- Ajusta estas rutas si tus CSS están en otra carpeta -->
+  <link rel="stylesheet" href="../CSS/Base.css">
+  <link rel="stylesheet" href="../CSS/styles.css">
+  <style>
+    .wrap { max-width: 1100px; margin: 24px auto; padding: 0 12px; }
+    .toolbar { display: flex; gap: 8px; align-items: end; margin: 16px 0; flex-wrap: wrap; }
+    .toolbar label { display: block; font-size: 0.9rem; color: #374151; margin-bottom: 4px; }
+    .toolbar input, .toolbar select, .toolbar button {
+      padding: 8px 10px; border: 1px solid #e5e7eb; border-radius: 8px; background: #fff;
+    }
+    .toolbar button { background: #111; color: #fff; cursor: pointer; }
+    table { width: 100%; border-collapse: collapse; background: #fff; border: 1px solid #e5e7eb; border-radius: 12px; overflow: hidden; }
+    th, td { padding: 10px; border-bottom: 1px solid #f3f4f6; text-align: left; }
+    th { background: #f9fafb; font-weight: 600; color: #111827; }
+    #paginacion { margin-top: 12px; color: #6b7280; font-size: 0.9rem; }
+  </style>
+</head>
+<body>
+  <div class="wrap">
+    <h1>6.1.1 Reporte de estado de transacciones</h1>
+
+    <div class="toolbar">
+      <div>
+        <label for="fFecha">Fecha</label>
+        <input id="fFecha" type="date" />
+      </div>
+      <div>
+        <label for="fEstado">Estado</label>
+        <select id="fEstado">
+          <option value="TODOS">Todos</option>
+          <option value="Completada">Autorizadas</option>
+          <option value="Rechazada">Rechazadas</option>
+        </select>
+      </div>
+      <div>
+        <label for="fOrden">Orden</label>
+        <select id="fOrden">
+          <option value="FACTURA">Factura</option>
+          <option value="MONTO">Monto</option>
+          <option value="FECHA">Fecha</option>
+        </select>
+      </div>
+      <button id="btnBuscar">Buscar</button>
+      <button id="btnExportar">Exportar</button>
+    </div>
+
+    <table>
+      <thead>
+        <tr>
+          <th>Estado</th>
+          <th>Comercio</th>
+          <th>Monto</th>
+          <th>Fecha</th>
+          <th>Factura</th>
+        </tr>
+      </thead>
+      <tbody id="grid"></tbody>
+    </table>
+
+    <div id="paginacion"></div>
+  </div>
+
+  <!-- JS externo del reporte -->
+  <script src="../js/reportes/reporteEstado.js"></script>
+</body>
+</html>
+

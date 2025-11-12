@@ -1,0 +1,59 @@
+<!doctype html>
+<html lang="es">
+<head>
+  <meta charset="utf-8" />
+  <title>Reporte de tiempos de respuesta</title>
+  <link rel="stylesheet" href="../CSS/Base.css">
+  <link rel="stylesheet" href="../CSS/styles.css">
+  <style>
+    .wrap { max-width: 1100px; margin: 24px auto; padding: 0 12px; }
+    .toolbar { display:flex; gap:8px; align-items:end; margin:16px 0; flex-wrap: wrap; }
+    .toolbar label { display:block; font-size:.9rem; color:#374151; margin-bottom:4px; }
+    .toolbar input, .toolbar button { padding:8px 10px; border:1px solid #e5e7eb; border-radius:8px; background:#fff; }
+    .toolbar button { background:#111; color:#fff; cursor:pointer; }
+    table { width:100%; border-collapse:collapse; background:#fff; border:1px solid #e5e7eb; border-radius:12px; overflow:hidden; }
+    th, td { padding:10px; border-bottom:1px solid #f3f4f6; text-align:left; white-space:nowrap; }
+    th { background:#f9fafb; font-weight:600; color:#111827; }
+    #paginacion { margin-top:12px; color:#6b7280; font-size:.9rem; }
+  </style>
+</head>
+<body>
+  <div class="wrap">
+    <h1>6.1.5 Reporte de tiempos de respuesta</h1>
+
+    <div class="toolbar">
+      <div>
+        <label for="fInicio">Fecha inicio</label>
+        <input id="fInicio" type="date" />
+      </div>
+      <div>
+        <label for="fFin">Fecha fin</label>
+        <input id="fFin" type="date" />
+      </div>
+      <button id="btnBuscar">Buscar</button>
+      <button id="btnExportar">Exportar</button>
+    </div>
+
+    <table>
+      <thead>
+        <tr>
+          <th>Endpoint</th>
+          <th>Método</th>
+          <th>Prom (ms)</th>
+          <th>P95 (ms)</th>
+          <th>P99 (ms)</th>
+          <th>Min (ms)</th>
+          <th>Max (ms)</th>
+          <th>Fecha</th>
+        </tr>
+      </thead>
+      <tbody id="grid"></tbody>
+    </table>
+
+    <div id="paginacion"></div>
+  </div>
+
+  <script src="../js/reportes/reporteRespuesta.js"></script>
+</body>
+</html>
+

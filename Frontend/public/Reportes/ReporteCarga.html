@@ -1,0 +1,49 @@
+<!doctype html>
+<html lang="es">
+<head>
+  <meta charset="utf-8" />
+  <title>Reporte de carga transaccional</title>
+  <link rel="stylesheet" href="../CSS/Base.css">
+  <link rel="stylesheet" href="../CSS/styles.css">
+  <style>
+    .wrap { max-width: 1100px; margin: 24px auto; padding: 0 12px; }
+    .toolbar { display:flex; gap:8px; align-items:end; margin:16px 0; flex-wrap: wrap; }
+    .toolbar label { display:block; font-size:.9rem; color:#374151; margin-bottom:4px; }
+    .toolbar select, .toolbar button { padding:8px 10px; border:1px solid #e5e7eb; border-radius:8px; background:#fff; }
+    .toolbar button { background:#111; color:#fff; cursor:pointer; }
+    table { width:100%; border-collapse:collapse; background:#fff; border:1px solid #e5e7eb; border-radius:12px; overflow:hidden; }
+    th, td { padding:10px; border-bottom:1px solid #f3f4f6; text-align:left; }
+    th { background:#f9fafb; font-weight:600; color:#111827; }
+  </style>
+</head>
+<body>
+  <div class="wrap">
+    <h1>6.1.4 Reporte de carga transaccional</h1>
+
+    <div class="toolbar">
+      <div>
+        <label for="fRango">Rango</label>
+        <select id="fRango">
+          <option value="diario">Diario</option>
+          <option value="semanal">Semanal</option>
+          <option value="mensual">Mensual</option>
+        </select>
+      </div>
+      <button id="btnBuscar">Actualizar</button>
+      <button id="btnExportar">Exportar</button>
+    </div>
+
+    <table>
+      <thead>
+        <tr>
+          <th>Hora</th>
+          <th>Tráfico</th>
+        </tr>
+      </thead>
+      <tbody id="grid"></tbody>
+    </table>
+  </div>
+
+  <script src="../js/reportes/reporteCarga.js"></script>
+</body>
+</html>
