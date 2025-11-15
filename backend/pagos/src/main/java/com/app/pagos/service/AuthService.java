@@ -36,7 +36,7 @@ public class AuthService {
       throw new RuntimeException("Contraseña incorrecta");
     }
 
-    Usuario usuario = usuarioRepository.findByPersona_IdPersona(persona.getIdPersona())
+    Usuario usuario = usuarioRepository.findByPersonaIdPersona(persona.getIdPersona())
         .orElseThrow(() -> new RuntimeException("Usuario no encontrado para esta persona"));
 
     String token = jwtService.generateToken(persona.getCorreo());
@@ -44,7 +44,8 @@ public class AuthService {
     return new LoginResponse(
         token,
         usuario.getIdUsuario(),
-        persona.getIdPersona()
+        persona.getIdPersona(),
+        persona.getRol()
     );
   }
 }

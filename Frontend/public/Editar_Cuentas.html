@@ -1,97 +1,147 @@
 <!DOCTYPE html>
 <html lang="es">
+
 <head>
-<meta charset="UTF-8" />
-<meta name="viewport" content="width=device-width, initial-scale=1.0" />
-<title>Dunamys – Formulario</title>
-<link rel="stylesheet" href="CSS/Editar_Cuentas.css">
-<link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.0/css/all.min.css">
-<script src="JS/Editar_Cuentas.js"></script>
-<script src="JS/Logout.js"></script>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>Dunamys – Editar Cuentas</title>
+
+  <!-- Estilos base del proyecto -->
+  <link rel="stylesheet" href="CSS/Base.css">
+  <!-- Estilos específicos de Editar Cuentas -->
+  <link rel="stylesheet" href="CSS/Editar_Cuentas.css">
+
+  <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.0/css/all.min.css">
+
+  <!-- JS específico para esta pantalla -->
+  <script src="JS/editar_cuentas.js" defer></script>
+  <script src="JS/Logout.js" defer></script>
 </head>
 
-
 <body>
-<div class="shell">
-<div class="panel">
-<!-- Sidebar -->
-<aside class="sidebar">
-<div class="brand-aside">Dunamys</div>
-<ul class="nav">
+  <div class="shell">
+    <div class="panel">
+      <!-- Sidebar -->
+      <aside class="sidebar">
+        <div class="brand-aside">Dunamys</div>
+        <ul class="nav">
           <li><button class="nav-btn" onclick="window.location.href='Consultas.html'"><i class="fa-solid fa-house"></i><span>Consultas</span></button></li>
           <li><button class="nav-btn" onclick="window.location.href='Mantenimientos.html'"><i class="fa-solid fa-user-pen"></i><span>Mantenimientos</span></button></li>
-          <li><button class="nav-btn"><i class="fa-solid fa-credit-card"></i></i><span>Tarjetas</span></button></li>
-          <li><button class="nav-btn"><i class="fa-solid fa-right-left"></i><span>Transferencias</span></button></li>
-          <li><button class="nav-btn"><i class="fa-solid fa-cart-shopping"></i><span>Historial de
-                Compras</span></button></li>
-          <li><button class="nav-btn"><i class="fa-solid fa-file-invoice"></i><span>Pagar Servicios</span></button></li>
+          <li><button class="nav-btn" onclick="window.location.href='Reportes.html'"><i class="fa-solid fa-file-pdf"></i><span>Reportes</span></button></li>
+          <li><button class="nav-btn" onclick="window.location.href='Reversos.html'"><i class="fa-solid fa-right-left"></i><span>Reversos y Devoluciones</span></button></li>
+          <li><button class="nav-btn" onclick="window.location.href='Autorizar.html'"><i class="fa-solid fa-check"></i><span>Autorizar Transacciones</span></button></li>
+          <li><button class="nav-btn" onclick="window.location.href='Conciliacion.html'"><i class="fa-solid fa-users-line"></i><span>Conciliación con Adquirentes/Emisores</span></button></li>
+          <li><button class="nav-btn" onclick="window.location.href='Notificaciones.html'"><i class="fa-solid fa-envelope"></i><span>Notificaciones y Mensajes</span></button></li>
         </ul>
 
+        <div class="subhead">Configuración</div>
+        <ul class="nav">
+          <li><button class="nav-btn"><i class="fa-solid fa-circle-question"></i><span>Ayuda</span></button></li>
+          <li><button class="nav-btn"><i class="fa-solid fa-envelope"></i><span>Contáctenos</span></button></li>
+        </ul>
+        <div class="subhead cerrar">
+          <button class="nav-btn" id="btn-logout"><i class="fa-solid fa-right-from-bracket"></i><span>Cerrar Sesión</span></button>
+        </div>
+      </aside>
 
-<div class="subhead">Configuración</div>
-<ul class="nav">
-<li><button class="nav-btn"><i class="fa-solid fa-circle-question"></i><span>Ayuda</span></button></li>
-<li><button class="nav-btn"><i class="fa-solid fa-envelope"></i><span>Contactenos</span></button></li>
-</ul>
+      <!-- Header -->
+      <header class="header">
+        <div class="logo">
+          <img src="IMG/Dunamys_Logo.png" alt="Logo Dunamys" class="logo-img">
+          <span class="word">DUNAMYS</span>
+        </div>
+      </header>
+
+      <!-- Contenido principal -->
+      <main class="content">
+        <div class="main-container">
+          <h2>Editar Cuentas</h2>
+          <p>Selecciona una cuenta para editar sus datos.</p>
+
+          <section id="admin-panel" class="admin-panel hidden">
+      <h3><i class="fa-solid fa-user-gear"></i> Modo administrador</h3>
+      <p>Selecciona manualmente el <b>idUsuario</b> para gestionar sus cuentas.</p>
+      <div class="admin-panel-row">
+        <label for="adminUserId">idUsuario:</label>
+        <input type="number" id="adminUserId" placeholder="Ej. 5" min="1" />
+        <button type="button" id="btn-admin-cargar" class="btn-primary btn-admin">
+          <i class="fa-solid fa-magnifying-glass"></i> Cargar cuentas
+        </button>
+      </div>
+    </section>
+
+          <!-- Listado dinámico de cuentas -->
+          <section class="accounts-section">
+            <h3>Mis cuentas</h3>
+            <div id="cuentas-container" class="cuentas-grid">
+              <!-- Aquí se crean las tarjetas de cuentas con JS -->
+            </div>
+
+            <!-- Mensaje cuando no hay cuentas -->
+            <p id="sin-cuentas-msg" class="sin-cuentas hidden">
+              No se encontraron cuentas asociadas al usuario.
+            </p>
+          </section>
+
+          <!-- Formulario de edición -->
+          <section id="edit-section" class="edit-section hidden">
+            <h3>Editar cuenta seleccionada</h3>
+            <form id="form-editar-cuenta" class="edit-form">
+              <div class="form-row">
+                <label for="numeroCuenta">Número de cuenta</label>
+                <input type="text" id="numeroCuenta" name="numeroCuenta"/>
+              </div>
 
 
-<div class="subhead muted cerrar">
-<button class="nav-btn" id="btn-logout"><i class="fa-solid fa-right-from-bracket"></i><span>Cerrar Sesión</span></button>
+              <div class="form-row">
+               <label for="tipoCuenta">Tipo de Cuenta</label>
+  <select id="tipoCuenta" name="tipoCuenta">
+    <option value="1">Cuenta de Ahorros</option>
+    <option value="2">Cuenta Corriente</option>
+  </select>
 </div>
-</aside>
 
 
-<!-- Header -->
-<header class="header">
-<div class="logo" aria-label="Dunamys">
-<img src="img/Dunamys_Logo.png" alt="Logo Dunamys" class="logo-img">
-<span class="word">DUNAMYS</span>
-</div>
-</header>
-
-
-<!-- Contenido (formulario centrado) -->
-<main class="content">
-<div class="form-container">
-<h2>Editar Usuario</h2>
-<form id="registro-form">
-<div class="form-group">
-<label for="nombre">Nombre</label>
-<input type="text" id="nombre" name="nombre" placeholder="Ingrese su nombre" required>
+              <div class="form-row">
+  <label for="moneda">Sucursal</label>
+  <select id="moneda" name="moneda">
+    <option value="1">Colones</option>
+    <option value="2">Dolares</option>
+  </select>
 </div>
 
-
-<div class="form-group">
-<label for="correo">Correo</label>
-<input type="email" id="correo" name="correo" placeholder="ejemplo@correo.com" required>
+              <div class="form-row">
+  <label for="sucursal">Sucursal</label>
+  <select id="sucursal" name="sucursal">
+    <option value="1">Sucursal Central</option>
+    <option value="2">Sucursal Heredia</option>
+    <option value="3">Sucursal Cartago</option>
+  </select>
 </div>
 
+              <div class="form-row">
+                <label for="saldo">Saldo</label>
+                <input type="number" step="0.01" id="saldo" name="saldo" readonly />
+              </div>
 
-<div class="form-group">
-<label for="contrasena">Contraseña</label>
-<input type="password" id="contrasena" name="contrasena" placeholder="Ingrese su contraseña" required>
-</div>
+              <div class="form-actions">
+                <button type="submit" class="btn-primary">
+                  <i class="fa-solid fa-floppy-disk"></i> Guardar cambios
+                </button>
+                <button type="button" class="btn-secondary" id="btn-cancelar">
+                  Cancelar
+                </button>
+              </div>
+            </form>
+          </section>
 
+        </div>
+      </main>
+    </div>
 
-<div class="form-group">
-<label for="genero">Género</label>
-<select id="genero" name="genero" required>
-<option value="">Seleccione...</option>
-<option value="femenino">Femenino</option>
-<option value="masculino">Masculino</option>
-<option value="otro">Otro</option>
-</select>
-</div>
+    <footer class="foot">Dunamys</footer>
+  </div>
 
-
-<button type="submit" class="btn-enviar">Actualizar</button>
-</form>
-</div>
-</main>
-</div>
-
-
-<footer class="foot">Dunamys</footer>
-</div>
 </body>
+
 </html>

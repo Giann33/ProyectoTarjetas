@@ -1,45 +1,68 @@
-    .content {
-      text-align: center;
-      padding: 2rem;
-    }
+.main-container {
+  padding: 20px 30px;
+}
 
-    .title {
-      font-size: 1.8rem;
-      margin-bottom: 2rem;
-      color: #333;
-    }
+/* Que el título se vea como en Mantenimientos */
+.main-container h2 {
+  margin-bottom: 5px;
+  font-size: 24px;
+  font-weight: 600;
+  text-transform: none;      /* quita mayúsculas forzadas */
+  letter-spacing: normal;    /* quita separación rara de letras */
+}
 
-    .options-grid {
-      display: grid;
-      grid-template-columns: repeat(auto-fit, minmax(180px, 1fr));
-      gap: 1.5rem;
-      justify-items: center;
-    }
+/* Texto debajo del título */
+.main-container > p {
+  margin-bottom: 20px;
+  color: #555;
+  font-size: 14px;
+  text-transform: none;
+  letter-spacing: normal;
+}
 
-    .option-btn {
-      background-color: #005f73;
-      color: #fff;
-      border: none;
-      padding: 1.5rem;
-      border-radius: 10px;
-      font-size: 1rem;
-      width: 180px;
-      height: 140px;
-      display: flex;
-      flex-direction: column;
-      justify-content: center;
-      align-items: center;
-      gap: 0.8rem;
-      transition: 0.3s ease;
-      cursor: pointer;
-      box-shadow: 0 4px 10px rgba(0,0,0,0.15);
-    }
+/* ===== GRID ===== */
 
-    .option-btn i {
-      font-size: 2rem;
-    }
+.consultas-grid {
+  display: grid;
+  grid-template-columns: repeat(auto-fill, minmax(260px, 1fr));
+  gap: 20px;
+  margin-top: 20px;
+}
 
-    .option-btn:hover {
-      background-color: #0a9396;
-      transform: translateY(-3px);
-    }
+/* ===== CARDS ===== */
+
+.consulta-card {
+  background: #ffffff;
+  border-radius: 10px;
+  padding: 18px;
+  box-shadow: 0 2px 8px rgba(0,0,0,0.08);
+  display: flex;
+  flex-direction: column;
+  gap: 10px;
+}
+
+.consulta-card h3 {
+  font-size: 1.1rem;
+  display: flex;
+  align-items: center;
+  gap: 8px;
+}
+
+.consulta-card p {
+  font-size: 0.9rem;
+  color: #444;
+}
+
+.consulta-btn {
+  width: 100%;
+  margin-top: 10px;
+  padding: 10px;
+  border-radius: 8px;
+  cursor: pointer;
+  font-size: 0.9rem;
+}
+
+/* Hover */
+.consulta-btn:hover {
+  filter: brightness(1.08);
+}

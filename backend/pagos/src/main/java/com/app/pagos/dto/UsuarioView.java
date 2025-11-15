@@ -13,12 +13,16 @@ public class UsuarioView {
     private String nombre;
     private String correo;
     private Integer idGenero;
+    private String apellido;
 
     public UsuarioView() {}
 
     // --- getters/setters (todos en Integer) ---
     public Integer getIdUsuario() { return idUsuario; }
     public void setIdUsuario(Integer idUsuario) { this.idUsuario = idUsuario; }
+
+    public String getApellido() { return apellido; }
+    public void setApellido(String apellido) { this.apellido = apellido; }
 
     public boolean isActivo() { return activo; }
     public void setActivo(boolean activo) { this.activo = activo; }

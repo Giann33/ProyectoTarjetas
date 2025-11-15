@@ -22,5 +22,5 @@ public interface UsuarioRepository extends JpaRepository<Usuario, Integer> {
            """)
     Optional<Usuario> findByIdUsuario(@Param("id") Integer id);
 
-    Optional<Usuario> findByPersona_IdPersona(Integer personaId);
+    Optional<Usuario> findByPersonaIdPersona(Integer personaId);
 }

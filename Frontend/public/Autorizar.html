@@ -1,0 +1,162 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>Dunamys – Autorizar Transacciones</title>
+
+  <!-- Estilos base del proyecto -->
+  <link rel="stylesheet" href="CSS/Base.css">
+  <!-- Estilos específicos de esta página -->
+  <link rel="stylesheet" href="CSS/Autorizar.css">
+
+  <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.0/css/all.min.css">
+
+  <!-- Scripts -->
+  <script src="JS/Logout.js" defer></script>
+  <script src="JS/Autorizar.js" defer></script>
+</head>
+
+<body>
+  <div class="shell">
+    <div class="panel">
+      <!-- Sidebar -->
+      <aside class="sidebar">
+        <div class="brand-aside">Dunamys</div>
+        <ul class="nav">
+          <li><button class="nav-btn" onclick="window.location.href='Consultas.html'"><i class="fa-solid fa-house"></i><span>Consultas</span></button></li>
+          <li><button class="nav-btn" onclick="window.location.href='Mantenimientos.html'"><i class="fa-solid fa-user-pen"></i><span>Mantenimientos</span></button></li>
+          <li><button class="nav-btn" onclick="window.location.href='Reportes.html'"><i class="fa-solid fa-file-pdf"></i><span>Reportes</span></button></li>
+          <li><button class="nav-btn" onclick="window.location.href='Reversos.html'"><i class="fa-solid fa-right-left"></i><span>Reversos y Devoluciones</span></button></li>
+          <li><button class="nav-btn" onclick="window.location.href='Autorizar.html'"><i class="fa-solid fa-check"></i><span>Autorizar Transacciones</span></button></li>
+          <li><button class="nav-btn" onclick="window.location.href='Conciliar.html'"><i class="fa-solid fa-users-line"></i><span>Conciliación con Adquirentes/Emisores</span></button></li>
+          <li><button class="nav-btn" onclick="window.location.href='Notificaciones.html'"><i class="fa-solid fa-envelope"></i><span>Notificaciones y Mensajes</span></button></li>
+        </ul>
+
+        <div class="subhead">Configuración</div>
+        <ul class="nav">
+          <li><button class="nav-btn"><i class="fa-solid fa-circle-question"></i><span>Ayuda</span></button></li>
+          <li><button class="nav-btn"><i class="fa-solid fa-envelope"></i><span>Contáctenos</span></button></li>
+        </ul>
+        <div class="subhead muted cerrar">
+          <button class="nav-btn" id="btn-logout"><i class="fa-solid fa-right-from-bracket"></i><span>Cerrar Sesión</span></button>
+        </div>
+      </aside>
+
+      <!-- Header -->
+      <header class="header">
+        <div class="logo" aria-label="Dunamys">
+          <img src="IMG/Dunamys_Logo.png" alt="Logo Dunamys" class="logo-img">
+          <span class="word">DUNAMYS</span>
+        </div>
+      </header>
+
+      <!-- ====== CONTENIDO: Autorizar Transacciones ====== -->
+      <main class="content">
+        <div class="authz-container">
+          <h2><i class="fa-solid fa-check"></i> Autorizar Transacciones</h2>
+          <p>Revisa transacciones en estado <b>Pendiente</b>, autoriza o rechaza (individual o masivo). La clave es <b>idTransaccion</b>.</p>
+
+          <!-- Filtros -->
+          <section class="card">
+            <h3><i class="fa-solid fa-filter"></i> Filtros</h3>
+            <div class="grid-4">
+              <div class="form-group">
+                <label for="fEstado">Estado</label>
+                <select id="fEstado">
+                  <option value="pendiente">Pendiente</option>
+                  <option value="autorizada">Autorizada</option>
+                  <option value="rechazada">Rechazada</option>
+                  <option value="">Todos</option>
+                </select>
+              </div>
+
+              <div class="form-group">
+                <label for="fEmisor">Emisor</label>
+                <select id="fEmisor">
+                  <option value="">Todos</option>
+                  <option value="Emisor X">Emisor X</option>
+                  <option value="Emisor Y">Emisor Y</option>
+                </select>
+              </div>
+
+              <div class="form-group">
+                <label for="fDesde">Desde</label>
+                <input type="date" id="fDesde" />
+              </div>
+
+              <div class="form-group">
+                <label for="fHasta">Hasta</label>
+                <input type="date" id="fHasta" />
+              </div>
+            </div>
+            <div class="actions">
+              <button class="btn-primary" id="btn-buscar"><i class="fa-solid fa-search"></i> Buscar</button>
+              <button class="btn-secondary" id="btn-limpiar"><i class="fa-solid fa-eraser"></i> Limpiar</button>
+            </div>
+          </section>
+
+          <!-- KPIs -->
+          <section class="kpis grid-3">
+            <div class="kpi"><span class="kpi-title">Pendientes</span><strong id="kpi-pend">0</strong></div>
+            <div class="kpi"><span class="kpi-title">Autorizadas</span><strong id="kpi-auto">0</strong></div>
+            <div class="kpi"><span class="kpi-title">Rechazadas</span><strong id="kpi-rech">0</strong></div>
+          </section>
+
+          <!-- Acciones Masivas -->
+          <section class="card">
+            <h3><i class="fa-solid fa-bolt"></i> Acciones masivas</h3>
+            <div class="actions">
+              <button class="btn-primary" id="btn-autorizarmasivo"><i class="fa-solid fa-check-double"></i> Autorizar seleccionadas</button>
+              <button class="btn-danger" id="btn-rechazarmasivo"><i class="fa-solid fa-ban"></i> Rechazar seleccionadas</button>
+              <button class="btn-secondary" id="btn-exportar"><i class="fa-solid fa-file-export"></i> Exportar seleccionadas</button>
+            </div>
+          </section>
+
+          <!-- Tabla -->
+          <section class="card">
+            <h3><i class="fa-solid fa-table"></i> Transacciones</h3>
+            <div class="table-responsive">
+              <table class="table" id="tablaAuthz">
+                <thead>
+                  <tr>
+                    <th><input type="checkbox" id="chk-todos"></th>
+                    <th>idTransaccion</th>
+                    <th>Fecha</th>
+                    <th>Tarjeta</th>
+                    <th>Emisor</th>
+                    <th>Monto</th>
+                    <th>Moneda</th>
+                    <th>Estado</th>
+                    <th>Acciones</th>
+                  </tr>
+                </thead>
+                <tbody><!-- JS --></tbody>
+              </table>
+            </div>
+          </section>
+
+          <!-- Modal rechazo -->
+          <dialog id="dlg-rechazo">
+            <form method="dialog" class="dialog-body">
+              <h4><i class="fa-solid fa-circle-exclamation"></i> Motivo de rechazo</h4>
+              <div class="form-group">
+                <label for="txt-motivo">Describe el motivo</label>
+                <textarea id="txt-motivo" rows="3" placeholder="Ej. información inconsistente…"></textarea>
+              </div>
+              <div class="actions">
+                <button class="btn-secondary" value="cancel">Cancelar</button>
+                <button class="btn-danger" id="btn-confirmar-rechazo" value="ok">Rechazar</button>
+              </div>
+            </form>
+          </dialog>
+
+        </div>
+      </main>
+      <!-- ====== /CONTENIDO ====== -->
+    </div>
+
+    <footer class="foot">Dunamys</footer>
+  </div>
+</body>
+</html>

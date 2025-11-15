@@ -1,0 +1,196 @@
+.main-container {
+  padding: 20px 30px;
+}
+
+.main-container h2 {
+  margin-bottom: 5px;
+}
+
+.main-container p {
+  margin-bottom: 12px;
+  color: #555;
+}
+
+.warning-text {
+  color: #b3261e;
+  font-weight: 600;
+}
+
+/* ===== Panel admin ===== */
+
+.admin-panel {
+  margin: 15px 0 20px;
+  padding: 12px 15px;
+  background: #f3f8f7;
+  border-left: 4px solid #0d755f;
+  border-radius: 6px;
+}
+
+.admin-panel h3 {
+  margin: 0 0 6px;
+  font-size: 0.98rem;
+}
+
+.admin-panel p {
+  margin: 0 0 8px;
+  font-size: 0.9rem;
+}
+
+.admin-panel-row {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 8px;
+  align-items: center;
+  margin-bottom: 4px;
+}
+
+.admin-panel-row label {
+  font-size: 0.9rem;
+  font-weight: 600;
+}
+
+.admin-panel-row input {
+  width: 120px;
+  padding: 6px 8px;
+  border-radius: 6px;
+  border: 1px solid #ccc;
+  font-size: 0.9rem;
+}
+
+.btn-admin {
+  padding: 6px 12px;
+  font-size: 0.85rem;
+}
+
+.admin-help {
+  font-size: 0.8rem;
+  color: #555;
+}
+
+/* ===== Acciones masivas ===== */
+
+.bulk-actions {
+  margin: 10px 0 15px;
+  display: flex;
+  justify-content: flex-end;
+}
+
+.btn-danger {
+  border: none;
+  border-radius: 6px;
+  padding: 8px 14px;
+  cursor: pointer;
+  font-size: 0.9rem;
+  display: inline-flex;
+  align-items: center;
+  gap: 6px;
+  background-color: #c0392b;
+  color: #ffffff;
+}
+
+.btn-danger:hover {
+  filter: brightness(1.05);
+}
+
+/* ===== Listado de cuentas ===== */
+
+.accounts-section {
+  margin-top: 10px;
+}
+
+.accounts-section h3 {
+  margin-bottom: 15px;
+}
+
+.cuentas-grid {
+  display: grid;
+  grid-template-columns: repeat(auto-fill, minmax(260px, 1fr));
+  gap: 18px;
+}
+
+.cuenta-card {
+  background-color: #ffffff;
+  border-radius: 10px;
+  padding: 16px 18px;
+  box-shadow: 0 2px 8px rgba(0, 0, 0, 0.08);
+  display: flex;
+  flex-direction: column;
+  gap: 6px;
+}
+
+.cuenta-header {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  margin-bottom: 6px;
+}
+
+.cuenta-header h4 {
+  font-size: 1rem;
+  font-weight: 600;
+}
+
+.cuenta-moneda {
+  font-size: 0.9rem;
+  color: #666;
+}
+
+.cuenta-card p {
+  margin: 0;
+  font-size: 0.9rem;
+}
+
+.cuenta-card p span {
+  font-weight: 600;
+}
+
+.cuenta-footer {
+  margin-top: 10px;
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  gap: 8px;
+}
+
+.cuenta-footer-left {
+  display: flex;
+  align-items: center;
+  gap: 6px;
+  font-size: 0.85rem;
+}
+
+.cuenta-footer-left input[type="checkbox"] {
+  width: 16px;
+  height: 16px;
+}
+
+.btn-small {
+  border: none;
+  border-radius: 6px;
+  padding: 6px 10px;
+  cursor: pointer;
+  font-size: 0.85rem;
+  display: inline-flex;
+  align-items: center;
+  gap: 5px;
+}
+
+.btn-delete-card {
+  background-color: #e74c3c;
+  color: #ffffff;
+}
+
+.btn-delete-card:hover {
+  filter: brightness(1.07);
+}
+
+.sin-cuentas {
+  margin-top: 10px;
+  font-size: 0.9rem;
+  color: #777;
+}
+
+/* Utilidad */
+.hidden {
+  display: none !important;
+}

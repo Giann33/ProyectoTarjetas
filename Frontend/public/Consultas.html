@@ -4,27 +4,31 @@
 <head>
   <meta charset="UTF-8" />
   <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-  <title>Dunamys – Panel Principal</title>
+  <title>Dunamys – Consultas</title>
+
   <link rel="stylesheet" href="CSS/Base.css">
   <link rel="stylesheet" href="CSS/Consultas.css">
+
   <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.0/css/all.min.css">
-  <script src="JS/cuentas.js"></script>
-  <script src="JS/Logout.js"></script>
+
+  <script src="JS/Logout.js" defer></script>
 </head>
 
 <body>
   <div class="shell">
     <div class="panel">
+
       <!-- Sidebar -->
       <aside class="sidebar">
         <div class="brand-aside">Dunamys</div>
         <ul class="nav">
-          <li><button class="nav-btn" onclick="window.location.href='Consultas.html'"><i class="fa-solid fa-house"></i><span>Consultas</span></button></li>
+          <li><button class="nav-btn" onclick="window.location.href='Consultas.html'"><i class="fa-solid fa-magnifying-glass"></i><span>Consultas</span></button></li>
           <li><button class="nav-btn" onclick="window.location.href='Mantenimientos.html'"><i class="fa-solid fa-user-pen"></i><span>Mantenimientos</span></button></li>
-          <li><button class="nav-btn"><i class="fa-solid fa-credit-card"></i><span>Tarjetas</span></button></li>
-          <li><button class="nav-btn"><i class="fa-solid fa-right-left"></i><span>Transferencias</span></button></li>
-          <li><button class="nav-btn"><i class="fa-solid fa-cart-shopping"></i><span>Historial de Compras</span></button></li>
-          <li><button class="nav-btn"><i class="fa-solid fa-file-invoice"></i><span>Pagar Servicios</span></button></li>
+          <li><button class="nav-btn" onclick="window.location.href='Reportes.html'"><i class="fa-solid fa-file-pdf"></i><span>Reportes</span></button></li>
+          <li><button class= "nav-btn" onclick="window.location.href='Reversos.html'"><i class="fa-solid fa-right-left"></i><span>Reversos y Devoluciones</span></button></li>
+          <li><button class="nav-btn" onclick="window.location.href='Autorizar.html'"><i class="fa-solid fa-check"></i><span>Autorizar Transacciones</span></button></li>
+          <li><button class="nav-btn" onclick="window.location.href='Conciliacion.html'"><i class="fa-solid fa-users-line"></i><span>Conciliación con Adquirientes/Emisores</span></button></li>
+          <li><button class="nav-btn" onclick="window.location.href='Notificaciones.html'"><i class="fa-solid fa-envelope"></i><span>Notificaciones</span></button></li>
         </ul>
 
         <div class="subhead">Configuración</div>
@@ -32,6 +36,7 @@
           <li><button class="nav-btn"><i class="fa-solid fa-circle-question"></i><span>Ayuda</span></button></li>
           <li><button class="nav-btn"><i class="fa-solid fa-envelope"></i><span>Contáctenos</span></button></li>
         </ul>
+
         <div class="subhead cerrar">
           <button class="nav-btn" id="btn-logout"><i class="fa-solid fa-right-from-bracket"></i><span>Cerrar Sesión</span></button>
         </div>
@@ -40,49 +45,58 @@
       <!-- Header -->
       <header class="header">
         <div class="logo">
-          <img src="IMG/Dunamys_Logo.png" alt="Logo Dunamys" class="logo-img">
+          <img src="IMG/Dunamys_Logo.png" class="logo-img" alt="Logo Dunamys">
           <span class="word">DUNAMYS</span>
         </div>
       </header>
 
       <!-- Contenido principal -->
       <main class="content">
-        <h2 class="title">Panel de Opciones</h2>
-        <div class="options-grid">
+        <div class="main-container">
 
-          <button class="option-btn" onclick="window.location.href='Editar_Cuentas.html'">
-            <i class="fa-solid fa-user-pen"></i>
-            <span>Editar Cuentas</span>
-          </button>
+          <h2>Consultas del Sistema</h2>
+          <p>Selecciona una de las siguientes opciones para consultar la información disponible.</p>
 
-          <button class="option-btn" onclick="window.location.href='Tarjetas.html'">
-            <i class="fa-solid fa-credit-card"></i>
-            <span>Tarjetas</span>
-          </button>
+          <div class="consultas-grid">
 
-          <button class="option-btn" onclick="window.location.href='Bitacoras.html'">
-            <i class="fa-solid fa-book'> </i>
-            <span> Bitácoras </span>
-          </button>
+            <!-- Cuentas -->
+            <div class="consulta-card">
+              <h3><i class="fa-solid fa-piggy-bank"></i> Consultar Cuentas</h3>
+              <p>Visualiza las cuentas asociadas al usuario.</p>
+              <button class="btn-primary consulta-btn" onclick="window.location.href='Consultar_Cuentas.html'">
+                <i class="fa-solid fa-eye"></i> Ver Cuentas
+              </button>
+            </div>
 
-          <button class="option-btn" onclick="window.location.href='Transferencias.html'">
-            <i class="fa-solid fa-right-left"></i>
-            <span>Transferencias</span>
-          </button>
+            <!-- Tarjetas -->
+            <div class="consulta-card">
+              <h3><i class="fa-solid fa-credit-card"></i> Consultar Tarjetas</h3>
+              <p>Consulta tarjetas activas, límites y estados.</p>
+              <button class="btn-primary consulta-btn" onclick="window.location.href='Consultar_Tarjetas.html'">
+                <i class="fa-solid fa-eye"></i> Ver Tarjetas
+              </button>
+            </div>
 
-          <button class="option-btn" onclick="window.location.href='Servicios.html'">
-            <i class="fa-solid fa-file-invoice"></i>
-            <span>Pagar Servicios</span>
-          </button>
+            <!-- Transacciones -->
+            <div class="consulta-card">
+              <h3><i class="fa-solid fa-money-bill-transfer"></i> Consultar Transacciones</h3>
+              <p>Visualiza movimientos recientes realizados.</p>
+              <button class="btn-primary consulta-btn" onclick="window.location.href='Consultar_Transacciones.html'">
+                <i class="fa-solid fa-eye"></i> Ver Transacciones
+              </button>
+            </div>
 
-          <button class="option-btn" onclick="window.location.href='Historial.html'">
-            <i class="fa-solid fa-clock-rotate-left"></i>
-            <span>Historial</span>
-          </button>
+          </div>
 
         </div>
       </main>
+
     </div>
 
-    <footer class="foot">Dunamys</footer>
+    <footer class="foot">
+      Dunamys
+    </footer>
   </div>
+</body>
+
+</html>

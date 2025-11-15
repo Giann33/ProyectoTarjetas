@@ -1,0 +1,152 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>Dunamys – Conciliación</title>
+  <link rel="stylesheet" href="CSS/Conciliar.css"><!-- puedes crear CSS/Conciliacion.css si prefieres -->
+  <link rel="stylesheet" href="CSS/Base.css">
+  <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.0/css/all.min.css">
+  <script src="JS/Logout.js" defer></script>
+  <script src="JS/Conciliacion.js" defer></script>
+</head>
+
+<body>
+  <div class="shell">
+    <div class="panel">
+      <!-- Sidebar -->
+      <aside class="sidebar">
+        <div class="brand-aside">Dunamys</div>
+        <ul class="nav">
+          <li><button class="nav-btn" onclick="window.location.href='Consultas.html'"><i class="fa-solid fa-house"></i><span>Consultas</span></button></li>
+          <li><button class="nav-btn" onclick="window.location.href='Mantenimientos.html'"><i class="fa-solid fa-user-pen"></i><span>Mantenimientos</span></button></li>
+          <li><button class="nav-btn" onclick="window.location.href='Reportes.html'"><i class="fa-solid fa-file-pdf"></i><span>Reportes</span></button></li>
+          <li><button class="nav-btn" onclick="window.location.href='Reversos.html'"><i class="fa-solid fa-right-left"></i><span>Reversos y Devoluciones</span></button></li>
+          <li><button class="nav-btn" onclick="window.location.href='Autorizar.html'"><i class="fa-solid fa-check"></i><span>Autorizar Transacciones</span></button></li>
+          <li><button class="nav-btn" onclick="window.location.href='Conciliacion.html'"><i class="fa-solid fa-users-line"></i><span>Conciliación con Adquirentes/Emisores</span></button></li>
+          <li><button class="nav-btn" onclick="window.location.href='Notificaciones.html'"><i class="fa-solid fa-envelope"></i><span>Notificaciones y Mensajes</span></button></li>
+        </ul>
+
+        <div class="subhead">Configuración</div>
+        <ul class="nav">
+          <li><button class="nav-btn"><i class="fa-solid fa-circle-question"></i><span>Ayuda</span></button></li>
+          <li><button class="nav-btn"><i class="fa-solid fa-envelope"></i><span>Contáctenos</span></button></li>
+        </ul>
+        <div class="subhead muted cerrar">
+          <button class="nav-btn" id="btn-logout"><i class="fa-solid fa-right-from-bracket"></i><span>Cerrar Sesión</span></button>
+        </div>
+      </aside>
+
+      <!-- Header -->
+      <header class="header">
+        <div class="logo" aria-label="Dunamys">
+          <img src="IMG/Dunamys_Logo.png" alt="Logo Dunamys" class="logo-img">
+          <span class="word">DUNAMYS</span>
+        </div>
+      </header>
+
+      <!-- ====== CONTENIDO: Conciliación ====== -->
+     <main class="content">
+  <div class="form-container" id="reconcil-container">
+    <h2><i class="fa-solid fa-users-line"></i> Conciliación con Adquirentes/Emisores</h2>
+    <p>Importa archivos internos/externos, filtra por fechas y ejecuta la conciliación por <b>idTransaccion</b>.</p>
+
+    <!-- Filtros -->
+    <section class="card" id="filtros">
+      <h3><i class="fa-solid fa-filter"></i> Filtros</h3>
+      <div class="grid-2">
+        <div class="form-group">
+          <label for="tipoEntidad">Tipo de entidad</label>
+          <select id="tipoEntidad" name="tipoEntidad">
+            <option value="">Seleccione...</option>
+            <option value="adquirente">Adquirente</option>
+            <option value="emisor">Emisor</option>
+          </select>
+        </div>
+
+        <div class="form-group">
+          <label for="entidad">Entidad</label>
+          <select id="entidad" name="entidad">
+            <option value="">Seleccione...</option>
+          </select>
+        </div>
+
+        <div class="form-group">
+          <label for="desde">Desde</label>
+          <input type="date" id="desde" name="desde">
+        </div>
+
+        <div class="form-group">
+          <label for="hasta">Hasta</label>
+          <input type="date" id="hasta" name="hasta">
+        </div>
+      </div>
+    </section>
+
+    <!-- Carga de archivos -->
+    <section class="card" id="carga-archivos">
+      <h3><i class="fa-solid fa-file-arrow-up"></i> Archivos</h3>
+      <div class="grid-2">
+        <div class="form-group">
+          <label for="archivoInterno">Archivo interno (CSV)</label>
+          <input type="file" id="archivoInterno" accept=".csv" />
+        </div>
+        <div class="form-group">
+          <label for="archivoExterno">Archivo externo (CSV)</label>
+          <input type="file" id="archivoExterno" accept=".csv" />
+        </div>
+      </div>
+      <small>Encabezados esperados (flexibles): <code>Fecha,idTransaccion,Autorizacion,Monto,Moneda,NumeroTarjeta</code>. 
+      También se aceptan variantes: <code>ARN</code>, <code>Tarjeta</code>/<code>Tarjeta/ARN</code>.</small>
+    </section>
+
+    <!-- Acciones -->
+    <section class="actions">
+      <button class="btn-enviar" id="btn-ejecutar">
+        <i class="fa-solid fa-play"></i> Ejecutar conciliación
+      </button>
+      <button class="btn-secondary" id="btn-exportar">
+        <i class="fa-solid fa-file-export"></i> Exportar discrepancias
+      </button>
+      <button class="btn-secondary" id="btn-marcar">
+        <i class="fa-solid fa-check-double"></i> Marcar como conciliadas
+      </button>
+    </section>
+
+    <!-- KPI resumen -->
+    <section class="kpis grid-3" id="kpis">
+      <div class="kpi"><span class="kpi-title">Total interno</span><strong id="kpi-interno">0</strong></div>
+      <div class="kpi"><span class="kpi-title">Total externo</span><strong id="kpi-externo">0</strong></div>
+      <div class="kpi"><span class="kpi-title">Diferencias</span><strong id="kpi-diff">0</strong></div>
+    </section>
+
+    <!-- Resultados -->
+    <section class="card" id="resultados">
+      <h3><i class="fa-solid fa-table"></i> Resultado de conciliación</h3>
+      <div class="table-responsive">
+        <table class="table" id="tablaConciliacion" aria-describedby="resultado-conciliacion">
+          <thead>
+            <tr>
+              <th>Fecha</th>
+              <th>Transacción (ID)</th>
+              <th>Autorización</th>
+              <th>Monto Interno</th>
+              <th>Monto Externo</th>
+              <th>Diferencia</th>
+              <th>Estado</th>
+              <th>Acciones</th>
+            </tr>
+          </thead>
+          <tbody><!-- JS --></tbody>
+        </table>
+      </div>
+    </section>
+  </div>
+</main>
+      <!-- ====== /CONTENIDO ====== -->
+    </div>
+
+    <footer class="foot">Dunamys</footer>
+  </div>
+</body>
+</html>

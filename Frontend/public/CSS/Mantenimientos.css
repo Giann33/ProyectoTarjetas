@@ -4,7 +4,7 @@
   margin: 10px auto;
   padding: 12px;
   font-size: 16px;
-  background-color: #007bff;
+  background-color: #3f8531;
   color: white;
   border: none;
   border-radius: 8px;
@@ -19,4 +19,13 @@
 .extra-options {
   margin-top: 30px;
   text-align: center;
+}
+
+.options {
+  
+  justify-content: center;
+  align-items: center;
+  flex-wrap: wrap;  /* permite que salten de línea si no caben */
+  display: flex !important;
+  column-gap: 2px;     /* <-- aquí el espacio horizontal y vertical */
 }

@@ -1,0 +1,185 @@
+.main-container {
+  padding: 20px 30px;
+}
+
+.main-container h2 {
+  margin-bottom: 5px;
+}
+
+.main-container p {
+  margin-bottom: 12px;
+  color: #555;
+}
+
+/* Panel admin (igual estilo que en editar/eliminar) */
+.admin-panel {
+  margin: 15px 0 20px;
+  padding: 12px 15px;
+  background: #f3f8f7;
+  border-left: 4px solid #0d755f;
+  border-radius: 6px;
+}
+
+.admin-panel h3 {
+  margin: 0 0 6px;
+  font-size: 0.98rem;
+}
+
+.admin-panel p {
+  margin: 0 0 8px;
+  font-size: 0.9rem;
+}
+
+.admin-panel-row {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 8px;
+  align-items: center;
+  margin-bottom: 4px;
+}
+
+.admin-panel-row label {
+  font-size: 0.9rem;
+  font-weight: 600;
+}
+
+.admin-panel-row input {
+  width: 120px;
+  padding: 6px 8px;
+  border-radius: 6px;
+  border: 1px solid #ccc;
+  font-size: 0.9rem;
+}
+
+.btn-admin {
+  padding: 6px 12px;
+  font-size: 0.85rem;
+}
+
+.admin-help {
+  font-size: 0.8rem;
+  color: #555;
+}
+
+/* Sección de usuario destino */
+.target-user {
+  margin-bottom: 18px;
+  font-size: 0.9rem;
+}
+
+.target-user strong {
+  color: #1c375b;
+}
+
+/* Formulario */
+.form-section {
+  margin-top: 10px;
+  padding: 16px 18px;
+  background-color: #ffffff;
+  border-radius: 10px;
+  box-shadow: 0 2px 8px rgba(0, 0, 0, 0.08);
+}
+
+.form-section h3 {
+  margin-top: 0;
+  margin-bottom: 12px;
+  font-size: 1rem;
+}
+
+.add-form {
+  max-width: 480px;
+  display: flex;
+  flex-direction: column;
+  gap: 12px;
+}
+
+.form-row {
+  display: flex;
+  flex-direction: column;
+  gap: 4px;
+}
+
+.form-row label {
+  font-size: 0.9rem;
+  font-weight: 600;
+}
+
+.form-row input,
+.form-row select {
+  padding: 8px 10px;
+  border-radius: 6px;
+  border: 1px solid #ccc;
+  font-size: 0.9rem;
+}
+
+.row-inline {
+  display: flex;
+  gap: 8px;
+  align-items: center;
+}
+
+.btn-mini {
+  padding: 6px 10px;
+  font-size: 0.8rem;
+}
+
+.hint {
+  font-size: 0.8rem;
+  color: #777;
+}
+
+.form-actions {
+  margin-top: 10px;
+  display: flex;
+  gap: 10px;
+}
+
+.btn-primary,
+.btn-secondary {
+  border: none;
+  border-radius: 6px;
+  padding: 8px 14px;
+  cursor: pointer;
+  font-size: 0.9rem;
+  display: inline-flex;
+  align-items: center;
+  gap: 6px;
+}
+
+.btn-primary {
+  background-color: #1c375b;
+  color: #ffffff;
+}
+
+.btn-secondary {
+  background-color: #e0e0e0;
+  color: #333;
+}
+
+.btn-primary:hover,
+.btn-secondary:hover {
+  filter: brightness(1.05);
+}
+
+/* Status */
+.status-section {
+  margin-top: 15px;
+  font-size: 0.9rem;
+}
+
+.status-section p {
+  margin: 0;
+}
+
+.status-ok {
+  color: #0b8043;
+}
+
+.status-error {
+  color: #b3261e;
+}
+
+/* Utilidad */
+.hidden {
+  display: none !important;
+}

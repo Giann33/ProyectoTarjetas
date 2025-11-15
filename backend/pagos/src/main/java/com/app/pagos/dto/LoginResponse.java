@@ -16,5 +16,5 @@ public class LoginResponse {
     private String Token;
     private Integer idUsuario;
     private Integer idPersona;
-
+    private Integer idRol;
 }

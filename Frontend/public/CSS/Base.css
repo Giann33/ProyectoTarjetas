@@ -226,7 +226,10 @@ body {
 .content {
     padding: 28px 28px 20px;
     background: var(--panel);
+    overflow-y: auto; min-height: 100%; 
 }
+
+.main-container { overflow: visible; }
 
 .grid {
     display: grid;

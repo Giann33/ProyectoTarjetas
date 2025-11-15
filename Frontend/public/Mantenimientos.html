@@ -1,6 +1,5 @@
 <!DOCTYPE html>
 <html lang="es">
-
 <head>
   <meta charset="UTF-8" />
   <meta name="viewport" content="width=device-width, initial-scale=1.0" />
@@ -8,8 +7,8 @@
   <link rel="stylesheet" href="CSS/Base.css">
   <link rel="stylesheet" href="CSS/Mantenimientos.css">
   <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.0/css/all.min.css">
-  <script src="JS/cuentas.js"></script>
-  <script src="JS/Logout.js"></script>
+  <script src="JS/cuentas.js" defer></script>
+  <script src="JS/Logout.js" defer></script>
 </head>
 
 <body>
@@ -21,10 +20,11 @@
         <ul class="nav">
           <li><button class="nav-btn" onclick="window.location.href='Consultas.html'"><i class="fa-solid fa-house"></i><span>Consultas</span></button></li>
           <li><button class="nav-btn" onclick="window.location.href='Mantenimientos.html'"><i class="fa-solid fa-user-pen"></i><span>Mantenimientos</span></button></li>
-          <li><button class="nav-btn"><i class="fa-solid fa-credit-card"></i><span>Tarjetas</span></button></li>
-          <li><button class="nav-btn"><i class="fa-solid fa-right-left"></i><span>Transferencias</span></button></li>
-          <li><button class="nav-btn"><i class="fa-solid fa-cart-shopping"></i><span>Historial de Compras</span></button></li>
-          <li><button class="nav-btn"><i class="fa-solid fa-file-invoice"></i><span>Pagar Servicios</span></button></li>
+          <li><button class="nav-btn" onclick="window.location.href='Reportes.html'"><i class="fa-solid fa-file-pdf"></i><span>Reportes</span></button></li>
+          <li><button class="nav-btn" onclick="window.location.href='Reversos.html'"><i class="fa-solid fa-right-left"></i><span>Reversos Y Devoluciones</span></button></li>
+          <li><button class="nav-btn" onclick="window.location.href='Autorizar.html'"><i class="fa-solid fa-check"></i><span>Autorizar Transacciones</span></button></li>
+          <li><button class="nav-btn" onclick="window.location.href='Conciliar.html'"><i class="fa-solid fa-users-line"></i><span>Conciliación con Adquirentes/Emisores</span></button></li>
+          <li><button class="nav-btn" onclick="window.location.href='Notificaciones.html'"><i class="fa-solid fa-envelope"></i><span>Notificaciones y Mensajes</span></button></li>
         </ul>
 
         <div class="subhead">Configuración</div>
@@ -48,27 +48,55 @@
       <!-- Contenido principal -->
       <main class="content">
         <div class="main-container">
-          <h2>Gestión de Cuentas</h2>
+          <h2>Gestión de Mantenimientos</h2>
           <p>Selecciona una de las siguientes opciones:</p>
 
-          <div class="options">
-            <button class="action-btn" id="btn-editar" onclick="window.location.href='Editar_Cuentas.html'"><i class="fa-solid fa-pen-to-square"></i> Editar Cuentas</button>
-            <button class="action-btn" id="btn-eliminar"><i class="fa-solid fa-trash"></i> Eliminar Cuentas</button>
-            <button class="action-btn" id="btn-agregar"><i class="fa-solid fa-plus"></i> Agregar Cuentas</button>
-          </div>
+          <!-- Cuentas -->
+          <section class="extra-options">
+            <h4>Cuentas</h4>
+            <div class="options">
+              <button class="action-btn btn-editar"   onclick="window.location.href='Editar_Cuentas.html'"><i class="fa-solid fa-pen-to-square"></i> Editar Cuentas</button>
+              <button class="action-btn btn-eliminar" onclick="window.location.href='Eliminar_Cuentas.html'"><i class="fa-solid fa-trash"></i> Eliminar Cuentas</button>
+              <button class="action-btn btn-agregar"  onclick="window.location.href='Agregar_Cuentas.html'"><i class="fa-solid fa-plus"></i> Agregar Cuentas</button>
+            </div>
+          </section>
 
-          <div class="extra-options">
-            <h4>Otras acciones</h4>
-            <button class="action-btn add-new" id="btn-nueva-opcion"><i class="fa-solid fa-circle-plus"></i> Añadir Nueva Opción</button>
+          <!-- Tarjetas -->
+          <section class="extra-options">
+            <h4>Tarjetas</h4>
+            <div class="options">
+              <button class="action-btn btn-editar"   onclick="window.location.href='Editar_Tarjetas.html'"><i class="fa-solid fa-pen-to-square"></i> Editar Tarjetas</button>
+              <button class="action-btn btn-eliminar" onclick="window.location.href='Eliminar_Tarjetas.html'"><i class="fa-solid fa-trash"></i> Eliminar Tarjetas</button>
+              <button class="action-btn btn-agregar"  onclick="window.location.href='Agregar_Tarjetas.html'"><i class="fa-solid fa-plus"></i> Agregar Tarjetas</button>
+            </div>
+          </section>
+
+          <!-- Usuarios -->
+          <section class="extra-options">
+            <h4>Usuarios</h4>
+            <div class="options">
+              <button class="action-btn btn-editar"   onclick="window.location.href='Editar_Usuarios.html'"><i class="fa-solid fa-pen-to-square"></i> Editar Usuarios</button>
+              <button class="action-btn btn-eliminar" onclick="window.location.href='Eliminar_Usuarios.html'"><i class="fa-solid fa-trash"></i> Eliminar Usuarios</button>
+              <button class="action-btn btn-agregar"  onclick="window.location.href='Agregar_Usuarios.html'"><i class="fa-solid fa-plus"></i> Agregar Usuarios</button>
+            </div>
             <ul id="lista-opciones"></ul>
-          </div>
+          </section>
+          <!-- Transacciones -->
+           <section class="extra-options">
+            <h4>Transacciones</h4>
+            <div class="options">
+              <button class="action-btn btn-editar"   onclick="window.location.href='Editar_Transacciones.html'"><i class="fa-solid fa-pen-to-square"></i> Editar Transacciones</button>
+              <button class="action-btn btn-eliminar" onclick="window.location.href='Eliminar_Transacciones.html'"><i class="fa-solid fa-trash"></i> Eliminar Transacciones</button>
+              <button class="action-btn btn-agregar"  onclick="window.location.href='Agregar_Transacciones.html'"><i class="fa-solid fa-plus"></i> Agregar Transacciones</button>
+            </div>
+            <ul id="lista-opciones"></ul>
+          </section>
+
         </div>
       </main>
     </div>
 
     <footer class="foot">Dunamys</footer>
   </div>
-
 </body>
-
 </html>
