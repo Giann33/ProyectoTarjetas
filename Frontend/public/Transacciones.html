@@ -1,0 +1,200 @@
+<!DOCTYPE html>
+<html lang="es">
+
+<head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>Dunamys – Realizar Pagos</title>
+
+    <link rel="stylesheet" href="CSS/Base.css">
+
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.0/css/all.min.css">
+
+    <script src="JS/Transacciones.js" defer></script>
+    <script src="JS/Logout.js" defer></script>
+
+    <style>
+        /* CLASE CLAVE: Convierte el grid en un flexbox centrado */
+        
+        .grid-centered {
+            display: flex !important;
+            justify-content: center !important;
+            /* Centra horizontalmente */
+            align-items: flex-start !important;
+            width: 100%;
+            padding-top: 40px;
+            /* Un poco de aire arriba */
+        }
+        /* Columna del formulario */
+        
+        .col-form {
+            max-width: 850px !important;
+            /* Ancho máximo del formulario */
+            width: 100%;
+        }
+        /* Título */
+        
+        h3 {
+            text-align: center;
+            margin-bottom: 25px;
+            font-size: 1.8rem;
+            color: #333;
+        }
+        /* Tarjeta contenedora con más espacio interno */
+        
+        .card-form {
+            width: 100%;
+            display: block;
+            height: auto;
+            padding: 50px;
+            /* Espaciado interno generoso */
+            box-sizing: border-box;
+        }
+        /* Inputs y Labels */
+        
+        .form-group {
+            margin-bottom: 25px;
+        }
+        
+        .form-group label {
+            display: block;
+            margin-bottom: 10px;
+            font-weight: bold;
+            color: #444;
+            font-size: 1.1rem;
+        }
+        
+        .form-group input,
+        .form-group select {
+            width: 100%;
+            padding: 15px;
+            /* Altura cómoda para escribir */
+            border: 1px solid #aaa;
+            border-radius: 8px;
+            font-size: 16px;
+            background-color: #fff;
+            box-sizing: border-box;
+        }
+        
+        .form-group input:focus,
+        .form-group select:focus {
+            border-color: #006847;
+            outline: none;
+            box-shadow: 0 0 5px rgba(0, 104, 71, 0.3);
+        }
+        /* Botón Grande y Verde */
+        
+        .btn-pagar {
+            background-color: #006847;
+            color: white;
+            border: none;
+            padding: 18px;
+            font-size: 18px;
+            border-radius: 8px;
+            cursor: pointer;
+            width: 100%;
+            margin-top: 20px;
+            transition: background 0.3s;
+            font-weight: bold;
+            text-transform: uppercase;
+            letter-spacing: 1px;
+        }
+        
+        .btn-pagar:hover {
+            background-color: #004d33;
+        }
+    </style>
+</head>
+
+<body>
+    <div class="shell">
+        <div class="panel">
+
+            <aside class="sidebar">
+                <div class="brand-aside">Dunamys</div>
+
+                <ul class="nav">
+                    <li><button class="nav-btn" onclick="window.location.href='Consultas.html'"><i class="fa-solid fa-house"></i><span>Consultas</span></button></li>
+
+                    <li><button class="nav-btn active" onclick="window.location.href='Transacciones.html'"><i class="fa-solid fa-money-bill-transfer"></i><span>Realizar Pagos</span></button></li>
+
+                    <li><button class="nav-btn" onclick="window.location.href='Mantenimientos.html'"><i class="fa-solid fa-user-pen"></i><span>Mantenimientos</span></button></li>
+                    <li><button class="nav-btn" onclick="window.location.href='Reportes.html'"><i class="fa-solid fa-file-pdf"></i><span>Reportes</span></button></li>
+                    <li><button class="nav-btn" onclick="window.location.href='Reversos.html'"><i class="fa-solid fa-right-left"></i><span>Reversos Y Devoluciones</span></button></li>
+                    <li><button class="nav-btn" onclick="window.location.href='Autorizar.html'"><i class="fa-solid fa-check"></i><span>Autorizar Transacciones</span></button></li>
+                    <li><button class="nav-btn" onclick="window.location.href='Conciliar.html'"><i class="fa-solid fa-users-line"></i><span>Conciliación</span></button></li>
+                    <li><button class="nav-btn" onclick="window.location.href='Notificaciones.html'"><i class="fa-solid fa-envelope"></i><span>Notificaciones y Mensajes</span></button></li>
+                </ul>
+
+                <div class="subhead">Configuración</div>
+                <ul class="nav">
+                    <li><button class="nav-btn"><i class="fa-solid fa-circle-question"></i><span>Ayuda</span></button></li>
+                    <li><button class="nav-btn"><i class="fa-solid fa-envelope"></i><span>Contactenos</span></button></li>
+                </ul>
+
+                <div class="subhead cerrar">
+                    <button class="nav-btn" id="btn-logout"><i class="fa-solid fa-right-from-bracket"></i><span>Cerrar Sesión</span></button>
+                </div>
+            </aside>
+
+            <header class="header">
+                <div class="logo">
+                    <img src="IMG/Dunamys_Logo.png" alt="Logo Dunamys" class="logo-img">
+                    <span class="word">DUNAMYS</span>
+                </div>
+            </header>
+
+            <main class="content">
+                <div class="grid grid-centered">
+
+                    <div class="col col-form">
+                        <h2>Nueva Transacción</h2>
+
+                        <div class="frame">
+                            <div class="card card-form">
+
+                                <form id="form-transaccion">
+                                    <div class="form-group">
+                                        <label for="selTarjeta">Seleccione su Tarjeta de Origen:</label>
+                                        <select id="selTarjeta" required>
+                            <option value="">Cargando sus tarjetas...</option>
+                        </select>
+                                    </div>
+
+                                    <div class="form-group">
+                                        <label for="selTipo">Tipo de Movimiento:</label>
+                                        <select id="selTipo" required>
+                            <option value="1">Pago de Servicios</option>
+                            <option value="2">Transferencia a Terceros</option>
+                            <option value="3">Compra en Comercio</option>
+                        </select>
+                                    </div>
+
+                                    <div class="form-group">
+                                        <label for="txtDetalle">Detalle / Concepto:</label>
+                                        <input type="text" id="txtDetalle" placeholder="Ej: Pago de Luz, Transferencia a Juan..." required>
+                                    </div>
+
+                                    <div class="form-group">
+                                        <label for="txtMonto">Monto (₡):</label>
+                                        <input type="number" id="txtMonto" placeholder="0.00" step="0.01" min="1" required>
+                                    </div>
+
+                                    <button type="submit" class="btn-pagar">
+                        <i class="fa-solid fa-paper-plane"></i> PROCESAR PAGO
+                    </button>
+                                </form>
+
+                            </div>
+                        </div>
+                    </div>
+
+                </div>
+            </main>
+        </div>
+
+        <footer class="foot">Dunamys</footer>
+    </div>
+</body>
+
+</html>
