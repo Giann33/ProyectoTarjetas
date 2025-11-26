@@ -8,11 +8,11 @@ document.addEventListener("DOMContentLoaded", () => {
 async function cargarTarjetasUsuario() {
     // 1. Obtener el usuario logueado del LocalStorage
     const usuarioString = localStorage.getItem("usuario");
-    if (!usuarioString) {
+   /* if (!usuarioString) {
         alert("No has iniciado sesión");
         window.location.href = "index.html"; // O tu login
         return;
-    }
+    }*/
 
     const usuario = JSON.parse(usuarioString);
     const select = document.getElementById("selTarjeta");

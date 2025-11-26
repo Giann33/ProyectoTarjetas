@@ -4,11 +4,18 @@
 <head>
   <meta charset="UTF-8" />
   <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-  <title>Dunamys – Cuentas</title>
+  <title>Dunamys – Editar Cuentas</title>
+
+  <!-- Estilos base del proyecto -->
   <link rel="stylesheet" href="CSS/Base.css">
+  <!-- Estilos específicos de Editar Cuentas -->
+  <link rel="stylesheet" href="CSS/Editar_Cuentas.css">
+<link rel="stylesheet" href="CSS/Consultar_Cuentas.css">
   <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.0/css/all.min.css">
-  <script src="JS/cuentas.js"></script>
-  <script src="JS/Logout.js"></script>
+
+  <!-- JS específico para esta pantalla -->
+  <script src="JS/Consultar_Cuentas.js" defer></script>
+  <script src="JS/Logout.js" defer></script>
 </head>
 
 <body>
@@ -21,16 +28,16 @@
           <li><button class="nav-btn" onclick="window.location.href='Consultas.html'"><i class="fa-solid fa-house"></i><span>Consultas</span></button></li>
           <li><button class="nav-btn" onclick="window.location.href='Mantenimientos.html'"><i class="fa-solid fa-user-pen"></i><span>Mantenimientos</span></button></li>
           <li><button class="nav-btn" onclick="window.location.href='Reportes.html'"><i class="fa-solid fa-file-pdf"></i><span>Reportes</span></button></li>
-          <li><button class="nav-btn" onclick="window.location.href='Reversos.html'"><i class="fa-solid fa-right-left"></i><span>Reversos Y Devoluciones</span></button></li>
+          <li><button class="nav-btn" onclick="window.location.href='Reversos.html'"><i class="fa-solid fa-right-left"></i><span>Reversos y Devoluciones</span></button></li>
           <li><button class="nav-btn" onclick="window.location.href='Autorizar.html'"><i class="fa-solid fa-check"></i><span>Autorizar Transacciones</span></button></li>
-          <li><button class="nav-btn" onclick="window.location.href='Conciliar.html'"><i class="fa-solid fa-users-line"></i><span>Conciliación con Adquirentes/Emisores</span></button></li>
+          <li><button class="nav-btn" onclick="window.location.href='Conciliacion.html'"><i class="fa-solid fa-users-line"></i><span>Conciliación con Adquirentes/Emisores</span></button></li>
           <li><button class="nav-btn" onclick="window.location.href='Notificaciones.html'"><i class="fa-solid fa-envelope"></i><span>Notificaciones y Mensajes</span></button></li>
         </ul>
 
         <div class="subhead">Configuración</div>
         <ul class="nav">
           <li><button class="nav-btn"><i class="fa-solid fa-circle-question"></i><span>Ayuda</span></button></li>
-          <li><button class="nav-btn"><i class="fa-solid fa-envelope"></i><span>Contactenos</span></button></li>
+          <li><button class="nav-btn"><i class="fa-solid fa-envelope"></i><span>Contáctenos</span></button></li>
         </ul>
         <div class="subhead cerrar">
           <button class="nav-btn" id="btn-logout"><i class="fa-solid fa-right-from-bracket"></i><span>Cerrar Sesión</span></button>
@@ -45,41 +52,86 @@
         </div>
       </header>
 
-      <!-- Contenido -->
-      <main class="content">
-        <div class="grid">
-          <div class="col">
-            <h3>Cuentas Personales</h3>
-            <div class="frame">
-              <div class="card" id="acc-personal">
-                <h4 id="acc1-name">CR–cuenta bancaria</h4>
-                <div class="sub" id="acc1-number">CR 09898 0687 88899 555</div>
-                <div class="line"></div>
-                <div class="amount" id="acc1-amount">C$50 000</div>
-              </div>
-            </div>
-          </div>
+      <!-- Contenido principal -->
+      
+        <main class="content">
+          <div class="main-container">
+            <h2>Consultar Cuentas</h2>
+            <p>Consulta la información del usuario y las cuentas asociadas a su idUsuario.</p>
 
-          <div class="col">
-            <h3>Cuenta objetivos</h3>
-            <div class="frame">
-              <div class="card" id="acc-objetivos">
-                <h4 id="acc2-name">CR–cuenta bancaria</h4>
-                <div class="sub" id="acc2-number">CR 09886 6667 88869 555</div>
-                <div class="line"></div>
-                <div class="amount" id="acc2-amount">C$30 000</div>
+            <!-- Panel administrador (idéntico al de Editar_Cuentas) -->
+            <section id="admin-panel" class="admin-panel hidden">
+              <h3><i class="fa-solid fa-user-gear"></i> Modo administrador</h3>
+              <p>Selecciona manualmente el <b>idUsuario</b> para consultar sus cuentas.</p>
+              <div class="admin-panel-row">
+                <label for="adminUserId">idUsuario:</label>
+                <input type="number" id="adminUserId" placeholder="Ej. 5" min="1" />
+                <button type="button" id="btn-admin-cargar" class="btn-primary btn-admin">
+                  <i class="fa-solid fa-magnifying-glass"></i> Cargar cuentas
+                </button>
               </div>
-            </div>
+              <p class="admin-help">
+                Si no indicas ningún idUsuario se usarán los datos del usuario en sesión.
+              </p>
+            </section>
+
+            <!-- Información del usuario/persona -->
+            <section class="user-info-section user-card">
+  <h3 class="user-title">Información del usuario</h3>
+
+  <div class="user-grid">
+    <div class="user-item">
+      <label>ID Usuario</label>
+      <span id="info-idUsuario">—</span>
+    </div>
+
+    <div class="user-item">
+      <label>Nombre</label>
+      <span id="info-nombre">—</span>
+    </div>
+
+    <div class="user-item">
+      <label>Apellidos</label>
+      <span id="info-apellido1">—</span>
+    </div>
+
+    <div class="user-item">
+      <label>Correo</label>
+      <span id="info-correo">—</span>
+    </div>
+
+    <div class="user-item">
+      <label>Género</label>
+      <span id="info-genero">—</span>
+    </div>
+
+    <div class="user-item">
+      <label>Rol</label>
+      <span id="info-rol">—</span>
+    </div>
+  </div>
+</section>
+
+            <!-- Listado dinámico de cuentas (solo lectura) -->
+            <section class="accounts-section">
+              <h3>Mis cuentas</h3>
+              <div id="cuentas-container" class="cuentas-grid">
+                <!-- Aquí se crean las tarjetas de cuentas con JS -->
+              </div>
+
+              <!-- Mensaje cuando no hay cuentas -->
+              <p id="sin-cuentas-msg" class="sin-cuentas hidden">
+                No se encontraron cuentas asociadas al usuario.
+              </p>
+            </section>
+
           </div>
-        </div>
-      </main>
+        </main>
     </div>
 
     <footer class="foot">Dunamys</footer>
   </div>
 
-
-  
 </body>
 
 </html>

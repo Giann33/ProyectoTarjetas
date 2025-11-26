@@ -45,7 +45,7 @@ public class AuthService {
         token,
         usuario.getIdUsuario(),
         persona.getIdPersona(),
-        persona.getRol()
+        usuario.getRol().getIdRol()
     );
   }
 }

@@ -132,10 +132,14 @@ body {
 
 /* === Contenido: formulario centrado === */
 .content {
-    display: flex;
+   
     align-items: center;
     justify-content: center;
     background: var(--panel);
+    padding: 28px 28px 20px;
+    background: var(--panel);
+    min-height: 100%;
+    overflow-y: auto;   /* aquí está el scroll interno */
 }
 
 .form-container {
@@ -240,4 +244,147 @@ body.is-admin .admin-only { display: block; }
     overflow-y: auto; min-height: 100%; 
 }
 
-.main-container { overflow: visible; }
+.main-container {
+    width: 100%;
+    max-width: 1000px;   /* mismo ancho que Editar Cuentas */
+    margin: 0 auto;      /* centra horizontalmente */
+    padding: 20px 40px;
+}
+
+/* Centrar título y descripción */
+.main-container h2 {
+    margin-top: 10px;
+    margin-bottom: 8px;
+    font-size: 1.7rem;
+}
+
+.main-container > p {
+    margin-bottom: 25px;
+    color: #555;
+}
+
+/* Separaciones entre secciones */
+.admin-panel {
+    margin-bottom: 25px;
+}
+
+
+
+/* ===== Panel administrador (igual al de Editar_Cuentas) ===== */
+
+.hidden {
+  display: none !important;
+}
+
+.admin-panel {
+  margin: 15px 0 20px;
+  padding: 12px 15px;
+  background: #f3f8f7;
+  border-left: 4px solid #0d755f;
+  border-radius: 6px;
+}
+
+.admin-panel h3 {
+  margin: 0 0 6px;
+  font-size: 0.98rem;
+}
+
+.admin-panel p {
+  margin: 0 0 8px;
+  font-size: 0.9rem;
+}
+
+.admin-panel-row {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 8px;
+  align-items: center;
+  margin-bottom: 4px;
+}
+
+.admin-panel-row label {
+  font-size: 0.9rem;
+  font-weight: 600;
+}
+
+.admin-panel-row input {
+  width: 120px;
+  padding: 6px 8px;
+  border-radius: 6px;
+  border: 1px solid #ccc;
+  font-size: 0.9rem;
+}
+
+.btn-admin {
+  padding: 6px 12px;
+  font-size: 0.85rem;
+}
+
+.admin-help {
+  font-size: 0.8rem;
+  color: #555;
+}
+
+/* ===== Sección de edición y formulario ===== */
+
+.edit-section {
+    padding-top: 20px;
+    margin-top: 15px;
+    border-top: 1px solid #ddd;
+}
+
+/* Formulario centrado dentro del contenedor */
+
+
+.edit-section h3 {
+  margin-bottom: 15px;
+}
+
+.edit-form {
+  max-width: 420px;
+  display: flex;
+  flex-direction: column;
+  gap: 12px;
+   width: 100%;
+    max-width: 550px;
+}
+
+/* Aprovechamos tus form-group existentes */
+.form-group {
+  text-align: left;
+  margin-bottom: 18px;
+}
+
+.form-actions {
+  margin-top: 10px;
+  display: flex;
+  gap: 10px;
+}
+
+/* Botones iguales a Editar_Cuentas (azul oscuro) */
+.btn-primary,
+.btn-secondary {
+  border: none;
+  border-radius: 6px;
+  padding: 8px 14px;
+  cursor: pointer;
+  font-size: 0.9rem;
+  display: inline-flex;
+  align-items: center;
+  gap: 6px;
+}
+
+.btn-primary {
+  background-color: #1c375b;
+  color: #ffffff;
+}
+
+.btn-secondary {
+  background-color: #e0e0e0;
+  color: #333;
+}
+
+.btn-primary:hover,
+.btn-secondary:hover {
+  filter: brightness(1.05);
+}

@@ -1,0 +1,591 @@
+/* === Estilos generales === */
+
+
+* {
+    box-sizing: border-box;
+}
+
+body {
+    margin: 0;
+    font-family: system-ui, -apple-system, Segoe UI, Roboto, Helvetica, Arial;
+    background: #f3f5f7;
+    color: var(--ink);
+}
+
+.shell {
+    min-height: 100vh;
+    display: flex;
+    flex-direction: column;
+}
+
+.panel {
+    flex: 1;
+    display: grid;
+    grid-template-columns: 260px minmax(0, 1fr);
+    background: #e1ece7;
+}
+
+/* === Sidebar === */
+
+.sidebar {
+    background: #0a5f4e;
+    color: #fff;
+    display: flex;
+    flex-direction: column;
+    padding: 24px 16px;
+}
+
+.brand-aside {
+    font-size: 22px;
+    font-weight: 700;
+    margin-bottom: 32px;
+    letter-spacing: 0.04em;
+}
+
+.nav {
+    list-style: none;
+    margin: 0;
+    padding: 0;
+    flex: 1;
+}
+
+.nav li {
+    margin-bottom: 8px;
+}
+
+.nav-btn {
+    width: 100%;
+    border: none;
+    outline: none;
+    background: transparent;
+    color: #f5f5f5;
+    display: flex;
+    align-items: center;
+    gap: 10px;
+    padding: 10px 12px;
+    border-radius: 8px;
+    cursor: pointer;
+    font-size: 14px;
+    text-align: left;
+    transition: background 0.15s ease, transform 0.1s ease;
+}
+
+.nav-btn i {
+    width: 18px;
+    text-align: center;
+}
+
+.nav-btn span {
+    flex: 1;
+}
+
+.nav-btn:hover {
+    background: rgba(255, 255, 255, 0.08);
+    transform: translateY(-1px);
+}
+
+.nav-btn.active {
+    background: #ffffff;
+    color: #0b3f35;
+    font-weight: 600;
+}
+
+.sidebar-footer {
+    margin-top: 16px;
+    border-top: 1px solid rgba(255, 255, 255, 0.2);
+    padding-top: 16px;
+}
+
+.logout-btn {
+    width: 100%;
+    border: none;
+    outline: none;
+    background: rgba(255, 255, 255, 0.06);
+    color: #f5f5f5;
+    display: flex;
+    align-items: center;
+    gap: 10px;
+    padding: 10px 12px;
+    border-radius: 8px;
+    cursor: pointer;
+    font-size: 14px;
+    text-align: left;
+    transition: background 0.15s ease;
+}
+
+.logout-btn:hover {
+    background: rgba(255, 255, 255, 0.18);
+}
+
+.logout-btn i {
+    width: 18px;
+    text-align: center;
+}
+
+/* === Contenido principal === */
+.content {
+    display: flex;
+    flex-direction: column;
+    padding: 16px 24px 32px;
+}
+
+.topbar {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    margin-bottom: 24px;
+}
+
+.topbar-left {
+    display: flex;
+    flex-direction: column;
+    gap: 4px;
+}
+
+.page-title {
+    margin: 0;
+    font-size: 24px;
+    font-weight: 700;
+    color: var(--green-900);
+}
+
+.page-subtitle {
+    margin: 0;
+    font-size: 13px;
+    color: var(--muted);
+}
+
+.topbar-right {
+    display: flex;
+    align-items: center;
+    gap: 12px;
+}
+
+.role-pill {
+    padding: 6px 10px;
+    border-radius: 999px;
+    font-size: 12px;
+    font-weight: 600;
+    border: 1px solid rgba(0, 0, 0, 0.1);
+    background: #f7faf9;
+}
+
+.role-admin {
+    background: #0a5f4e;
+    color: #fff;
+}
+
+.role-user {
+    background: #edf6f3;
+    color: #0a5f4e;
+}
+
+.user-mini {
+    display: flex;
+    align-items: center;
+    gap: 8px;
+    padding: 6px 10px;
+    background: #fff;
+    border-radius: 999px;
+    border: 1px solid #dde3e0;
+    font-size: 13px;
+}
+
+.user-mini i {
+    color: var(--green-900);
+}
+
+.content-body {
+    display: grid;
+    grid-template-columns: minmax(0, 1.4fr) minmax(0, 1fr);
+    gap: 20px;
+    align-items: flex-start;
+}
+
+/* === Panel de información (izquierda) === */
+.user-card {
+    background: var(--panel);
+    border-radius: 16px;
+    padding: 18px 20px;
+    box-shadow: 0 10px 25px rgba(15, 23, 42, 0.07);
+    display: flex;
+    flex-direction: column;
+    gap: 12px;
+}
+
+.user-card-header {
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+}
+
+.user-main-info {
+    display: flex;
+    align-items: center;
+    gap: 12px;
+}
+
+.avatar-circle {
+    width: 40px;
+    height: 40px;
+    border-radius: 50%;
+    background: #0b3f35;
+    color: #fff;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    font-weight: 600;
+}
+
+.user-card-text h2 {
+    margin: 0;
+    font-size: 16px;
+    font-weight: 600;
+}
+
+.user-card-text p {
+    margin: 0;
+    font-size: 13px;
+    color: var(--muted);
+}
+
+.status-pill {
+    padding: 4px 8px;
+    border-radius: 999px;
+    font-size: 11px;
+    font-weight: 600;
+    text-transform: uppercase;
+    letter-spacing: 0.04em;
+}
+
+.status-activo {
+    background: rgba(8, 128, 88, 0.08);
+    color: #0a5f4e;
+}
+
+.status-inactivo {
+    background: #fef2f2;
+    color: #991b1b;
+}
+
+.user-card-grid {
+    display: grid;
+    grid-template-columns: repeat(2, minmax(0, 1fr));
+    gap: 12px;
+    margin-top: 8px;
+    font-size: 13px;
+}
+
+.user-card-item {
+    display: flex;
+    flex-direction: column;
+    gap: 2px;
+}
+
+.user-card-label {
+    color: var(--muted);
+    font-size: 11px;
+    text-transform: uppercase;
+    letter-spacing: 0.05em;
+}
+
+.user-card-value {
+    font-weight: 500;
+}
+
+/* === Panel admin (para rol admin) === */
+.admin-panel {
+    background: #0b3f35;
+    color: #f5f5f5;
+    border-radius: 12px;
+    padding: 14px 16px;
+    margin-bottom: 16px;
+    display: none;
+}
+
+.admin-panel h3 {
+    margin: 0 0 4px;
+    font-size: 14px;
+}
+
+.admin-panel p {
+    margin: 0;
+    font-size: 13px;
+    color: #ccf0e7;
+}
+
+.admin-panel-row {
+    display: flex;
+    align-items: center;
+    gap: 8px;
+    margin-top: 8px;
+    font-size: 13px;
+}
+
+.admin-panel-row label {
+    font-weight: 500;
+}
+
+.admin-panel-row input {
+    width: 100px;
+    padding: 4px 6px;
+    border-radius: 6px;
+    border: none;
+    outline: none;
+}
+
+/* === Formulario de edición (derecha) === */
+.edit-section {
+    background: var(--panel);
+    border-radius: 16px;
+    padding: 18px 20px 20px;
+    box-shadow: 0 10px 25px rgba(15, 23, 42, 0.07);
+}
+
+.edit-section h3 {
+    margin: 0 0 10px;
+    font-size: 16px;
+    font-weight: 600;
+}
+
+.edit-form {
+    display: grid;
+    grid-template-columns: repeat(2, minmax(0, 1fr));
+    gap: 12px 16px;
+    margin-top: 8px;
+}
+
+.form-group {
+    display: flex;
+    flex-direction: column;
+    gap: 4px;
+    font-size: 13px;
+}
+
+.form-group label {
+    font-weight: 500;
+    color: #374151;
+}
+
+.form-group input,
+.form-group select {
+    padding: 8px 9px;
+    border-radius: 8px;
+    border: 1px solid #d1d5db;
+    font-size: 13px;
+    outline: none;
+    transition: border 0.15s ease, box-shadow 0.15s ease;
+}
+
+.form-group input:focus,
+.form-group select:focus {
+    border-color: var(--green-700);
+    box-shadow: 0 0 0 1px rgba(13, 117, 95, 0.15);
+}
+
+.field-hint {
+    font-size: 11px;
+    color: var(--muted);
+}
+
+.form-actions {
+    grid-column: 1 / -1;
+    display: flex;
+    justify-content: flex-end;
+    gap: 10px;
+    margin-top: 6px;
+}
+
+.btn-primary,
+.btn-secondary {
+    border-radius: 999px;
+    font-size: 13px;
+    padding: 8px 16px;
+    border: none;
+    cursor: pointer;
+    display: inline-flex;
+    align-items: center;
+    gap: 6px;
+    font-weight: 500;
+    transition: background 0.15s ease, transform 0.1s;
+}
+
+.btn-primary {
+    background: linear-gradient(135deg, #0a5f4e, #0d755f);
+    color: #fff;
+}
+
+.btn-primary:hover {
+    background: linear-gradient(135deg, #0d755f, #0a5f4e);
+    transform: translateY(-1px);
+}
+
+.btn-secondary {
+    background: #eef2f0;
+    color: #111827;
+}
+
+.btn-secondary:hover {
+    background: #e0e7e3;
+    transform: translateY(-1px);
+}
+
+/* === Pie de página === */
+.foot {
+    text-align: center;
+    padding: 10px;
+    font-size: 12px;
+    color: #6b7280;
+}
+
+/* === Alertas / mensajes === */
+.alert {
+    padding: 8px 10px;
+    border-radius: 8px;
+    font-size: 13px;
+    margin-bottom: 10px;
+}
+
+.alert-error {
+    background: #fef2f2;
+    color: #991b1b;
+    border: 1px solid #fecaca;
+}
+
+.alert-success {
+    background: #ecfdf3;
+    color: #166534;
+    border: 1px solid #bbf7d0;
+}
+
+/* === Responsive === */
+
+@media (max-width: 980px) {
+    .content-body {
+        grid-template-columns: 1fr;
+    }
+}
+
+@media (max-width:720px) {
+    .panel {
+        grid-template-columns: 1fr;
+    }
+
+    .sidebar {
+        display: none;
+    }
+
+    .content {
+        padding: 12px 12px 40px;
+    }
+
+    .topbar {
+        flex-direction: column;
+        align-items: flex-start;
+        gap: 8px;
+    }
+
+    .content-body {
+        grid-template-columns: 1fr;
+    }
+}
+
+/* === Extra: pill pequeño para ID usuario/persona === */
+.pill-ids {
+    display: inline-flex;
+    align-items: center;
+    gap: 6px;
+    padding: 4px 8px;
+    background: #edf2ff;
+    color: #3730a3;
+    border-radius: 999px;
+    font-size: 11px;
+}
+
+.pill-ids span {
+    display: inline-flex;
+    align-items: center;
+    gap: 4px;
+}
+
+.pill-ids i {
+    font-size: 11px;
+}
+
+/* === Mensaje de solo lectura cuando no es admin === */
+.readonly-banner {
+    margin-top: 8px;
+    margin-bottom: 8px;
+    background: #fef9c3;
+    border-radius: 8px;
+    padding: 6px 10px;
+    font-size: 12px;
+    border: 1px solid #facc15;
+    color: #854d0e;
+    display: flex;
+    align-items: center;
+    gap: 6px;
+}
+
+.readonly-banner i {
+    font-size: 13px;
+}
+
+/* === Estilo para campos deshabilitados cuando no es admin === */
+.edit-form input[disabled],
+.edit-form select[disabled] {
+    background: #f3f4f6;
+    color: #6b7280;
+    cursor: not-allowed;
+}
+
+.edit-form input[disabled]::placeholder {
+    color: #9ca3af;
+}
+
+/* === Panel datos sensibles (como cambiar contraseña) === */
+.sensitive-section {
+    margin-top: 12px;
+    padding-top: 10px;
+    border-top: 1px dashed #e5e7eb;
+    font-size: 12px;
+    color: #4b5563;
+}
+
+.sensitive-section strong {
+    color: #111827;
+}
+
+.sensitive-section small {
+    display: block;
+    margin-top: 4px;
+    color: #6b7280;
+}
+
+/* === Loader simple (si lo quieres usar) === */
+.loader-inline {
+    width: 16px;
+    height: 16px;
+    border-radius: 999px;
+    border: 2px solid rgba(255, 255, 255, 0.4);
+    border-top-color: #ffffff;
+    animation: spin .6s linear infinite;
+}
+
+@keyframes spin {
+    to {
+        transform: rotate(360deg);
+    }
+}
+
+/* === Badge para estado del rol === */
+.role-badge {
+    background: #064e3b;
+    color: #d7efe9;
+    font-size: 12px;
+    letter-spacing: .2px;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    height: 32px;
+}

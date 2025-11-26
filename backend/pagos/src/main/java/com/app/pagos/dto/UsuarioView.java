@@ -15,57 +15,96 @@ public class UsuarioView {
     private Integer idGenero;
     private String apellido;
 
-    public UsuarioView() {}
+    public UsuarioView() {
+    }
 
     // --- getters/setters (todos en Integer) ---
-    public Integer getIdUsuario() { return idUsuario; }
-    public void setIdUsuario(Integer idUsuario) { this.idUsuario = idUsuario; }
+    public Integer getIdUsuario() {
+        return idUsuario;
+    }
 
-    public String getApellido() { return apellido; }
-    public void setApellido(String apellido) { this.apellido = apellido; }
+    public void setIdUsuario(Integer idUsuario) {
+        this.idUsuario = idUsuario;
+    }
 
-    public boolean isActivo() { return activo; }
-    public void setActivo(boolean activo) { this.activo = activo; }
+    public String getApellido() {
+        return apellido;
+    }
 
-    public Integer getRolId() { return rolId; }
-    public void setRolId(Integer rolId) { this.rolId = rolId; }
+    public void setApellido(String apellido) {
+        this.apellido = apellido;
+    }
 
-    public Integer getPersonaId() { return personaId; }
-    public void setPersonaId(Integer personaId) { this.personaId = personaId; }
+    public boolean isActivo() {
+        return activo;
+    }
 
-    public String getNombre() { return nombre; }
-    public void setNombre(String nombre) { this.nombre = nombre; }
+    public void setActivo(boolean activo) {
+        this.activo = activo;
+    }
 
-    public String getCorreo() { return correo; }
-    public void setCorreo(String correo) { this.correo = correo; }
+    public Integer getRolId() {
+        return rolId;
+    }
 
-    public Integer getIdGenero() { return idGenero; }
-    public void setIdGenero(Integer idGenero) { this.idGenero = idGenero; }
+    public void setRolId(Integer rolId) {
+        this.rolId = rolId;
+    }
+
+    public Integer getPersonaId() {
+        return personaId;
+    }
+
+    public void setPersonaId(Integer personaId) {
+        this.personaId = personaId;
+    }
+
+    public String getNombre() {
+        return nombre;
+    }
+
+    public void setNombre(String nombre) {
+        this.nombre = nombre;
+    }
+
+    public String getCorreo() {
+        return correo;
+    }
+
+    public void setCorreo(String correo) {
+        this.correo = correo;
+    }
+
+    public Integer getIdGenero() {
+        return idGenero;
+    }
+
+    public void setIdGenero(Integer idGenero) {
+        this.idGenero = idGenero;
+    }
 
     // === Factory desde la entidad ===
-    public static UsuarioView from(Usuario u) {
-        UsuarioView v = new UsuarioView();
+   public static UsuarioView from(Usuario u) {
+    UsuarioView v = new UsuarioView();
 
-        // Usa el getter REAL de tu entidad:
-        // si tu Usuario solo tiene getIdCliente(), usa ese:
-        v.setIdUsuario(u.getIdUsuario());    // ✅ Integer
-        // si tienes getIdUsuario(), podrías usarlo en su lugar:
-        // v.setIdUsuario(u.getIdUsuario());
+    v.setIdUsuario(u.getIdUsuario());
+    v.setActivo(u.isActivo());
 
-        v.setActivo(u.isActivo());
-
-        if (u.getRol() != null) {
-            v.setRolId(u.getRol().getIdRol());  // ✅ Integer
-        }
-
-        Persona p = u.getPersona();
-        if (p != null) {
-            v.setPersonaId(p.getIdPersona());   // ✅ Integer
-            v.setNombre(p.getNombre());
-            v.setCorreo(p.getCorreo());
-            v.setIdGenero(p.getIdGenero());     // ✅ Integer
-        }
-
-        return v;
+    
+    
+    if (u.getRol() != null) {
+        v.setRolId(u.getRol().getIdRol());
     }
+
+    Persona p = u.getPersona();
+    if (p != null) {
+        v.setPersonaId(p.getIdPersona());
+        v.setNombre(p.getNombre());
+        v.setCorreo(p.getCorreo());
+        v.setIdGenero(p.getIdGenero());
+        v.setApellido(p.getApellido());
+    }
+
+    return v;
+}
 }

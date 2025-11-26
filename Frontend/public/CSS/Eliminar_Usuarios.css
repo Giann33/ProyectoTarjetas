@@ -1,0 +1,305 @@
+/* ============================
+   Topbar y cabecera de página
+   ============================ */
+
+.topbar {
+    grid-column: 2 / -1;
+    height: 72px;
+    padding: 0 24px;
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    border-bottom: 1px solid #e9eceb;
+    background: #f8faf9;
+}
+
+.topbar-left {
+    display: flex;
+    flex-direction: column;
+    gap: 4px;
+}
+
+.page-title {
+    margin: 0;
+    font-size: 20px;
+    font-weight: 700;
+    color: var(--green-900);
+}
+
+.page-subtitle {
+    margin: 0;
+    font-size: 12px;
+    color: var(--muted);
+}
+
+.topbar-right {
+    display: flex;
+    align-items: center;
+    gap: 10px;
+}
+
+/* Pill de rol + mini usuario */
+
+.role-pill {
+    padding: 4px 10px;
+    border-radius: 999px;
+    font-size: 11px;
+    font-weight: 600;
+    border: 1px solid #dde3e0;
+    background: #f3f7f5;
+}
+
+.role-admin {
+    background: var(--green-900);
+    color: #fff;
+    border-color: var(--green-900);
+}
+
+.role-user {
+    background: #e0f2f1;
+    color: var(--green-900);
+    border-color: #cde5e1;
+}
+
+.user-mini {
+    display: flex;
+    align-items: center;
+    gap: 6px;
+    padding: 4px 10px;
+    border-radius: 999px;
+    border: 1px solid #dde3e0;
+    background: #fff;
+    font-size: 12px;
+}
+
+.user-mini i {
+    color: var(--green-900);
+}
+
+/* ============================
+   Sección principal de edición
+   ============================ */
+
+.content-body {
+    grid-column: 2 / -1;
+    padding: 20px 24px 24px;
+}
+
+/* Panel blanco tipo formulario */
+.edit-section {
+    background: #fff;
+    border-radius: 4px;
+    padding: 18px 20px;
+    box-shadow: 0 0 0 1px rgba(0,0,0,.04);
+    max-width: 720px;
+}
+
+/* Grupos de formulario reutilizables */
+.form-group {
+    margin-bottom: 14px;
+    display: flex;
+    flex-direction: column;
+    gap: 4px;
+}
+
+.form-group label {
+    font-size: 12px;
+    font-weight: 600;
+    color: #374151;
+}
+
+/* Reuso de tu estilo base pero aplicado aquí también */
+.form-group input,
+.form-group select {
+    font-size: 13px;
+    border-radius: 4px;
+    border: 1px solid #d1d5db;
+    padding: 7px 9px;
+    outline: none;
+}
+
+.form-group input:focus,
+.form-group select:focus {
+    border-color: var(--green-700);
+    box-shadow: 0 0 0 2px rgba(13,117,95,.18);
+}
+
+/* Hint debajo del input */
+.field-hint {
+    font-size: 11px;
+    color: var(--muted);
+}
+
+/* Acciones del formulario */
+.form-actions {
+    margin-top: 12px;
+    display: flex;
+    justify-content: flex-end;
+    gap: 10px;
+}
+
+/* Ya tienes .btn-primary, añadimos .btn-secondary más pequeño */
+.btn-secondary {
+    height: 32px;
+    padding: 0 14px;
+    border-radius: 4px;
+    border: 1px solid #d1d5db;
+    background: #f3f4f6;
+    cursor: pointer;
+    font-size: 13px;
+    transition: background .15s ease, transform .03s ease;
+}
+
+.btn-secondary:hover {
+    background: #e5e7eb;
+}
+
+.btn-secondary:active {
+    transform: scale(.99);
+}
+
+/* ============================
+   Tarjeta con info de usuario
+   ============================ */
+
+.user-card {
+    margin-top: 16px;
+    background: #fff;
+    border-radius: 4px;
+    padding: 16px 16px 14px;
+    box-shadow: 0 1px 3px rgba(0,0,0,.06);
+    border: 1px solid rgba(0,0,0,.04);
+}
+
+.user-card-header {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    gap: 12px;
+}
+
+.user-main-info {
+    display: flex;
+    align-items: center;
+    gap: 10px;
+}
+
+.avatar-circle {
+    width: 36px;
+    height: 36px;
+    border-radius: 50%;
+    background: var(--green-900);
+    color: #fff;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    font-weight: 600;
+    font-size: 14px;
+}
+
+.user-card-text h2 {
+    margin: 0;
+    font-size: 14px;
+    font-weight: 600;
+}
+
+.user-card-text p {
+    margin: 0;
+    font-size: 12px;
+    color: var(--muted);
+}
+
+/* Pill de estado */
+.status-pill {
+    padding: 4px 8px;
+    border-radius: 999px;
+    font-size: 10px;
+    font-weight: 700;
+    letter-spacing: .06em;
+}
+
+.status-activo {
+    background: #ecfdf3;
+    color: #166534;
+}
+
+.status-inactivo {
+    background: #fef2f2;
+    color: #b91c1c;
+}
+
+/* Grid de datos */
+.user-card-grid {
+    margin-top: 12px;
+    display: grid;
+    grid-template-columns: repeat(3,minmax(0,1fr));
+    gap: 8px;
+}
+
+.user-card-item {
+    display: flex;
+    flex-direction: column;
+    gap: 2px;
+}
+
+.user-card-label {
+    font-size: 10px;
+    text-transform: uppercase;
+    letter-spacing: .06em;
+    color: var(--muted);
+}
+
+.user-card-value {
+    font-size: 12px;
+    font-weight: 500;
+}
+
+/* Bloque de advertencia */
+.sensitive-section {
+    margin-top: 12px;
+    padding-top: 8px;
+    border-top: 1px dashed #e5e7eb;
+    font-size: 11px;
+    color: #4b5563;
+}
+
+.sensitive-section strong {
+    color: #111827;
+}
+
+/* Mensajes de alerta */
+.alert {
+    margin-top: 14px;
+    padding: 8px 10px;
+    border-radius: 4px;
+    font-size: 12px;
+}
+
+.alert-error {
+    background: #fef2f2;
+    color: #b91c1c;
+    border: 1px solid #fecaca;
+}
+
+.alert-success {
+    background: #ecfdf3;
+    color: #166534;
+    border: 1px solid #bbf7d0;
+}
+
+/* Responsive extra */
+@media (max-width: 900px) {
+    .user-card-grid {
+        grid-template-columns: repeat(2,minmax(0,1fr));
+    }
+}
+
+@media (max-width: 720px) {
+    .topbar {
+        grid-column: 1 / -1;
+    }
+    .content-body {
+        grid-column: 1 / -1;
+        padding: 16px;
+    }
+}

@@ -1,0 +1,176 @@
+<!DOCTYPE html>
+<html lang="es">
+
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>Dunamys – Eliminar Cuentas</title>
+
+  <!-- Estilos base del proyecto -->
+  <link rel="stylesheet" href="CSS/Base.css">
+  <!-- Estilos específicos de Eliminar Cuentas -->
+  <link rel="stylesheet" href="CSS/Eliminar_Usuarios.css">
+
+  <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.0/css/all.min.css">
+
+  
+  <script src="JS/Eliminar_Usuarios.js" defer></script> 
+ <script src="JS/Logout.js" defer></script> 
+</head>
+
+<body>
+  <div class="shell">
+    <div class="panel">
+
+      <!-- Sidebar -->
+      <aside class="sidebar">
+        <div class="brand-aside">Dunamys</div>
+        <ul class="nav">
+          <li>
+            <button class="nav-btn" onclick="window.location.href='Consultas.html'">
+              <i class="fa-solid fa-house"></i><span>Consultas</span>
+            </button>
+          </li>
+          <li>
+            <button class="nav-btn" onclick="window.location.href='Mantenimientos.html'">
+              <i class="fa-solid fa-user-pen"></i><span>Mantenimientos</span>
+            </button>
+          </li>
+          <li>
+            <button class="nav-btn" onclick="window.location.href='Reportes.html'">
+              <i class="fa-solid fa-file-pdf"></i><span>Reportes</span>
+            </button>
+          </li>
+          <li>
+            <button class="nav-btn" onclick="window.location.href='Reversos.html'">
+              <i class="fa-solid fa-right-left"></i><span>Reversos y Devoluciones</span>
+            </button>
+          </li>
+          <li>
+            <button class="nav-btn" onclick="window.location.href='Autorizar.html'">
+              <i class="fa-solid fa-check"></i><span>Autorizar Transacciones</span>
+            </button>
+          </li>
+          <li>
+            <button class="nav-btn" onclick="window.location.href='Conciliacion.html'">
+              <i class="fa-solid fa-users-line"></i><span>Conciliación con Adquirentes/Emisores</span>
+            </button>
+          </li>
+          <li>
+            <button class="nav-btn" onclick="window.location.href='Notificaciones.html'">
+              <i class="fa-solid fa-envelope"></i><span>Notificaciones y Mensajes</span>
+            </button>
+          </li>
+        </ul>
+
+        <div class="subhead">Configuración</div>
+        <ul class="nav">
+          <li>
+            <button class="nav-btn">
+              <i class="fa-solid fa-circle-question"></i><span>Ayuda</span>
+            </button>
+          </li>
+          <li>
+            <button class="nav-btn">
+              <i class="fa-solid fa-envelope"></i><span>Contáctenos</span>
+            </button>
+          </li>
+        </ul>
+        <div class="subhead cerrar">
+          <button class="nav-btn" id="btn-logout">
+            <i class="fa-solid fa-right-from-bracket"></i><span>Cerrar Sesión</span>
+          </button>
+        </div>
+      </aside>
+
+      <!-- Header -->
+      <header class="topbar">
+  <div class="topbar-left">
+    <h1 class="page-title">Eliminar usuario</h1>
+    <p class="page-subtitle">
+      Selecciona el usuario que deseas eliminar del sistema.
+    </p>
+  </div>
+
+  
+</header>
+
+<div class="content-body">
+  <section class="edit-section">
+    <h3>Seleccionar usuario</h3>
+
+    <!-- Input de ID de usuario -->
+    <div class="form-group">
+  <label for="inputIdUsuario">ID de usuario</label>
+  <div style="display:flex; gap:8px; align-items:center;">
+    <input
+      type="number"
+      id="inputIdUsuario"
+      min="1"
+      step="1"
+      placeholder="Ej: 3" />
+    <button type="button" class="btn-secondary" id="btnCargarUsuario">
+      Cargar
+    </button>
+  </div>
+  <small class="field-hint">
+    Escribe el ID del usuario y presiona "Cargar".
+  </small>
+</div>
+
+    <!-- Tarjeta con info del usuario seleccionado -->
+    <div id="info-usuario" class="user-card" style="display:none;">
+      <div class="user-card-header">
+        <div class="user-main-info">
+          <div class="avatar-circle" id="avatarIniciales">U</div>
+          <div class="user-card-text">
+            <h2 id="infoNombre">Nombre Apellido</h2>
+            <p id="infoCorreo">correo@ejemplo.com</p>
+          </div>
+        </div>
+        <span id="estadoPill" class="status-pill status-activo">ACTIVO</span>
+      </div>
+
+      <div class="user-card-grid">
+        <div class="user-card-item">
+          <span class="user-card-label">ID Usuario</span>
+          <span class="user-card-value" id="infoIdUsuario">-</span>
+        </div>
+        <div class="user-card-item">
+          <span class="user-card-label">ID Persona</span>
+          <span class="user-card-value" id="infoIdPersona">-</span>
+        </div>
+        <div class="user-card-item">
+          <span class="user-card-label">Rol</span>
+          <span class="user-card-value" id="infoRol">-</span>
+        </div>
+      </div>
+
+      <div class="sensitive-section">
+        <strong>Advertencia:</strong>
+        <small>
+          Esta acción eliminará el usuario del sistema. Revisa bien los datos antes de confirmar.
+        </small>
+      </div>
+
+      <div class="form-actions">
+        <button type="button" class="btn-secondary" id="btnCancelarEliminar">
+          Cancelar
+        </button>
+        <button type="button" class="btn-primary" id="btnConfirmarEliminar">
+          <i class="fa-solid fa-trash"></i> Eliminar usuario
+        </button>
+      </div>
+    </div>
+
+    <div id="mensajeInfo" class="alert" style="display:none;"></div>
+  </section>
+</div>
+
+    </div>
+
+    <footer class="foot">Dunamys</footer>
+  </div>
+</body>
+
+</html>

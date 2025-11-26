@@ -1,0 +1,50 @@
+/* ---- TARJETA DE INFORMACIÓN DEL USUARIO ---- */
+
+.user-card {
+  background: white;
+  padding: 25px;
+  border-radius: 16px;
+  box-shadow: 0 2px 8px rgba(0,0,0,0.08);
+  max-width: 700px;
+  margin: 0 auto 40px auto; /* centra la tarjeta */
+  border-left: 6px solid #0f6b52; /* verde corporativo */
+}
+
+.user-title {
+  text-align: center;
+  margin-bottom: 20px;
+  font-size: 22px;
+  font-weight: 600;
+  color: #0f6b52;
+}
+
+.user-grid {
+  display: grid;
+  grid-template-columns: 1fr 1fr;
+  gap: 18px 35px;
+}
+
+.user-item label {
+  font-size: 14px;
+  font-weight: 600;
+  color: #444;
+  display: block;
+  margin-bottom: 4px;
+}
+
+.user-item span {
+  font-size: 16px;
+  display: block;
+  color: #222;
+  background: #f7f7f7;
+  padding: 10px 14px;
+  border-radius: 8px;
+  border: 1px solid #e0e0e0;
+}
+
+/* Para que en pantallas pequeñas se vea bien */
+@media (max-width: 600px) {
+  .user-grid {
+    grid-template-columns: 1fr;
+  }
+}

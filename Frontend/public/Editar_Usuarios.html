@@ -52,17 +52,47 @@
 
 <!-- Contenido (formulario centrado) -->
 <main class="content">
-<div class="form-container">
-<h2>Editar Usuario</h2>
-<form id="registro-form">
-      <div class="form-group admin-only" id="group-idUsuario">
-  <label for="idUsuarioField">ID de Usuario</label>
-  <input type="number" id="idUsuarioField" name="idUsuarioField" placeholder="ID actual" />
+  <div class="main-container">
+    <h2>Editar Usuario</h2>
+    <p>Edita la información de un usuario.</p>
 
-</div>
+    <!-- PANEL ADMIN IGUAL AL DE EDITAR CUENTAS -->
+    <section id="admin-panel" class="admin-panel admin-only hidden">
+      <h3><i class="fa-solid fa-user-gear"></i> Modo administrador</h3>
+      <p>Selecciona manualmente el <b>idUsuario</b> del usuario que quieres editar.</p>
+      <div class="admin-panel-row">
+        <label for="adminUserId">idUsuario:</label>
+        <input type="number" id="adminUserId" placeholder="Ej. 5" min="1" />
+        <button type="button" id="btn-admin-cargar" class="btn-primary btn-admin">
+          <i class="fa-solid fa-magnifying-glass"></i> Cargar usuario
+        </button>
+      </div>
+      <p class="admin-help">
+        Si no usas esta opción, se editará el usuario con el que iniciaste sesión.
+      </p>
+    </section>
+
+    <!-- SECCIÓN DEL FORMULARIO DE EDICIÓN -->
+    <section class="edit-section">
+      <h3>Datos del usuario</h3>
+
+      <form id="registro-form" class="edit-form">
+        <!-- De aquí para abajo son tus mismos campos originales -->
+
+        <div class="form-group admin-only" id="group-idUsuario">
+          <label for="idUsuarioField">ID de Usuario</label>
+          <input type="number" id="idUsuarioField" name="idUsuarioField" placeholder="ID actual" readonly/>
+        </div>
+
+        <div class="form-group">
+          <label for="nombre">Nombre</label>
+          <input type="text" id="nombre" name="nombre" placeholder="Ingrese su nombre" required>
+        </div>
+
+        
 <div class="form-group">
-<label for="nombre">Nombre</label>
-<input type="text" id="nombre" name="nombre" placeholder="Ingrese su nombre" required>
+<label for="nombre">Apellidos</label>
+<input type="text" id="apellidos" name="apellidos" placeholder="Ingrese sus Apellidos" required>
 </div>
 
 
@@ -74,7 +104,7 @@
 
 <div class="form-group">
 <label for="contrasena">Contraseña</label>
-<input type="password" id="contrasena" name="contrasena" placeholder="Ingrese su contraseña" required>
+<input type="password" id="contrasena" name="contrasena" placeholder="Ingrese su contraseña">
 </div>
 
 
@@ -82,25 +112,32 @@
 <label for="genero">Género</label>
 <select id="genero" name="genero" required>
 <option value="">Seleccione...</option>
-<option value="femenino">Femenino</option>
-<option value="masculino">Masculino</option>
-<option value="otro">Otro</option>
+<option value="2">Femenino</option>
+<option value="1">Masculino</option>
 </select>
 </div>
 
-<div class="form-group admin-only">
-<label for="genero">Rol</label>
-<select id="genero" name="genero" required>
-<option value="">Seleccione...</option>
-<option value="femenino">Administrador</option>
-<option value="masculino">Usuario</option>
-</select>
+        <div class="form-group admin-only">
+  <label for="rolSelect">Rol</label>
+  <select id="rolSelect" name="rolSelect">
+    <option value="">Seleccione...</option>
+    <option value="1">Administrador</option>
+    <option value="2">Usuario</option>
+  </select>
 </div>
 
-
-<button type="submit" class="btn-enviar">Actualizar</button>
-</form>
-</div>
+        <!-- Botones con el mismo estilo que Editar_Cuentas -->
+        <div class="form-actions">
+          <button type="submit" class="btn-primary">
+            <i class="fa-solid fa-floppy-disk"></i> Actualizar
+          </button>
+          <button type="button" class="btn-secondary" id="btnCancelar">
+            Cancelar
+          </button>
+        </div>
+      </form>
+    </section>
+  </div>
 </main>
 </div>
 

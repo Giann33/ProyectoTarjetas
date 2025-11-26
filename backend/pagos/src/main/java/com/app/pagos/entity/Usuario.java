@@ -12,9 +12,7 @@ public class Usuario implements Serializable {
     @Column(name = "idUsuario")
     private Integer idUsuario;
 
-    @Column(name = "Apellido", nullable = false)
-    private String apellido;
-
+ 
     @ManyToOne(fetch = FetchType.EAGER)
     @JoinColumn(name = "catalogo_rol_usuario_idRol", nullable = false)
     private Rol rol;
@@ -38,13 +36,7 @@ public class Usuario implements Serializable {
         this.idUsuario = idUsuario;
     }
 
-    public String getApellido() {
-        return apellido; // o devuelve el mismo campo que usas en getIdCliente()
-    }
 
-    public void setIapellido(String apellido) {
-        this.apellido = apellido;
-    }
 
     public Rol getRol() {
         return rol;

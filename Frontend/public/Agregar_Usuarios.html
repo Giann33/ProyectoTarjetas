@@ -1,0 +1,130 @@
+<!DOCTYPE html>
+<html lang="es">
+
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>Dunamys – Agregar Cuentas</title>
+
+  <!-- Estilos base del proyecto -->
+  <link rel="stylesheet" href="CSS/Base.css">
+  <!-- Estilos específicos de Agregar Cuentas -->
+  <link rel="stylesheet" href="CSS/Agregar_Usuarios.css">
+
+  <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.0/css/all.min.css">
+
+  <script src="JS/Agregar_Usuarios.js" defer></script>
+  <script src="JS/Logout.js" defer></script>
+</head>
+
+<body>
+  <div class="shell">
+    <div class="panel">
+      <!-- Sidebar -->
+      <aside class="sidebar">
+        <div class="brand-aside">Dunamys</div>
+        <ul class="nav">
+          <li><button class="nav-btn" onclick="window.location.href='Consultas.html'"><i class="fa-solid fa-house"></i><span>Consultas</span></button></li>
+          <li><button class="nav-btn" onclick="window.location.href='Mantenimientos.html'"><i class="fa-solid fa-user-pen"></i><span>Mantenimientos</span></button></li>
+          <li><button class="nav-btn" onclick="window.location.href='Reportes.html'"><i class="fa-solid fa-file-pdf"></i><span>Reportes</span></button></li>
+          <li><button class="nav-btn" onclick="window.location.href='Reversos.html'"><i class="fa-solid fa-right-left"></i><span>Reversos y Devoluciones</span></button></li>
+          <li><button class="nav-btn" onclick="window.location.href='Autorizar.html'"><i class="fa-solid fa-check"></i><span>Autorizar Transacciones</span></button></li>
+          <li><button class="nav-btn" onclick="window.location.href='Conciliacion.html'"><i class="fa-solid fa-users-line"></i><span>Conciliación con Adquirentes/Emisores</span></button></li>
+          <li><button class="nav-btn" onclick="window.location.href='Notificaciones.html'"><i class="fa-solid fa-envelope"></i><span>Notificaciones y Mensajes</span></button></li>
+        </ul>
+
+        <div class="subhead">Configuración</div>
+        <ul class="nav">
+          <li><button class="nav-btn"><i class="fa-solid fa-circle-question"></i><span>Ayuda</span></button></li>
+          <li><button class="nav-btn"><i class="fa-solid fa-envelope"></i><span>Contáctenos</span></button></li>
+        </ul>
+        <div class="subhead cerrar">
+          <button class="nav-btn" id="btn-logout"><i class="fa-solid fa-right-from-bracket"></i><span>Cerrar Sesión</span></button>
+        </div>
+      </aside>
+
+      <!-- Header -->
+      <header class="header">
+        <div class="logo">
+          <img src="IMG/Dunamys_Logo.png" alt="Logo Dunamys" class="logo-img">
+          <span class="word">DUNAMYS</span>
+        </div>
+      </header>
+
+      <!-- Contenido principal -->
+     <main class="content">
+        <!-- Encabezado superior -->
+        <header class="topbar">
+          <div class="topbar-left">
+            <h1 class="page-title">Agregar usuario</h1>
+            <p class="page-subtitle">Registra un nuevo usuario en el sistema</p>
+          </div>
+
+          <div class="topbar-right">
+            
+          </div>
+        </header>
+
+        <div class="content-body">
+        
+          <!-- SECCIÓN DEL FORMULARIO DE ALTA -->
+          <section class="edit-section">
+  <h3>Datos del nuevo usuario</h3>
+
+  <form id="registro-form" class="edit-form">
+    <div class="form-group">
+      <label for="nombre">Nombre</label>
+      <input type="text" id="nombre" name="nombre" placeholder="Nombre" required>
+    </div>
+
+    <div class="form-group">
+      <label for="apellidos">Apellidos</label>
+      <input type="text" id="apellidos" name="apellidos" placeholder="Apellidos" required>
+    </div>
+
+    <div class="form-group">
+      <label for="correo">Correo electrónico</label>
+      <input type="email" id="correo" name="correo" placeholder="correo@ejemplo.com" required>
+    </div>
+
+    <div class="form-group">
+      <label for="contrasena">Contraseña</label>
+      <input type="password" id="contrasena" name="contrasena" placeholder="Contraseña inicial" required>
+    </div>
+
+    <div class="form-group">
+      <label for="genero">Género</label>
+      <select id="genero" name="genero" required>
+        <option value="">Seleccione...</option>
+        <option value="1">Femenino</option>
+        <option value="2">Masculino</option>
+      </select>
+    </div>
+
+    <div class="form-group admin-only">
+      <label for="rolSelect">Rol</label>
+      <select id="rolSelect" name="rolSelect" required>
+        <option value="">Seleccione...</option>
+        <option value="1">Administrador</option>
+        <option value="2">Usuario</option>
+      </select>
+    </div>
+
+    <div class="form-actions">
+      <button type="submit" class="btn-primary">
+        <i class="fa-solid fa-floppy-disk"></i> Guardar usuario
+      </button>
+      <button type="button" class="btn-secondary" id="btnCancelar">Cancelar</button>
+    </div>
+  </form>
+</section>
+        </div>
+      </main>
+    </div>
+
+    <footer class="foot">Dunamys</footer>
+  </div>
+
+</body>
+
+</html>
