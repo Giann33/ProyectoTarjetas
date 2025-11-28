@@ -1,0 +1,49 @@
+<!DOCTYPE html>
+<html lang="es">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Eliminar Tarjetas</title>
+    <link rel="stylesheet" href="CSS/Base.css">
+    <link rel="stylesheet" href="CSS/Consultar_Tarjetas.css">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.0/css/all.min.css">
+</head>
+
+<body>
+
+    <div class="main-container">
+        <div class="header-section" style="border-bottom-color: #dc3545;">
+            <h1 style="color: #dc3545;">Eliminar Tarjetas</h1>
+            <button onclick="window.location.href='Mantenimientos.html'" class="btn-back">
+                <i class="fa-solid fa-arrow-left"></i> Volver
+            </button>
+        </div>
+
+        <div style="background-color: #fff3cd; color: #856404; padding: 10px; border-radius: 5px; margin-bottom: 20px; border: 1px solid #ffeeba;">
+            <i class="fa-solid fa-triangle-exclamation"></i>
+            <strong>Cuidado:</strong> Esta acción borrará la tarjeta permanentemente de la base de datos.
+        </div>
+
+        <div class="table-container">
+            <table id="tablaEliminar">
+                <thead>
+                    <tr>
+                        <th style="background-color: #dc3545;">ID</th>
+                        <th style="background-color: #dc3545;">Número</th>
+                        <th style="background-color: #dc3545;">Emisor</th>
+                        <th style="background-color: #dc3545;">Tipo</th>
+                        <th style="background-color: #dc3545;">ID Cuenta</th>
+                        <th style="background-color: #dc3545;">Acción</th>
+                    </tr>
+                </thead>
+                <tbody>
+                </tbody>
+            </table>
+        </div>
+    </div>
+
+    <script src="JS/Eliminar_Tarjetas.js"></script>
+</body>
+
+</html>

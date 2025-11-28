@@ -1,0 +1,51 @@
+<!DOCTYPE html>
+<html lang="es">
+
+<head>
+    <meta charset="UTF-8">
+    <title>Consultar Tarjetas</title>
+    <link rel="stylesheet" href="CSS/Base.css">
+    <link rel="stylesheet" href="CSS/Consultar_Tarjetas.css">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.0/css/all.min.css">
+</head>
+
+<body>
+
+    <div class="main-container">
+        <div class="header-section">
+            <h1>Listado de Tarjetas</h1>
+            <button onclick="window.location.href='Mantenimientos.html'" class="btn-back">
+                <i class="fa-solid fa-arrow-left"></i> Volver
+            </button>
+        </div>
+
+        <div class="table-container">
+            <table id="tablaTarjetas">
+                <thead>
+                    <tr>
+                        <th>ID</th>
+                        <th>Número</th>
+                        <th>Vencimiento</th>
+                        <th>Emisor</th>
+                        <th>Tipo</th>
+                        <th>ID Cuenta</th>
+                        <th>Estado</th>
+                        <th>Acción</th>
+                    </tr>
+                </thead>
+                <tbody>
+                </tbody>
+            </table>
+        </div>
+
+        <div style="margin-top: 20px; text-align: right;">
+            <a href="Agregar_Tarjeta.html" class="btn-add" style="background-color: #28a745; color: white; padding: 10px 15px; text-decoration: none; border-radius: 5px;">
+                <i class="fa-solid fa-plus"></i> Nueva Tarjeta
+            </a>
+        </div>
+    </div>
+
+    <script src="JS/Consultar_Tarjetas.js"></script>
+</body>
+
+</html>

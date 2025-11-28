@@ -1,14 +1,10 @@
 package com.app.pagos.entity;
 
-import java.sql.Date;
-
 import jakarta.persistence.Column;
 import jakarta.persistence.Entity;
 import jakarta.persistence.GeneratedValue;
 import jakarta.persistence.GenerationType;
 import jakarta.persistence.Id;
-import jakarta.persistence.JoinColumn;
-import jakarta.persistence.ManyToOne;
 import jakarta.persistence.Table;
 
 @Entity
@@ -23,20 +19,34 @@ public class Tarjeta {
     @Column(name = "Numero_Tarjeta")
     private String numeroTarjeta;
 
+    // Lo cambiamos a String para guardar "12/28" sin problemas de conversión
     @Column(name = "Fecha_Expiracion")
-    private Date fechaExpiracion;
+    private String fechaExpiracion;
+
+    @Column(name = "CVV")
+    private String cvv;
+
+    @Column(name = "PIN")
+    private String pin;
 
     @Column(name = "Activo")
-    private Boolean activo;
+    private Integer activo; // Usamos Integer (1 o 0) para mayor compatibilidad con MySQL
 
-    // ESTO ES LO IMPORTANTE: CONECTA CON TU ARCHIVO CUENTA.JAVA
-    @ManyToOne
-    @JoinColumn(name = "Cuenta_idCuenta") // Este nombre debe ser igual a la columna en tu BD MySQL
-    private Cuenta cuenta;
+    // --- RELACIONES (Usamos IDs directos para evitar errores complejos) ---
 
-    // --- Otros campos como idTipoTarjeta si los usas ---
+    @Column(name = "Cuenta_idCuenta")
+    private Integer idCuenta; // En vez del objeto Cuenta, guardamos su ID
 
-    // Getters y Setters
+    @Column(name = "idTipoTarjeta")
+    private Integer idTipoTarjeta;
+
+    @Column(name = "idEmisor")
+    private Integer idEmisor;
+
+    // ==========================================
+    // GETTERS Y SETTERS (Necesarios sin Lombok)
+    // ==========================================
+
     public Integer getIdTarjeta() {
         return idTarjeta;
     }
@@ -53,19 +63,59 @@ public class Tarjeta {
         this.numeroTarjeta = numeroTarjeta;
     }
 
-    public Cuenta getCuenta() {
-        return cuenta;
+    public String getFechaExpiracion() {
+        return fechaExpiracion;
     }
 
-    public void setCuenta(Cuenta cuenta) {
-        this.cuenta = cuenta;
+    public void setFechaExpiracion(String fechaExpiracion) {
+        this.fechaExpiracion = fechaExpiracion;
     }
 
-    public Boolean getActivo() {
+    public String getCvv() {
+        return cvv;
+    }
+
+    public void setCvv(String cvv) {
+        this.cvv = cvv;
+    }
+
+    public String getPin() {
+        return pin;
+    }
+
+    public void setPin(String pin) {
+        this.pin = pin;
+    }
+
+    public Integer getActivo() {
         return activo;
     }
 
-    public void setActivo(Boolean activo) {
+    public void setActivo(Integer activo) {
         this.activo = activo;
+    }
+
+    public Integer getIdCuenta() {
+        return idCuenta;
+    }
+
+    public void setIdCuenta(Integer idCuenta) {
+        this.idCuenta = idCuenta;
+    }
+
+    public Integer getIdTipoTarjeta() {
+        return idTipoTarjeta;
+    }
+
+    public void setIdTipoTarjeta(Integer idTipoTarjeta) {
+        this.idTipoTarjeta = idTipoTarjeta;
+    }
+
+    public Integer getIdEmisor() {
+        return idEmisor;
+    }
+
+    public void setIdEmisor(Integer idEmisor) {
+        this.idEmisor = idEmisor;
     }
 }

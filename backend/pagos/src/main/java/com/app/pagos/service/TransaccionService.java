@@ -7,12 +7,10 @@ import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
 import com.app.pagos.dto.TransaccionRequest;
-// Importa tus entidades
 import com.app.pagos.entity.Cuenta;
 import com.app.pagos.entity.Pago;
 import com.app.pagos.entity.Tarjeta;
 import com.app.pagos.entity.Transaccion;
-// Importa tus repositorios
 import com.app.pagos.repository.CuentaRepository;
 import com.app.pagos.repository.PagoRepository;
 import com.app.pagos.repository.TarjetaRepository;
@@ -30,43 +28,50 @@ public class TransaccionService {
     @Autowired
     private PagoRepository pagoRepository;
 
-    @Transactional // <--- CRÍTICO: Asegura la integridad de los datos
+    @Transactional
     public void procesarPago(TransaccionRequest request) throws Exception {
 
-        // 1. Buscar la tarjeta
+        // 1. CORRECCIÓN: Quitamos Long.valueOf(...)
+        // Si request.getIdTarjeta() ya es un número, lo pasamos directo.
+        // Si fuera String, usaríamos Integer.valueOf()
         Tarjeta tarjeta = tarjetaRepository.findById(request.getIdTarjeta())
                 .orElseThrow(() -> new Exception("Tarjeta no encontrada"));
 
-        // 2. Obtener la cuenta asociada a esa tarjeta
-        // (Nota: Tu entidad Tarjeta debe tener la relación con Cuenta)
-        Cuenta cuenta = tarjeta.getCuenta();
+        // 2. Obtener el ID de la cuenta desde la tarjeta
+        Integer idCuenta = tarjeta.getIdCuenta();
 
-        // 3. VALIDAR FONDOS
-        // compareTo devuelve -1 si es menor. Si saldo < monto -> Error.
+        // 3. CORRECCIÓN: Quitamos Long.valueOf(...)
+        // idCuenta ya es Integer, así que lo pasamos directo
+        Cuenta cuenta = cuentaRepository.findById(idCuenta)
+                .orElseThrow(() -> new Exception("Cuenta asociada a la tarjeta no encontrada"));
+
+        // 4. VALIDAR FONDOS
         if (cuenta.getSaldo().compareTo(request.getMonto()) < 0) {
             throw new Exception("Fondos insuficientes en la cuenta");
         }
 
-        // 4. DESCONTAR DINERO (Lógica matemática)
+        // 5. DESCONTAR DINERO
         cuenta.setSaldo(cuenta.getSaldo().subtract(request.getMonto()));
-        cuentaRepository.save(cuenta); // Guardamos el nuevo saldo
+        cuentaRepository.save(cuenta);
 
-        // 5. REGISTRAR LA TRANSACCIÓN (Historial)
+        // 6. REGISTRAR LA TRANSACCIÓN
         Transaccion nuevaTransaccion = new Transaccion();
         nuevaTransaccion.setFecha(LocalDateTime.now());
+
+        // Asignamos la tarjeta encontrada
         nuevaTransaccion.setTarjeta(tarjeta);
-        nuevaTransaccion.setEstado(1); // 1 = Aprobado (según tu catálogo)
+
+        nuevaTransaccion.setEstado(1); // 1 = Aprobado
         nuevaTransaccion.setTipo(request.getIdTipoTransaccion());
-        // Asignar servicio por defecto o null si no aplica
 
         Transaccion transaccionGuardada = transaccionRepository.save(nuevaTransaccion);
 
-        // 6. REGISTRAR EL PAGO (Detalle monetario)
+        // 7. REGISTRAR EL PAGO
         Pago nuevoPago = new Pago();
         nuevoPago.setMonto(request.getMonto());
-        nuevoPago.setTransaccion(transaccionGuardada); // Relacionamos con la anterior
-        nuevoPago.setMetodo(1); // 1 = Tarjeta (según catálogo)
-        nuevoPago.setIdTipoMoneda(1); // 1 = Colones (o traer de la cuenta)
+        nuevoPago.setTransaccion(transaccionGuardada);
+        nuevoPago.setMetodo(1); // 1 = Tarjeta
+        nuevoPago.setIdTipoMoneda(1); // 1 = Colones
 
         pagoRepository.save(nuevoPago);
     }
