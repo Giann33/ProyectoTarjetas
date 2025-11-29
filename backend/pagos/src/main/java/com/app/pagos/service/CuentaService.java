@@ -9,8 +9,10 @@ import org.springframework.stereotype.Service;
 import com.app.pagos.dto.ActualizarCuentaRequest;
 import com.app.pagos.dto.CuentaView;
 import com.app.pagos.entity.Cuenta;
+import com.app.pagos.entity.Usuario;
 import com.app.pagos.repository.CuentaRepository;
 import com.app.pagos.dto.CrearCuentaRequest;
+import com.app.pagos.repository.UsuarioRepository;
 
 import jakarta.persistence.EntityNotFoundException;
 
@@ -18,9 +20,11 @@ import jakarta.persistence.EntityNotFoundException;
 public class CuentaService {
 
     private final CuentaRepository repo;
+    private final UsuarioRepository usuarioRepository;
 
-    public CuentaService(CuentaRepository repo) {
+     public CuentaService(CuentaRepository repo, UsuarioRepository usuarioRepository) {
         this.repo = repo;
+        this.usuarioRepository = usuarioRepository;
     }
 
     public List<CuentaView> consultarPorIdUsuario(int idUsuario) {
@@ -79,8 +83,12 @@ public class CuentaService {
         }
 
         if (data.idUsuario() != null) {
-            cuenta.setUsuario(data.idUsuario());
-        }
+
+    Usuario usuario = usuarioRepository.findById(data.idUsuario())
+            .orElseThrow(() -> new EntityNotFoundException("Usuario no encontrado"));
+
+    cuenta.setUsuario(usuario);
+}
 
         // 4) Guardar
         repo.save(cuenta);
@@ -107,7 +115,12 @@ public class CuentaService {
 
         // Estos setters existen porque ya se usan en actualizarCuenta
         cuenta.setNumeroCuenta(data.numeroCuenta());
-        cuenta.setUsuario(data.idUsuario());
+        // 1) Buscar el usuario por ID
+Usuario usuario = usuarioRepository.findById(data.idUsuario())
+        .orElseThrow(() -> new EntityNotFoundException("Usuario no encontrado"));
+
+// 2) Asignar la entidad Usuario a la cuenta
+cuenta.setUsuario(usuario);
         cuenta.setCatalogo_tipo_cuenta_idTipoCuenta(data.tipoCuenta());
         cuenta.setCatalogo_tipo_moneda_idTipoMoneda(data.tipoMoneda());
         cuenta.setSucursal(data.sucursal());

@@ -15,8 +15,9 @@ public class Cuenta {
     @Column(name = "NumeroCuenta")
     private String numeroCuenta;
 
-    @Column(name = "Usuario_idUsuario")
-    private Integer Usuario;
+   @ManyToOne
+@JoinColumn(name = "Usuario_idUsuario")
+private Usuario usuario;
 
     @Column(name = "catalogo_tipo_cuenta_idTipoCuenta")
     private Integer catalogo_tipo_cuenta_idTipoCuenta;
@@ -59,13 +60,13 @@ public class Cuenta {
         this.numeroCuenta = numeroCuenta;
     }
 
-    public Integer getUsuario() {
-        return Usuario;
-    }
+   public Usuario getUsuario() {
+    return usuario;
+}
 
-    public void setUsuario(Integer usuario) {
-        this.Usuario = usuario;
-    }
+public void setUsuario(Usuario usuario) {
+    this.usuario = usuario;
+}
 
     public Integer getCatalogo_tipo_cuenta_idTipoCuenta() {
         return catalogo_tipo_cuenta_idTipoCuenta;

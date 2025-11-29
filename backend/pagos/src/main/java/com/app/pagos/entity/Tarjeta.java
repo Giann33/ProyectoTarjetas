@@ -5,6 +5,8 @@ import jakarta.persistence.Entity;
 import jakarta.persistence.GeneratedValue;
 import jakarta.persistence.GenerationType;
 import jakarta.persistence.Id;
+import jakarta.persistence.JoinColumn;
+import jakarta.persistence.ManyToOne;
 import jakarta.persistence.Table;
 
 @Entity
@@ -32,10 +34,13 @@ public class Tarjeta {
     @Column(name = "Activo")
     private Integer activo; // Usamos Integer (1 o 0) para mayor compatibilidad con MySQL
 
+    
+
     // --- RELACIONES (Usamos IDs directos para evitar errores complejos) ---
 
-    @Column(name = "Cuenta_idCuenta")
-    private Integer idCuenta; // En vez del objeto Cuenta, guardamos su ID
+@ManyToOne
+@JoinColumn(name = "Cuenta_idCuenta") // así se llama en la BD
+private Cuenta cuenta;
 
     @Column(name = "idTipoTarjeta")
     private Integer idTipoTarjeta;
@@ -95,12 +100,11 @@ public class Tarjeta {
         this.activo = activo;
     }
 
-    public Integer getIdCuenta() {
-        return idCuenta;
+    public Cuenta getCuenta() {
+        return cuenta;
     }
-
-    public void setIdCuenta(Integer idCuenta) {
-        this.idCuenta = idCuenta;
+    public void setCuenta(Cuenta cuenta) {
+        this.cuenta = cuenta;
     }
 
     public Integer getIdTipoTarjeta() {
@@ -118,4 +122,6 @@ public class Tarjeta {
     public void setIdEmisor(Integer idEmisor) {
         this.idEmisor = idEmisor;
     }
+
+    
 }

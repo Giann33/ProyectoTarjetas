@@ -22,10 +22,10 @@ public class ReportesController {
     record ReporteRespuestaDTO(String endpoint, String metodo, int promedioMs, int p95Ms, int p99Ms, int minMs, int maxMs, String fecha) {}
 
     // Health check
-    @GetMapping("/ping")
+  /*  @GetMapping("/ping")
     public PingDTO ping() {
         return new PingDTO("reportes-up");
-    }
+    }*/
 
     // === 6.1.1 Reporte diario de transacciones autorizadas/rechazadas ===
     @GetMapping("/reporte-estado")

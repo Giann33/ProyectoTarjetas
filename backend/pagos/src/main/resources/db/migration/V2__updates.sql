@@ -88,3 +88,34 @@ ADD PRIMARY KEY (idCuenta);
 -- 4. Crear el nuevo atributo NumeroCuenta (VARCHAR como antes)
 ALTER TABLE cuenta
 ADD COLUMN NumeroCuenta VARCHAR(100) NOT NULL AFTER idCuenta;
+
+--EEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEE
+
+ALTER TABLE transaccion
+ADD COLUMN destino VARCHAR(100) NOT NULL;
+
+ALTER TABLE transaccion
+ADD COLUMN detalle VARCHAR(100) NOT NULL;
+
+ALTER TABLE servicio
+DROP FOREIGN KEY servicio_ibfk_1;
+
+ALTER TABLE servicio
+DROP COLUMN idTipoServicio;
+
+DROP TABLE IF EXISTS catalogo_tipo_servicio;
+
+ALTER TABLE servicio
+ADD COLUMN Activo BIT(1) NOT NULL DEFAULT 1 AFTER Descripcion;
+
+INSERT INTO `sistemapagotarjeta`.`servicio` (`idServicio`, `Descripcion`, `Activo`) VALUES (1, 'Transferencia', 1);
+INSERT INTO `sistemapagotarjeta`.`servicio` (`idServicio`, `Descripcion`, `Activo`) VALUES (2, 'Pago de Servicio', 1);
+INSERT INTO `sistemapagotarjeta`.`servicio` (`idServicio`, `Descripcion`, `Activo`) VALUES (3, 'Compra en Comercio', 1);
+
+INSERT INTO `sistemapagotarjeta`.`catalogo_metodo_pago` (`idMetodoPago`, `Descripcion`, `Activo`) VALUES (1, 'Por Tarjeta', 1);
+
+INSERT INTO `sistemapagotarjeta`.`catalogo_tipo_transaccion` (`idTipoTransaccion`, `Descripcion`, `Activo`) VALUES (1,'comercial', 1);
+INSERT INTO `sistemapagotarjeta`.`catalogo_tipo_transaccion` (`idTipoTransaccion`, `Descripcion`, `Activo`) VALUES (2, 'financiero', 1);
+
+INSERT INTO `sistemapagotarjeta`.`catalogo_estado_transaccion` (`idEstadoTransaccion`, `Descripcion`, `Activo`) VALUES (1, 'Aprobada', 1);
+INSERT INTO `sistemapagotarjeta`.`catalogo_estado_transaccion` (`idEstadoTransaccion`, `Descripcion`, `Activo`) VALUES (2, 'Denegada', 1);

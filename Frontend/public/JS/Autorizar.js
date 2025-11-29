@@ -1,291 +1,326 @@
-// JS/Autorizar.js
+
+// Endpoint para autorizar transacciones
+const API_AUTORIZAR_URL = "http://localhost:8081/api/transacciones/autorizar";
+
+// Endpoint para obtener las tarjetas del usuario logueado
+const API_TARJETAS_USUARIO_BASE =
+  "http://localhost:8081/api/tarjetas/por-usuario/";
+
+// Clave donde guardas el usuario en localStorage
+// En tu caso es "user"
+const LOCALSTORAGE_USER_KEY = "user";
+
+// ================================
+// INICIO
+// ================================
+
 document.addEventListener("DOMContentLoaded", () => {
-  // Filtros
-  const fEstado = document.getElementById("fEstado");
-  const fEmisor = document.getElementById("fEmisor");
-  const fDesde  = document.getElementById("fDesde");
-  const fHasta  = document.getElementById("fHasta");
-
-  const btnBuscar  = document.getElementById("btn-buscar");
+  const form = document.getElementById("form-autorizar");
+  const btnEnviar = document.getElementById("btn-enviar");
   const btnLimpiar = document.getElementById("btn-limpiar");
+  const errorBox = document.getElementById("form-error");
 
-  // KPIs
-  const kpiPend = document.getElementById("kpi-pend");
-  const kpiAuto = document.getElementById("kpi-auto");
-  const kpiRech = document.getElementById("kpi-rech");
+  const placeholder = document.getElementById("resultado-placeholder");
+  const card = document.getElementById("resultado-card");
+  const badge = document.getElementById("resultado-estado-badge");
+  const iconSpan = document.getElementById("resultado-icon");
+  const mensajeP = document.getElementById("resultado-mensaje");
+  const idTxSpan = document.getElementById("resultado-id-transaccion");
+  const codigoSpan = document.getElementById("resultado-codigo");
+  const latenciaSpan = document.getElementById("resultado-latencia");
+  const jsonPre = document.getElementById("resultado-json-raw");
 
-  // Tabla
-  const tbody = document.querySelector("#tablaAuthz tbody");
-  const chkTodos = document.getElementById("chk-todos");
+  const selectTarjeta = document.getElementById("idTarjeta");
 
-  // Acciones masivas
-  const btnAutoMasivo = document.getElementById("btn-autorizarmasivo");
-  const btnRechMasivo = document.getElementById("btn-rechazarmasivo");
-  const btnExportar   = document.getElementById("btn-exportar");
+  // 1) Cargar tarjetas del usuario con sesión iniciada
+  cargarTarjetasUsuario(selectTarjeta, errorBox);
 
-  // Dialog rechazo
-  const dlgRechazo = document.getElementById("dlg-rechazo");
-  const txtMotivo  = document.getElementById("txt-motivo");
-  const btnConfirmRechazo = document.getElementById("btn-confirmar-rechazo");
+  // 2) Manejar envío del formulario
+  form.addEventListener("submit", async (e) => {
+  e.preventDefault();
+  errorBox.classList.add("hidden");
+  errorBox.textContent = "";
 
-  // Estado
-  let transacciones = [];   // todas las que trajo el backend (simulado)
-  let seleccionadas = new Set(); // ids seleccionados para acción masiva
-  let colaRechazo = [];     // ids a rechazar cuando confirme el motivo
+  const idTarjeta = parseInt(selectTarjeta.value, 10);
+  const idServicio = parseInt(
+    document.getElementById("idServicio").value,
+    10
+  );
+  const tipoTransaccion = parseInt(
+    document.getElementById("tipoTransaccion").value,
+    10
+  );
+  const idMetodoPago = parseInt(
+    document.getElementById("idMetodoPago").value,
+    10
+  );
+  const idTipoMoneda = parseInt(
+    document.getElementById("idTipoMoneda").value,
+    10
+  );
 
-  // --- Simulación de backend ---
-  // En producción: GET /transacciones?estado=...&emisor=...&desde=...&hasta=...
-  async function fetchTransacciones(params) {
-    // Genera 12 filas de demo con distintos estados y emisores
-    const hoy = new Date();
-    const pad2 = (n) => String(n).padStart(2, "0");
-    const mkDate = (d) => {
-      const x = new Date(hoy.getTime() - d*86400000);
-      return `${x.getFullYear()}-${pad2(x.getMonth()+1)}-${pad2(x.getDate())}`;
+  const montoValue = document.getElementById("monto").value.trim();
+  const destino = document.getElementById("destino").value.trim();
+  const detalle = document.getElementById("detalle").value.trim();
+
+  const monto = parseFloat(montoValue);
+
+  const idUsuario = obtenerIdUsuarioDesdeLocalStorage();
+
+  if (
+    isNaN(idTarjeta) ||
+    isNaN(idServicio) ||
+    isNaN(tipoTransaccion) ||
+    isNaN(idMetodoPago) ||
+    isNaN(idTipoMoneda) ||
+    isNaN(monto) ||
+    monto <= 0 ||
+    destino.length === 0 ||
+    detalle.length === 0 ||
+    !idUsuario
+  ) {
+    errorBox.textContent =
+      "Por favor, completa todos los campos con valores válidos y asegúrate de haber iniciado sesión.";
+    errorBox.classList.remove("hidden");
+    return;
+  }
+
+  const payload = {
+    idTarjeta,
+    idServicio,
+    tipoTransaccion,
+    idMetodoPago,
+    idTipoMoneda,
+    monto,
+    destino,
+    detalle,
+    idUsuario,
+  };
+
+  // Bloquear botón mientras se envía
+  btnEnviar.disabled = true;
+  btnEnviar.innerHTML =
+    '<i class="fa-solid fa-spinner fa-spin"></i> Enviando...';
+
+  try {
+    const headers = {
+      "Content-Type": "application/json",
     };
 
-    const demo = Array.from({ length: 12 }, (_, i) => {
-      const estados = ["pendiente", "autorizada", "rechazada"];
-      const emisores = ["Emisor X", "Emisor Y"];
-      const estado = i < 6 ? "pendiente" : (i % 2 === 0 ? "autorizada" : "rechazada");
-      const emisor = emisores[i % 2];
-      const monto = 5000 + i * 123.45;
-      return {
-        idTransaccion: 10000 + i,
-        fecha: mkDate(i),
-        tarjeta: "**** **** **** " + String(1111 + i),
-        emisor,
-        monto: monto,
-        moneda: "CRC",
-        estado
-      };
-    });
-
-    // filtros básicos en front (si tu API ya filtra, quita esto)
-    let data = demo;
-    if (params.estado) data = data.filter(r => r.estado === params.estado);
-    if (params.emisor) data = data.filter(r => r.emisor === params.emisor);
-    const dMin = params.desde ? new Date(params.desde) : null;
-    const dMax = params.hasta ? new Date(params.hasta) : null;
-    if (dMin) data = data.filter(r => new Date(r.fecha) >= dMin);
-    if (dMax) data = data.filter(r => new Date(r.fecha) <= dMax);
-
-    return data;
-  }
-
-  function renderTabla(list) {
-    tbody.innerHTML = "";
-    seleccionadas.clear();
-    chkTodos.checked = false;
-
-    list.forEach((r) => {
-      const tr = document.createElement("tr");
-
-      const tdSel = document.createElement("td");
-      tdSel.innerHTML = `<input type="checkbox" class="chk-row" data-id="${r.idTransaccion}">`;
-      tr.appendChild(tdSel);
-
-      const tdId = document.createElement("td");
-      tdId.textContent = r.idTransaccion;
-      tr.appendChild(tdId);
-
-      const tdF = document.createElement("td");
-      tdF.textContent = r.fecha;
-      tr.appendChild(tdF);
-
-      const tdT = document.createElement("td");
-      tdT.textContent = r.tarjeta;
-      tr.appendChild(tdT);
-
-      const tdE = document.createElement("td");
-      tdE.textContent = r.emisor;
-      tr.appendChild(tdE);
-
-      const tdM = document.createElement("td");
-      tdM.textContent = r.monto.toFixed(2);
-      tr.appendChild(tdM);
-
-      const tdMo = document.createElement("td");
-      tdMo.textContent = r.moneda;
-      tr.appendChild(tdMo);
-
-      const tdEst = document.createElement("td");
-      tdEst.textContent = r.estado.charAt(0).toUpperCase() + r.estado.slice(1);
-      tr.appendChild(tdEst);
-
-      const tdAcc = document.createElement("td");
-      tdAcc.innerHTML = `
-        <button class="btn-primary btn-mini" data-acc="autorizar" data-id="${r.idTransaccion}"><i class="fa-solid fa-check"></i></button>
-        <button class="btn-danger btn-mini"  data-acc="rechazar"  data-id="${r.idTransaccion}"><i class="fa-solid fa-ban"></i></button>
-      `;
-      tr.appendChild(tdAcc);
-
-      // Colorear por estado
-      if (r.estado === "pendiente") tr.style.background = "rgba(255, 193, 7, 0.12)";
-      if (r.estado === "autorizada") tr.style.background = "rgba(25, 135, 84, 0.12)";
-      if (r.estado === "rechazada") tr.style.background = "rgba(220, 53, 69, 0.12)";
-
-      tbody.appendChild(tr);
-    });
-  }
-
-  function updateKPIs(list) {
-    const p = list.filter(x => x.estado === "pendiente").length;
-    const a = list.filter(x => x.estado === "autorizada").length;
-    const r = list.filter(x => x.estado === "rechazada").length;
-    kpiPend.textContent = p;
-    kpiAuto.textContent = a;
-    kpiRech.textContent = r;
-  }
-
-  // ---- Eventos de UI ----
-  btnBuscar.addEventListener("click", async () => {
-    const params = {
-      estado: fEstado.value || "",
-      emisor: fEmisor.value || "",
-      desde:  fDesde.value || "",
-      hasta:  fHasta.value || ""
-    };
-    transacciones = await fetchTransacciones(params);
-    renderTabla(transacciones);
-    updateKPIs(transacciones);
-  });
-
-  btnLimpiar.addEventListener("click", () => {
-    fEstado.value = "pendiente";
-    fEmisor.value = "";
-    fDesde.value = "";
-    fHasta.value = "";
-    transacciones = [];
-    renderTabla(transacciones);
-    updateKPIs(transacciones);
-  });
-
-  // Seleccionar todos
-  chkTodos.addEventListener("change", () => {
-    document.querySelectorAll(".chk-row").forEach(chk => {
-      chk.checked = chkTodos.checked;
-      const id = Number(chk.dataset.id);
-      if (chk.checked) seleccionadas.add(id);
-      else seleccionadas.delete(id);
-    });
-  });
-
-  // Delegación de selección por fila + acciones por fila
-  tbody.addEventListener("change", (e) => {
-    if (e.target.classList.contains("chk-row")) {
-      const id = Number(e.target.dataset.id);
-      if (e.target.checked) seleccionadas.add(id);
-      else seleccionadas.delete(id);
+    const token = obtenerTokenDesdeLocalStorage();
+    if (token) {
+      headers["Authorization"] = "Bearer " + token;
     }
-  });
 
-  tbody.addEventListener("click", (e) => {
-    const btn = e.target.closest("button[data-acc]");
-    if (!btn) return;
-    const id = Number(btn.dataset.id);
-    const acc = btn.dataset.acc;
-
-    if (acc === "autorizar") {
-      autorizar([id]);
-    } else if (acc === "rechazar") {
-      colaRechazo = [id];
-      abrirDialogoRechazo();
-    }
-  });
-
-  // Acciones masivas
-  btnAutoMasivo.addEventListener("click", () => {
-    if (!seleccionadas.size) return alert("Selecciona al menos una transacción.");
-    autorizar([...seleccionadas]);
-  });
-
-  btnRechMasivo.addEventListener("click", () => {
-    if (!seleccionadas.size) return alert("Selecciona al menos una transacción.");
-    colaRechazo = [...seleccionadas];
-    abrirDialogoRechazo();
-  });
-
-  btnExportar.addEventListener("click", () => {
-    if (!seleccionadas.size) return alert("Selecciona al menos una transacción.");
-    exportarSeleccionadas([...seleccionadas]);
-  });
-
-  // Dialog rechazo
-  function abrirDialogoRechazo() {
-    txtMotivo.value = "";
-    if (typeof dlgRechazo.showModal === "function") dlgRechazo.showModal();
-    else alert("Escribe el motivo de rechazo en el siguiente prompt.");
-  }
-
-  btnConfirmRechazo.addEventListener("click", (e) => {
-    e.preventDefault();
-    const motivo = txtMotivo.value.trim();
-    if (!motivo) { alert("Debes escribir un motivo."); return; }
-    rechazar(colaRechazo, motivo);
-    dlgRechazo.close();
-  });
-
-  // ---- Lógica de negocio (simulada) ----
-  // En producción, harías:
-  //  - POST /transacciones/autorizar { ids: [...] }
-  //  - POST /transacciones/rechazar  { ids: [...], motivo: "..." }
-
-  function autorizar(ids) {
-    transacciones = transacciones.map(tx =>
-      ids.includes(tx.idTransaccion) ? { ...tx, estado: "autorizada" } : tx
-    );
-    renderTabla(transacciones);
-    updateKPIs(transacciones);
-    seleccionadas.clear();
-    alert(`Autorizadas: ${ids.length} transacciones.`);
-  }
-
-  function rechazar(ids, motivo) {
-    transacciones = transacciones.map(tx =>
-      ids.includes(tx.idTransaccion) ? { ...tx, estado: "rechazada", motivoRechazo: motivo } : tx
-    );
-    renderTabla(transacciones);
-    updateKPIs(transacciones);
-    seleccionadas.clear();
-    alert(`Rechazadas: ${ids.length} transacciones.\nMotivo: ${motivo}`);
-  }
-
-  function exportarSeleccionadas(ids) {
-    const rows = transacciones.filter(tx => ids.includes(tx.idTransaccion));
-    if (!rows.length) return;
-
-    const headers = ["idTransaccion","Fecha","Tarjeta","Emisor","Monto","Moneda","Estado"];
-    const lines = [headers.join(",")];
-    rows.forEach(r => {
-      lines.push([
-        r.idTransaccion,
-        r.fecha,
-        r.tarjeta,
-        r.emisor,
-        r.monto.toFixed(2),
-        r.moneda,
-        r.estado
-      ].join(","));
+    const response = await fetch(API_AUTORIZAR_URL, {
+      method: "POST",
+      headers,
+      body: JSON.stringify(payload),
     });
 
-    const blob = new Blob([lines.join("\n")], { type: "text/csv;charset=utf-8" });
-    const url = URL.createObjectURL(blob);
-    const a = document.createElement("a");
-    a.href = url;
-    const stamp = new Date().toISOString().slice(0,19).replace(/[:T]/g,"-");
-    a.download = `autorizar-seleccion-${stamp}.csv`;
-    document.body.appendChild(a);
-    a.click();
-    URL.revokeObjectURL(url);
-    a.remove();
-  }
+    if (!response.ok) {
+      throw new Error(
+        "Error al procesar la autorización. Código HTTP: " + response.status
+      );
+    }
 
-  // Carga inicial: pendientes
-  (async function init() {
-    fEstado.value = "pendiente";
-    transacciones = await fetchTransacciones({ estado: "pendiente" });
-    renderTabla(transacciones);
-    updateKPIs(transacciones);
-  })();
+    const data = await response.json();
+    renderResultado(data);
+  } catch (err) {
+    console.error(err);
+    errorBox.textContent =
+      "Ocurrió un error al contactar el servicio de autorización.";
+    errorBox.classList.remove("hidden");
+  } finally {
+    btnEnviar.disabled = false;
+    btnEnviar.innerHTML =
+      '<i class="fa-solid fa-paper-plane"></i> Enviar autorización';
+  }
 });
+
+  // 3) Botón limpiar
+  btnLimpiar.addEventListener("click", () => {
+    form.reset();
+    errorBox.classList.add("hidden");
+    errorBox.textContent = "";
+    card.classList.add("hidden");
+    placeholder.classList.remove("hidden");
+  });
+
+  // Función para pintar el resultado
+  function renderResultado(data) {
+    if (!data) return;
+
+    placeholder.classList.add("hidden");
+    card.classList.remove("hidden");
+
+    const estado = (data.estado || "").toUpperCase();
+
+    badge.textContent = estado || "SIN ESTADO";
+    badge.classList.remove(
+      "estado-aprobada",
+      "estado-rechazada",
+      "estado-timeout"
+    );
+
+    let iconHtml = '<i class="fa-solid fa-circle-question"></i>';
+
+    if (estado === "APROBADA") {
+      badge.classList.add("estado-aprobada");
+      iconHtml = '<i class="fa-solid fa-circle-check"></i>';
+    } else if (estado === "RECHAZADA") {
+      badge.classList.add("estado-rechazada");
+      iconHtml = '<i class="fa-solid fa-circle-xmark"></i>';
+    } else if (estado === "TIMEOUT") {
+      badge.classList.add("estado-timeout");
+      iconHtml = '<i class="fa-solid fa-circle-exclamation"></i>';
+    }
+
+    iconSpan.innerHTML = iconHtml;
+
+    mensajeP.textContent = data.mensaje || "Sin mensaje.";
+
+    idTxSpan.textContent = data.idTransaccion ?? "—";
+    codigoSpan.textContent = data.codigoRespuesta || "—";
+
+    if (typeof data.latenciaMs === "number") {
+      latenciaSpan.textContent = data.latenciaMs + " ms";
+    } else {
+      latenciaSpan.textContent = "—";
+    }
+
+    jsonPre.textContent = JSON.stringify(data, null, 2);
+  }
+});
+
+// ================================
+// FUNCIONES AUXILIARES
+// ================================
+
+/**
+ * Obtiene el idUsuario desde localStorage.
+ * En tu caso, el usuario está guardado como JSON bajo la clave "user".
+ * Ejemplo:
+ *  localStorage.setItem("user", JSON.stringify({ idUsuario: 2, idRol: 1, ... }))
+ */
+function obtenerIdUsuarioDesdeLocalStorage() {
+  console.log("Claves en localStorage:", Object.keys(localStorage));
+
+  const rawUser = localStorage.getItem(LOCALSTORAGE_USER_KEY);
+  console.log("rawUser:", rawUser);
+
+  if (!rawUser) {
+    console.warn("No se encontró nada en localStorage bajo la clave 'user'");
+    return null;
+  }
+
+  try {
+    const userObj = JSON.parse(rawUser);
+    console.log("Objeto user parseado:", userObj);
+
+    if (userObj && userObj.idUsuario != null) {
+      const id = parseInt(userObj.idUsuario, 10);
+      console.log("idUsuario obtenido desde user.idUsuario:", id);
+      return isNaN(id) ? null : id;
+    } else {
+      console.warn("user.idUsuario es nulo o no existe");
+    }
+  } catch (e) {
+    console.error("Error al parsear user desde localStorage:", e);
+  }
+
+  return null;
+}
+
+function obtenerTokenDesdeLocalStorage() {
+  const rawUser = localStorage.getItem(LOCALSTORAGE_USER_KEY);
+  if (!rawUser) return null;
+
+  try {
+    const userObj = JSON.parse(rawUser);
+    return userObj.token || null;
+  } catch (e) {
+    console.error("Error al parsear user desde localStorage (token):", e);
+    return null;
+  }
+}
+
+/**
+ * Carga las tarjetas del usuario con sesión iniciada y llena el <select>.
+ */
+async function cargarTarjetasUsuario(selectTarjeta, errorBox) {
+  const userId = obtenerIdUsuarioDesdeLocalStorage();
+  console.log("idUsuario final usado:", userId);
+
+  // Si no hay usuario en sesión, deshabilita el select
+  if (!userId) {
+    selectTarjeta.innerHTML =
+      '<option value="">Inicia sesión para ver tus tarjetas</option>';
+    selectTarjeta.disabled = true;
+    if (errorBox) {
+      errorBox.textContent =
+        "No se encontró un usuario en sesión. Inicia sesión para autorizar transacciones.";
+      errorBox.classList.remove("hidden");
+    }
+    return;
+  }
+
+  selectTarjeta.disabled = true;
+  selectTarjeta.innerHTML =
+    '<option value="">Cargando tarjetas...</option>';
+
+  try {
+    const response = await fetch(API_TARJETAS_USUARIO_BASE + userId);
+
+    if (!response.ok) {
+      throw new Error(
+        "Error al cargar tarjetas. Código HTTP: " + response.status
+      );
+    }
+
+    const tarjetas = await response.json();
+
+    // Si no hay tarjetas, mostramos un mensaje
+    if (!Array.isArray(tarjetas) || tarjetas.length === 0) {
+      selectTarjeta.innerHTML =
+        '<option value="">No se encontraron tarjetas activas</option>';
+      return;
+    }
+
+    // Limpiar opciones y agregar las nuevas
+    selectTarjeta.innerHTML =
+      '<option value="">Seleccione una tarjeta...</option>';
+
+    tarjetas.forEach((tarjeta) => {
+      const option = document.createElement("option");
+      option.value = tarjeta.idTarjeta;
+
+      const texto = construirTextoTarjeta(tarjeta);
+
+      option.textContent = texto;
+      selectTarjeta.appendChild(option);
+    });
+
+    selectTarjeta.disabled = false;
+  } catch (error) {
+    console.error(error);
+    selectTarjeta.innerHTML =
+      '<option value="">Error al cargar tarjetas</option>';
+    if (errorBox) {
+      errorBox.textContent =
+        "Ocurrió un error al cargar las tarjetas del usuario.";
+      errorBox.classList.remove("hidden");
+    }
+  }
+}
+
+/**
+ * Construye el texto legible que se muestra en el <select> para cada tarjeta.
+ * Esperado: { idTarjeta, numeroEnmascarado, tipo }
+ */
+function construirTextoTarjeta(tarjeta) {
+  const numero = tarjeta.numeroEnmascarado || "****";
+  const tipo = tarjeta.tipo || "Tarjeta";
+
+  return `${tipo} • ${numero}`;
+}

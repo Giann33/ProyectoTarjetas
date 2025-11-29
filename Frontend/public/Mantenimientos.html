@@ -45,57 +45,65 @@
 
             <main class="content">
                 <div class="main-container">
-                    <h2>Gestión de Mantenimientos</h2>
-                    <p>Selecciona una de las siguientes opciones:</p>
+                    <div class="page-header">
+                        <h2>Gestión de Mantenimientos</h2>
+                        <p>Administra los catálogos principales del sistema</p>
+                    </div>
 
-                    <section class="extra-options">
-                        <h4>Cuentas</h4>
-                        <div class="options">
-                            <button class="action-btn btn-editar" onclick="window.location.href='Editar_Cuentas.html'"><i class="fa-solid fa-pen-to-square"></i> Editar Cuentas</button>
-                            <button class="action-btn btn-eliminar" onclick="window.location.href='Eliminar_Cuentas.html'"><i class="fa-solid fa-trash"></i> Eliminar Cuentas</button>
-                            <button class="action-btn btn-agregar" onclick="window.location.href='Agregar_Cuentas.html'"><i class="fa-solid fa-plus"></i> Agregar Cuentas</button>
-                        </div>
-                    </section>
+                    <div class="dashboard-grid">
 
-                    <section class="extra-options">
-                        <h4>Tarjetas</h4>
-                        <div class="options">
-                            <button class="action-btn btn-editar" onclick="window.location.href='Consultar_Tarjetas.html'">
-                  <i class="fa-solid fa-list"></i> Ver / Editar Tarjetas
-              </button>
+                        <section class="card-module">
+                            <div class="card-header">
+                                <i class="fa-solid fa-wallet icon-bg"></i>
+                                <h4>Cuentas</h4>
+                            </div>
+                            <div class="options">
+                                <button class="action-btn btn-view" onclick="window.location.href='Editar_Cuentas.html'"><i class="fa-solid fa-pen-to-square"></i> Editar</button>
+                                <button class="action-btn btn-delete" onclick="window.location.href='Eliminar_Cuentas.html'"><i class="fa-solid fa-trash"></i> Eliminar</button>
+                                <button class="action-btn btn-add" onclick="window.location.href='Agregar_Cuentas.html'"><i class="fa-solid fa-plus"></i> Agregar</button>
+                            </div>
+                        </section>
 
-                            <button class="action-btn btn-eliminar" onclick="window.location.href='Eliminar_Tarjetas.html'">
-                  <i class="fa-solid fa-trash"></i> Eliminar Tarjetas
-              </button>
+                        <section class="card-module">
+                            <div class="card-header">
+                                <i class="fa-solid fa-credit-card icon-bg"></i>
+                                <h4>Tarjetas</h4>
+                            </div>
+                            <div class="options">
+                                <button class="action-btn btn-view" onclick="window.location.href='Consultar_Tarjetas.html'"><i class="fa-solid fa-pen-to-square"></i> Editar</button>
+                                <button class="action-btn btn-delete" onclick="window.location.href='Eliminar_Tarjetas.html'"><i class="fa-solid fa-trash"></i> Eliminar</button>
+                                <button class="action-btn btn-add" onclick="window.location.href='Agregar_Tarjeta.html'"><i class="fa-solid fa-plus"></i> Agregar</button>
+                            </div>
+                        </section>
 
-                            <button class="action-btn btn-agregar" onclick="window.location.href='Agregar_Tarjeta.html'">
-                  <i class="fa-solid fa-plus"></i> Agregar Tarjetas
-              </button>
-                        </div>
-                    </section>
+                        <section class="card-module">
+                            <div class="card-header">
+                                <i class="fa-solid fa-users icon-bg"></i>
+                                <h4>Usuarios</h4>
+                            </div>
+                            <div class="options">
+                                <button class="action-btn btn-view" onclick="window.location.href='Editar_Usuarios.html'"><i class="fa-solid fa-pen-to-square"></i> Editar</button>
+                                <button class="action-btn btn-delete" onclick="window.location.href='Eliminar_Usuarios.html'"><i class="fa-solid fa-trash"></i> Eliminar</button>
+                                <button class="action-btn btn-add" onclick="window.location.href='Agregar_Usuarios.html'"><i class="fa-solid fa-plus"></i> Agregar</button>
+                            </div>
+                        </section>
 
-                    <section class="extra-options">
-                        <h4>Usuarios</h4>
-                        <div class="options">
-                            <button class="action-btn btn-editar" onclick="window.location.href='Editar_Usuarios.html'"><i class="fa-solid fa-pen-to-square"></i> Editar Usuarios</button>
-                            <button class="action-btn btn-eliminar" onclick="window.location.href='Eliminar_Usuarios.html'"><i class="fa-solid fa-trash"></i> Eliminar Usuarios</button>
-                            <button class="action-btn btn-agregar" onclick="window.location.href='Agregar_Usuarios.html'"><i class="fa-solid fa-plus"></i> Agregar Usuarios</button>
-                        </div>
-                    </section>
+                        <section class="card-module">
+                            <div class="card-header">
+                                <i class="fa-solid fa-money-bill-transfer icon-bg"></i>
+                                <h4>Transacciones</h4>
+                            </div>
+                            <div class="options">
+                                <button class="action-btn btn-view" onclick="window.location.href='Editar_Transacciones.html'"><i class="fa-solid fa-pen-to-square"></i> Editar</button>
+                                <button class="action-btn btn-delete" onclick="window.location.href='Eliminar_Transacciones.html'"><i class="fa-solid fa-trash"></i> Eliminar</button>
+                                <button class="action-btn btn-add" onclick="window.location.href='Agregar_Transacciones.html'"><i class="fa-solid fa-plus"></i> Agregar</button>
+                            </div>
+                        </section>
 
-                    <section class="extra-options">
-                        <h4>Transacciones</h4>
-                        <div class="options">
-                            <button class="action-btn btn-editar" onclick="window.location.href='Editar_Transacciones.html'"><i class="fa-solid fa-pen-to-square"></i> Editar Transacciones</button>
-                            <button class="action-btn btn-eliminar" onclick="window.location.href='Eliminar_Transacciones.html'"><i class="fa-solid fa-trash"></i> Eliminar Transacciones</button>
-                            <button class="action-btn btn-agregar" onclick="window.location.href='Agregar_Transacciones.html'"><i class="fa-solid fa-plus"></i> Agregar Transacciones</button>
-                        </div>
-                    </section>
-
+                    </div>
                 </div>
             </main>
         </div>
-
         <footer class="foot">Dunamys</footer>
     </div>
 </body>
