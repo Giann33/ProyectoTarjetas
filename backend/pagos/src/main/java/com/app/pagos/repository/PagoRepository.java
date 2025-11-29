@@ -6,3 +6,4 @@ import com.app.pagos.entity.Pago;
 
 public interface PagoRepository extends JpaRepository<Pago, Integer> {
 }
+

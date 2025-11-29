@@ -14,8 +14,15 @@ import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RestController;
 
+import com.app.pagos.dto.CrearTarjetaRequest;
+import com.app.pagos.dto.EditarTarjetaRequest;
+import com.app.pagos.dto.TarjetaView;
+import com.app.pagos.dto.TarjetaViewConsulta;
+import com.app.pagos.entity.Cuenta;
 import com.app.pagos.entity.Tarjeta;
+import com.app.pagos.repository.CuentaRepository;
 import com.app.pagos.repository.TarjetaRepository;
+import com.app.pagos.service.TarjetaService;
 
 @RestController
 @RequestMapping("/api/tarjetas")
@@ -25,23 +32,53 @@ public class TarjetaController {
     @Autowired
     private TarjetaRepository tarjetaRepository;
 
-    // 1. LISTAR (Para Consultar_Tarjetas.html y Eliminar_Tarjetas.html)
-    @GetMapping
-    public List<Tarjeta> listar() {
-        return tarjetaRepository.findAll();
+     @Autowired
+    private TarjetaService tarjetaService;
+
+    @Autowired
+private CuentaRepository cuentaRepository;
+
+    @GetMapping("/por-usuario/{idUsuario}")
+    public List<TarjetaView> obtenerTarjetasPorUsuario(@PathVariable Integer idUsuario) {
+        return tarjetaService.obtenerTarjetasPorUsuario(idUsuario);
     }
+
+    // 1. LISTAR (Para Consultar_Tarjetas.html y Eliminar_Tarjetas.html)
+    
+@GetMapping
+public List<TarjetaViewConsulta> listar() {
+    return tarjetaService.listarTodas();
+}
+    
 
     // 2. GUARDAR (Para Agregar_Tarjeta.html)
     @PostMapping
-    public ResponseEntity<?> guardar(@RequestBody Tarjeta tarjeta) {
-        try {
-            tarjeta.setActivo(1); // Siempre activo al crear
-            Tarjeta nueva = tarjetaRepository.save(tarjeta);
-            return ResponseEntity.ok(nueva);
-        } catch (Exception e) {
-            return ResponseEntity.status(500).body("Error al guardar: " + e.getMessage());
-        }
+public ResponseEntity<?> guardar(@RequestBody CrearTarjetaRequest req) {
+    try {
+        Tarjeta tarjeta = new Tarjeta();
+
+        tarjeta.setNumeroTarjeta(req.getNumeroTarjeta());
+        tarjeta.setFechaExpiracion(req.getFechaExpiracion());
+        tarjeta.setCvv(req.getCvv());
+        tarjeta.setPin(req.getPin());
+        tarjeta.setIdEmisor(req.getIdEmisor());
+        tarjeta.setIdTipoTarjeta(req.getIdTipoTarjeta());
+        tarjeta.setActivo(1);  // nueva tarjeta siempre activa
+
+        // 🔥 aquí está la parte importante: asignar la cuenta
+        Cuenta cuenta = cuentaRepository.findById(req.getIdCuenta())
+                .orElseThrow(() -> new RuntimeException("No existe la cuenta con id " + req.getIdCuenta()));
+        tarjeta.setCuenta(cuenta);
+
+        Tarjeta guardada = tarjetaRepository.save(tarjeta);
+        // si quieres, puedes devolver TarjetaView.from(guardada)
+        return ResponseEntity.ok(guardada);
+
+    } catch (Exception e) {
+        return ResponseEntity.status(500).body("Error al guardar: " + e.getMessage());
     }
+}
+
 
     // 3. ELIMINAR (Corregido)
     @DeleteMapping("/{id}")
@@ -61,30 +98,11 @@ public class TarjetaController {
 
     // 4. ACTUALIZAR (Para Editar_Tarjeta.html)
     @PutMapping("/{id}")
-    public ResponseEntity<?> actualizar(@PathVariable Integer id, @RequestBody Tarjeta tarjetaDetalles) {
-        try {
-            // Buscamos la tarjeta por ID
-            Tarjeta tarjeta = tarjetaRepository.findById(id).orElse(null);
+    public ResponseEntity<TarjetaViewConsulta> actualizar(
+            @PathVariable Integer id,
+            @RequestBody EditarTarjetaRequest req) {
 
-            if (tarjeta == null) {
-                return ResponseEntity.notFound().build();
-            }
-
-            // Actualizamos los datos con lo que nos envíe el formulario
-            tarjeta.setNumeroTarjeta(tarjetaDetalles.getNumeroTarjeta());
-            tarjeta.setFechaExpiracion(tarjetaDetalles.getFechaExpiracion());
-            tarjeta.setCvv(tarjetaDetalles.getCvv());
-            tarjeta.setPin(tarjetaDetalles.getPin());
-            tarjeta.setIdEmisor(tarjetaDetalles.getIdEmisor());
-            tarjeta.setIdTipoTarjeta(tarjetaDetalles.getIdTipoTarjeta());
-            tarjeta.setIdCuenta(tarjetaDetalles.getIdCuenta());
-
-            // Guardamos los cambios
-            Tarjeta actualizada = tarjetaRepository.save(tarjeta);
-            return ResponseEntity.ok(actualizada);
-
-        } catch (Exception e) {
-            return ResponseEntity.status(500).body("Error al actualizar: " + e.getMessage());
-        }
+        TarjetaViewConsulta view = tarjetaService.actualizarTarjeta(id, req);
+        return ResponseEntity.ok(view);
     }
 }

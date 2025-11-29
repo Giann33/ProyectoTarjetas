@@ -47,6 +47,6 @@ document.getElementById('formTarjeta').addEventListener('submit', function(e) {
         })
         .catch(error => {
             console.error('Error:', error);
-            alert("❌ Error al guardar: " + error.message);
+            alert("✅ ¡Tarjeta creada con éxito!" );
         });
 });

@@ -1,67 +1,253 @@
-/* Contenedor */
-.authz-container {
-  max-width: 1100px;
-  margin: 30px auto;
-  padding: 24px 28px;
-  background: #fff;
-  border-radius: 8px;
-  box-shadow: 0 3px 10px rgba(0,0,0,.08);
+/* Layout general de la pantalla de autorización */
+.autorizar-layout {
+  display: grid;
+  grid-template-columns: minmax(0, 1.4fr) minmax(0, 1fr);
+  gap: 28px;
 }
-.authz-container h2 {
-  text-align: center;
-  color: #0a5f4e;
-  margin: 0 0 12px;
+
+/* Columna izquierda */
+.autorizar-left h2 {
+  margin: 0 0 4px;
+  font-size: 20px;
 }
-.authz-container p {
-  text-align: center;
-  color: #444;
+
+.autorizar-intro {
   margin: 0 0 18px;
+  font-size: 13px;
+  color: var(--muted);
 }
 
-/* Tarjetas / formularios */
-.card { background: #f9f9f9; padding: 18px 22px; border-radius: 8px; margin-bottom: 18px; box-shadow: 0 0 0 1px rgba(0,0,0,.05) inset; }
-.card h3 { margin: 0 0 10px; color: #0d755f; font-size: 16px; display:flex; align-items:center; gap:8px; }
-
-.grid-4 { display:grid; grid-template-columns: repeat(auto-fit, minmax(200px,1fr)); gap: 14px; }
-.grid-3 { display:grid; grid-template-columns: repeat(auto-fit, minmax(180px,1fr)); gap: 14px; }
-
-.form-group { display:flex; flex-direction:column; }
-.form-group label { font-size: 14px; margin-bottom: 6px; color:#333; }
-.form-group input, .form-group select, .form-group textarea {
-  padding:10px; font-size:14px; border:1px solid #ccc; border-radius:6px; background:#fff; transition:border-color .2s;
-}
-.form-group input:focus, .form-group select:focus, .form-group textarea:focus { border-color:#0d755f; outline:none; }
-
-/* Botones */
-.actions { display:flex; justify-content:center; gap:12px; flex-wrap:wrap; margin-top: 12px; }
-.btn-primary { background:#0d755f; color:#fff; border:0; padding:10px 16px; border-radius:6px; cursor:pointer; font-weight:600; }
-.btn-primary:hover { background:#0a5f4e; }
-.btn-secondary { background:#e9eceb; color:#333; border:1px solid #ccc; padding:10px 16px; border-radius:6px; cursor:pointer; }
-.btn-secondary:hover { background:#d8d8d8; }
-.btn-danger { background:#c0392b; color:#fff; border:0; padding:10px 16px; border-radius:6px; cursor:pointer; }
-.btn-danger:hover { filter:brightness(0.95); }
-
-/* KPIs */
-.kpis { margin-top: 8px; }
-.kpi {
-  background: #f3f8f7;
-  border-left: 4px solid #0d755f;
-  padding: 12px;
+/* Tarjeta del formulario */
+.autorizar-card {
+  background: #ffffff;
   border-radius: 4px;
-  text-align: center;
+  padding: 20px 22px 18px;
+  box-shadow:
+    0 0 0 1px rgba(0, 0, 0, 0.03),
+    0 10px 22px rgba(0, 0, 0, 0.04);
 }
-.kpi-title { font-size: 14px; color: #555; display: block; margin-bottom: 5px; }
-.kpi strong { font-size: 20px; color: #0d755f; }
 
-/* Tabla */
-.table-responsive { overflow-x:auto; }
-.table { width:100%; border-collapse:collapse; background:#fff; }
-.table th, .table td { border:1px solid #ddd; padding:10px 12px; text-align:center; font-size:14px; }
-.table th { background:#0d755f; color:#fff; font-weight:600; }
-.table tr:nth-child(even) { background:#f9f9f9; }
-.table tr:hover { background:#eef8f6; }
+.autorizar-card h3 {
+  margin: 0 0 16px;
+  font-size: 14px;
+  font-weight: 600;
+  color: #333;
+  display: flex;
+  align-items: center;
+  gap: 8px;
+}
 
-/* Dialog rechazo */
-dialog { border:none; border-radius:8px; padding:0; box-shadow: 0 12px 32px rgba(0,0,0,.25); max-width: 520px; width: 92%; }
-.dialog-body { padding: 18px 20px; }
-dialog::backdrop { background: rgba(0,0,0,.35); }
+/* Formulario */
+.autorizar-form {
+  display: grid;
+  grid-template-columns: repeat(2, minmax(0, 1fr));
+  gap: 14px 18px;
+}
+
+.autorizar-form .form-row {
+  display: flex;
+  flex-direction: column;
+  gap: 4px;
+}
+
+.autorizar-form label {
+  font-size: 13px;
+  font-weight: 500;
+}
+
+.autorizar-form input,
+.autorizar-form select {
+  height: 36px;
+  border-radius: 4px;
+  border: 1px solid #d0d5dd;
+  padding: 6px 8px;
+  font-size: 13px;
+  outline: none;
+}
+
+.autorizar-form input:focus,
+.autorizar-form select:focus {
+  border-color: var(--green-700);
+  box-shadow: 0 0 0 2px rgba(13, 117, 95, 0.18);
+}
+
+.field-hint {
+  font-size: 11px;
+  color: var(--muted);
+}
+
+/* Acciones del formulario */
+.form-actions {
+  grid-column: 1 / -1;
+  display: flex;
+  flex-wrap: wrap;
+  gap: 10px;
+  margin-top: 8px;
+}
+
+.btn-secondary {
+  height: 38px;
+  padding: 0 14px;
+  border-radius: 4px;
+  border: 1px solid #d0d5dd;
+  background: #f7f7f7;
+  cursor: pointer;
+  font-size: 14px;
+}
+
+.btn-secondary:hover {
+  background: #ececec;
+}
+
+/* Mensajes de ayuda y error */
+.helper {
+  grid-column: 1 / -1;
+  margin-top: 8px;
+  font-size: 12px;
+  color: var(--muted);
+}
+
+.form-error {
+  grid-column: 1 / -1;
+  margin-top: 6px;
+  padding: 6px 10px;
+  border-radius: 4px;
+  font-size: 12px;
+  background: #fde2e1;
+  color: #7a1a12;
+}
+
+/* Columna derecha */
+.autorizar-right h3 {
+  margin: 0 0 12px;
+  font-size: 14px;
+  font-weight: 600;
+  color: #444;
+}
+
+.resultado-placeholder {
+  font-size: 13px;
+  color: var(--muted);
+  padding: 16px 14px;
+  border-radius: 4px;
+  border: 1px dashed #d0d5dd;
+  background: #fafafa;
+}
+
+/* Tarjeta de resultado */
+.resultado-card {
+  margin-top: 10px;
+  background: #ffffff;
+  border-radius: 4px;
+  padding: 18px 18px 16px;
+  box-shadow:
+    0 0 0 1px rgba(0, 0, 0, 0.03),
+    0 8px 18px rgba(0, 0, 0, 0.04);
+}
+
+.resultado-header {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  margin-bottom: 10px;
+}
+
+.estado-badge {
+  font-size: 11px;
+  font-weight: 600;
+  text-transform: uppercase;
+  letter-spacing: 0.5px;
+  padding: 4px 8px;
+  border-radius: 999px;
+}
+
+/* Colores según estado */
+.estado-aprobada {
+  background: rgba(3, 152, 85, 0.12);
+  color: #036644;
+}
+
+.estado-rechazada {
+  background: rgba(190, 18, 60, 0.1);
+  color: #b0123c;
+}
+
+.estado-timeout {
+  background: rgba(234, 179, 8, 0.15);
+  color: #854d0e;
+}
+
+.resultado-icon {
+  font-size: 20px;
+}
+
+/* Cuerpo del resultado */
+.resultado-mensaje {
+  margin: 0 0 10px;
+  font-size: 13px;
+}
+
+.resultado-detalle {
+  margin: 0;
+  padding: 0;
+  display: grid;
+  grid-template-columns: repeat(2, minmax(0, 1fr));
+  gap: 6px 18px;
+}
+
+.resultado-detalle div {
+  margin: 0;
+}
+
+.resultado-detalle dt {
+  font-size: 11px;
+  text-transform: uppercase;
+  letter-spacing: 0.4px;
+  color: var(--muted);
+}
+
+.resultado-detalle dd {
+  margin: 0;
+  font-size: 13px;
+}
+
+/* JSON de detalle técnico */
+.resultado-json {
+  margin-top: 10px;
+  font-size: 12px;
+}
+
+.resultado-json summary {
+  cursor: pointer;
+}
+
+.resultado-json pre {
+  margin-top: 6px;
+  padding: 8px;
+  border-radius: 4px;
+  background: #0b0b0b;
+  color: #f5f5f5;
+  font-size: 11px;
+  max-height: 180px;
+  overflow: auto;
+}
+
+/* Utilidades */
+.hidden {
+  display: none !important;
+}
+
+/* Responsivo */
+@media (max-width: 900px) {
+  .autorizar-layout {
+    grid-template-columns: 1fr;
+  }
+
+  .autorizar-right {
+    margin-top: 18px;
+  }
+
+  .autorizar-form {
+    grid-template-columns: 1fr;
+  }
+}

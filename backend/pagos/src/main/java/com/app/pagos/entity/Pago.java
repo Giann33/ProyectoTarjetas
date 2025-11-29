@@ -8,6 +8,7 @@ import jakarta.persistence.GeneratedValue;
 import jakarta.persistence.GenerationType;
 import jakarta.persistence.Id;
 import jakarta.persistence.JoinColumn;
+import jakarta.persistence.ManyToOne;
 import jakarta.persistence.OneToOne;
 import jakarta.persistence.Table;
 
@@ -23,11 +24,19 @@ public class Pago {
     @Column(name = "Monto")
     private BigDecimal monto;
 
-    @Column(name = "Metodo")
-    private Integer metodo;
+      // ===============================
+    //     RELACIÓN: METODO DE PAGO
+    // ===============================
+    @ManyToOne
+    @JoinColumn(name = "Metodo", referencedColumnName = "idMetodoPago", nullable = false)
+    private MetodoPago metodo;
 
-    @Column(name = "catalogo_tipo_moneda_idTipoMoneda")
-    private Integer idTipoMoneda;
+    // ===============================
+    //     RELACIÓN: TIPO DE MONEDA
+    // ===============================
+    @ManyToOne
+    @JoinColumn(name = "catalogo_tipo_moneda_idTipoMoneda", referencedColumnName = "idTipoMoneda", nullable = false)
+    private TipoMoneda tipoMoneda;
 
     @OneToOne
     @JoinColumn(name = "Transaccion_idTransaccion")
@@ -50,20 +59,17 @@ public class Pago {
         this.monto = monto;
     }
 
-    public Integer getMetodo() {
+    public MetodoPago getMetodo() {
         return metodo;
     }
-
-    public void setMetodo(Integer metodo) {
+    public void setMetodo(MetodoPago metodo) {
         this.metodo = metodo;
     }
-
-    public Integer getIdTipoMoneda() {
-        return idTipoMoneda;
+    public TipoMoneda getTipoMoneda() {
+        return tipoMoneda;
     }
-
-    public void setIdTipoMoneda(Integer idTipoMoneda) {
-        this.idTipoMoneda = idTipoMoneda;
+    public void setTipoMoneda(TipoMoneda tipoMoneda) {
+        this.tipoMoneda = tipoMoneda;
     }
 
     public Transaccion getTransaccion() {

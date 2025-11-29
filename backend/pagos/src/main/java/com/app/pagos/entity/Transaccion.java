@@ -23,15 +23,26 @@ public class Transaccion {
     @Column(name = "Fecha")
     private LocalDateTime fecha;
 
-    @Column(name = "Estado")
-    private Integer estado;
+@ManyToOne(optional = false)
+@JoinColumn(name = "Estado", nullable = false)
+private EstadoTransaccion estado;
 
     @Column(name = "Tipo")
     private Integer tipo;
 
+    @Column(name = "Destino")
+    private String Destino;
+
+    @Column(name = "Detalle")
+    private String Detalle;
+
     @ManyToOne
     @JoinColumn(name = "idTarjeta")
     private Tarjeta tarjeta;
+
+    @ManyToOne
+    @JoinColumn(name = "servicio_idServicio")
+    private Servicio servicio;
 
     // Getters y Setters
     public Integer getIdTransaccion() {
@@ -50,13 +61,13 @@ public class Transaccion {
         this.fecha = fecha;
     }
 
-    public Integer getEstado() {
-        return estado;
-    }
+   public EstadoTransaccion getEstado() {
+    return estado;
+}
 
-    public void setEstado(Integer estado) {
-        this.estado = estado;
-    }
+public void setEstado(EstadoTransaccion estado) {
+    this.estado = estado;
+}
 
     public Integer getTipo() {
         return tipo;
@@ -72,5 +83,25 @@ public class Transaccion {
 
     public void setTarjeta(Tarjeta tarjeta) {
         this.tarjeta = tarjeta;
+    }
+
+    public Servicio getServicio() {
+        return servicio;
+    }
+
+    public void setServicio(Servicio servicio) {
+        this.servicio = servicio;
+    }
+    public String getDestino() {
+        return Destino;
+    }
+    public void setDestino(String destino) {
+        Destino = destino;
+    }
+    public String getDetalle() {
+        return Detalle;
+    }
+    public void setDetalle(String detalle) {
+        Detalle = detalle;
     }
 }
