@@ -1,31 +1,159 @@
-.action-btn {
-  display: block;
-  width: 250px;
-  margin: 10px auto;
-  padding: 12px;
-  font-size: 16px;
-  background-color: #3f8531;
-  color: white;
-  border: none;
-  border-radius: 8px;
-  cursor: pointer;
-  transition: background-color 0.2s ease-in-out;
+/* Estilos Generales para el Dashboard */
+
+.main-container {
+    padding: 20px 40px;
+    background-color: #f8f9fa;
+    /* Fondo gris muy claro para contraste */
+    min-height: 100%;
 }
 
-.action-btn:hover {
-  background-color: #0056b3;
+.page-header {
+    margin-bottom: 30px;
+    border-bottom: 2px solid #e9ecef;
+    padding-bottom: 15px;
 }
 
-.extra-options {
-  margin-top: 30px;
-  text-align: center;
+.page-header h2 {
+    color: #1a4d2e;
+    font-size: 28px;
+    margin-bottom: 5px;
 }
+
+.page-header p {
+    color: #6c757d;
+    font-size: 16px;
+    margin: 0;
+}
+
+
+/* GRID SYSTEM: Organiza las tarjetas en 2 columnas */
+
+.dashboard-grid {
+    display: grid;
+    grid-template-columns: repeat(auto-fit, minmax(350px, 1fr));
+    gap: 30px;
+}
+
+
+/* TARJETAS (Módulos) */
+
+.card-module {
+    background: white;
+    border-radius: 12px;
+    padding: 25px;
+    box-shadow: 0 4px 6px rgba(0, 0, 0, 0.05), 0 1px 3px rgba(0, 0, 0, 0.1);
+    transition: transform 0.3s ease, box-shadow 0.3s ease;
+    border-top: 5px solid #1a4d2e;
+    /* Borde verde superior elegante */
+    display: flex;
+    flex-direction: column;
+}
+
+.card-module:hover {
+    transform: translateY(-5px);
+    /* Efecto de levantar al pasar el mouse */
+    box-shadow: 0 10px 20px rgba(0, 0, 0, 0.1);
+}
+
+
+/* Encabezado de la tarjeta */
+
+.card-header {
+    display: flex;
+    align-items: center;
+    margin-bottom: 20px;
+    gap: 15px;
+}
+
+.card-header h4 {
+    margin: 0;
+    font-size: 20px;
+    color: #333;
+    font-weight: 700;
+}
+
+.icon-bg {
+    font-size: 24px;
+    color: #1a4d2e;
+    background-color: #e8f5e9;
+    padding: 10px;
+    border-radius: 50%;
+    width: 25px;
+    height: 25px;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+}
+
+
+/* BOTONES */
 
 .options {
-  
-  justify-content: center;
-  align-items: center;
-  flex-wrap: wrap;  /* permite que salten de línea si no caben */
-  display: flex !important;
-  column-gap: 2px;     /* <-- aquí el espacio horizontal y vertical */
+    display: flex;
+    flex-direction: column;
+    gap: 12px;
+    margin-top: auto;
+    /* Empuja los botones hacia abajo si sobra espacio */
+}
+
+.action-btn {
+    border: none;
+    border-radius: 8px;
+    padding: 12px 20px;
+    font-size: 15px;
+    font-weight: 600;
+    cursor: pointer;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    gap: 10px;
+    transition: all 0.2s ease;
+    text-decoration: none;
+    width: 100%;
+}
+
+
+/* Colores específicos para cada acción */
+
+
+/* Botón VER/EDITAR (Azul suave) */
+
+.btn-view {
+    background-color: #e7f1ff;
+    color: #0d6efd;
+}
+
+.btn-view:hover {
+    background-color: #0d6efd;
+    color: white;
+}
+
+
+/* Botón ELIMINAR (Rojo suave) */
+
+.btn-delete {
+    background-color: #fff2f2;
+    /* Rojo muy claro */
+    color: #dc3545;
+}
+
+.btn-delete:hover {
+    background-color: #dc3545;
+    color: white;
+}
+
+
+/* Botón AGREGAR (Verde marca) */
+
+.btn-add {
+    background-color: #1a4d2e;
+    color: white;
+    margin-top: 10px;
+    /* Separar un poco el de agregar */
+    box-shadow: 0 4px 6px rgba(26, 77, 46, 0.2);
+}
+
+.btn-add:hover {
+    background-color: #143a22;
+    transform: scale(1.02);
 }
