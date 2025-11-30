@@ -83,6 +83,10 @@ public class CuentaService {
             cuenta.setSucursal(data.sucursal());
         }
 
+        if (data.saldo() != null) {
+        cuenta.setSaldo(data.saldo());
+    }
+
         if (data.idUsuario() != null) {
 
             Usuario usuario = usuarioRepository.findById(data.idUsuario())

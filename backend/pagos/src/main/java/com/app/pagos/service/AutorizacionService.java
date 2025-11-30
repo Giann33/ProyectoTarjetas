@@ -75,161 +75,223 @@ public class AutorizacionService {
         private CuentaRepository cuentaRepository;
 
         @Transactional
-public AutorizarTransaccionResponse autorizar(AutorizarTransaccionRequest request) {
+        public AutorizarTransaccionResponse autorizar(AutorizarTransaccionRequest request) {
 
-    // ---------- 1) CARGAR ENTIDADES BASE ----------
-    Tarjeta tarjeta = tarjetaRepository.findById(request.getIdTarjeta())
-            .orElseThrow(() -> new IllegalArgumentException("Tarjeta no encontrada"));
+                // ---------- 1) CARGAR ENTIDADES BASE ----------
+                Tarjeta tarjeta = tarjetaRepository.findById(request.getIdTarjeta())
+                                .orElseThrow(() -> new IllegalArgumentException("Tarjeta no encontrada"));
 
-    Cuenta cuenta = tarjeta.getCuenta();
-    if (cuenta == null) {
-        throw new IllegalStateException("La tarjeta no tiene una cuenta asociada");
-    }
+                Cuenta cuenta = tarjeta.getCuenta();
+                if (cuenta == null) {
+                        throw new IllegalStateException("La tarjeta no tiene una cuenta asociada");
+                }
 
-    Servicio servicio = servicioRepository.findById(request.getIdServicio())
-            .orElseThrow(() -> new IllegalArgumentException("Servicio no encontrado"));
+                Servicio servicio = servicioRepository.findById(request.getIdServicio())
+                                .orElseThrow(() -> new IllegalArgumentException("Servicio no encontrado"));
 
-    Usuario usuario = usuarioRepository.findById(request.getIdUsuario())
-            .orElseThrow(() -> new IllegalArgumentException("Usuario no encontrado"));
+                Usuario usuario = usuarioRepository.findById(request.getIdUsuario())
+                                .orElseThrow(() -> new IllegalArgumentException("Usuario no encontrado"));
 
-    MetodoPago metodo = metodoPagoRepository.findById(request.getIdMetodoPago())
-            .orElseThrow(() -> new IllegalArgumentException("Método de pago no encontrado"));
+                MetodoPago metodo = metodoPagoRepository.findById(request.getIdMetodoPago())
+                                .orElseThrow(() -> new IllegalArgumentException("Método de pago no encontrado"));
 
-    TipoMoneda tipoMoneda = tipoMonedaRepository.findById(request.getIdTipoMoneda())
-            .orElseThrow(() -> new IllegalArgumentException("Tipo de moneda no encontrada"));
+                TipoMoneda monedaTransaccion = tipoMonedaRepository.findById(request.getIdTipoMoneda())
+                                .orElseThrow(() -> new IllegalArgumentException("Tipo de moneda no encontrada"));
 
-    // ---------- 2) SIMULAR BANCO + VALIDAR FONDOS ----------
-    LocalDateTime inicioSimulacion = LocalDateTime.now();
+                // 👇 OJO: aquí asumo que Cuenta tiene un objeto TipoMoneda
+                // Si en tu entidad tienes solo un idTipoMoneda, tendrías que hacer:
+                // TipoMoneda monedaCuenta =
+                // tipoMonedaRepository.findById(cuenta.getIdTipoMoneda()).orElseThrow(...);
+                int idTipoMonedaCuenta = cuenta.getCatalogo_tipo_cuenta_idTipoCuenta();
 
-    BigDecimal monto = request.getMonto();
-    if (monto == null || monto.signum() <= 0) {
-        throw new IllegalArgumentException("El monto de la transacción debe ser mayor a cero");
-    }
+                TipoMoneda monedaCuenta = tipoMonedaRepository.findById(idTipoMonedaCuenta)
+                                .orElseThrow(() -> new IllegalArgumentException(
+                                                "Tipo de moneda de la cuenta no encontrado"));
 
-    BigDecimal saldoActual = cuenta.getSaldo();
-    if (saldoActual == null) {
-        saldoActual = BigDecimal.ZERO;
-    }
+                // ---------- 2) SIMULAR BANCO + VALIDAR FONDOS ----------
+                LocalDateTime inicioSimulacion = LocalDateTime.now();
 
-    // ¿Hay fondos suficientes?
-    boolean hayFondos = saldoActual.compareTo(monto) >= 0;
+                BigDecimal monto = request.getMonto();
+                if (monto == null || monto.signum() <= 0) {
+                        throw new IllegalArgumentException("El monto de la transacción debe ser mayor a cero");
+                }
 
-    // Regla actual de ejemplo por monto máximo
-    boolean aprobadoPorMonto = monto.compareTo(new BigDecimal("100000")) <= 0;
+                BigDecimal saldoActual = cuenta.getSaldo();
+                if (saldoActual == null) {
+                        saldoActual = BigDecimal.ZERO;
+                }
 
-    // Aprobado solo si pasa regla de monto y hay fondos
-    boolean aprobado = aprobadoPorMonto && hayFondos;
+                // 💱 Convertir el monto de la TRANSACCIÓN a la moneda de la CUENTA
+                BigDecimal montoEnMonedaCuenta = convertirMonto(monto, monedaTransaccion, monedaCuenta);
 
-    String codigoRespuesta;
-    String mensajeRespuesta;
+                // Validar fondos con el monto convertido
+                boolean hayFondos = saldoActual.compareTo(montoEnMonedaCuenta) >= 0;
 
-    if (!hayFondos) {
-        codigoRespuesta = "51";
-        mensajeRespuesta = "Fondos insuficientes";
-    } else if (!aprobadoPorMonto) {
-        // puedes cambiar este código si usas otro para "monto excedido"
-        codigoRespuesta = "05";
-        mensajeRespuesta = "Monto excede el límite permitido";
-    } else {
-        codigoRespuesta = "01";
-        mensajeRespuesta = "Transacción aprobada";
-    }
+                // Regla por límite máximo usando el monto original (si quieres, puedes aplicar
+                // sobre el convertido)
+                boolean aprobadoPorMonto = monto.compareTo(new BigDecimal("100000")) <= 0;
 
-    long latenciaMs = java.time.Duration
-            .between(inicioSimulacion, LocalDateTime.now())
-            .toMillis();
+                boolean aprobado = aprobadoPorMonto && hayFondos;
 
-    final int ESTADO_APROBADA_ID  = 1;
-    final int ESTADO_RECHAZADA_ID = 2;
+                String codigoRespuesta;
+                String mensajeRespuesta;
 
-    // ---------- 3) CREAR TRANSACCION ----------
-    Transaccion transaccion = new Transaccion();
-    transaccion.setFecha(LocalDateTime.now());
+                if (!hayFondos) {
+                        codigoRespuesta = "51";
+                        mensajeRespuesta = "Fondos insuficientes";
+                } else if (!aprobadoPorMonto) {
+                        codigoRespuesta = "05";
+                        mensajeRespuesta = "Monto excede el límite permitido";
+                } else {
+                        codigoRespuesta = "01";
+                        mensajeRespuesta = "Transacción aprobada";
+                }
 
-    EstadoTransaccion estado = estadoTransaccionRepository
-            .findById(aprobado ? ESTADO_APROBADA_ID : ESTADO_RECHAZADA_ID)
-            .orElseThrow(() -> new IllegalArgumentException("Estado de transacción no encontrado"));
+                long latenciaMs = java.time.Duration
+                                .between(inicioSimulacion, LocalDateTime.now())
+                                .toMillis();
 
-    transaccion.setEstado(estado);
-    transaccion.setTipo(request.getTipoTransaccion());
-    transaccion.setTarjeta(tarjeta);
-    transaccion.setServicio(servicio);
-    transaccion.setDestino(request.getDestino());
-    transaccion.setDetalle(request.getDetalle());
+                final int ESTADO_APROBADA_ID = 1;
+                final int ESTADO_RECHAZADA_ID = 2;
 
-    transaccion = transaccionRepository.save(transaccion);
+                // ---------- 3) CREAR TRANSACCION ----------
+                Transaccion transaccion = new Transaccion();
+                transaccion.setFecha(LocalDateTime.now());
 
-    // ---------- 4) SI SE APRUEBA → RESTAR SALDO Y CREAR PAGO ----------
-    if (aprobado) {
-        // Restar saldo a la cuenta
-        BigDecimal nuevoSaldo = saldoActual.subtract(monto);
-        cuenta.setSaldo(nuevoSaldo);
-        cuentaRepository.save(cuenta);
+                EstadoTransaccion estado = estadoTransaccionRepository
+                                .findById(aprobado ? ESTADO_APROBADA_ID : ESTADO_RECHAZADA_ID)
+                                .orElseThrow(() -> new IllegalArgumentException("Estado de transacción no encontrado"));
 
-        // Crear pago solo si la transacción fue aprobada
-        Pago pago = new Pago();
-        pago.setTransaccion(transaccion);
-        pago.setMonto(monto);
-        pago.setMetodo(metodo);
-        pago.setTipoMoneda(tipoMoneda);
+                transaccion.setEstado(estado);
+                transaccion.setTipo(request.getTipoTransaccion());
+                transaccion.setTarjeta(tarjeta);
+                transaccion.setServicio(servicio);
+                transaccion.setDestino(request.getDestino());
+                transaccion.setDetalle(request.getDetalle());
 
-        pagoRepository.save(pago);
-    }
-    // Si NO se aprueba, no se crea Pago y no se toca el saldo
+                transaccion = transaccionRepository.save(transaccion);
 
-    // ---------- 5) CREAR AUTORIZACION ----------
-    Autorizacion autorizacion = new Autorizacion();
-    autorizacion.setTransaccion(transaccion);
-    autorizacion.setCodigoRespuesta(codigoRespuesta);
-    autorizacion.setMensaje(mensajeRespuesta);
-    autorizacion.setAprobado(aprobado);
-    autorizacion.setFechaAutorizacion(LocalDateTime.now());
+                // ---------- 4) SI SE APRUEBA → RESTAR SALDO Y CREAR PAGO ----------
+                if (aprobado) {
+                        // Restar el saldo usando el monto convertido a la moneda de la cuenta
+                        BigDecimal nuevoSaldo = saldoActual.subtract(montoEnMonedaCuenta);
+                        cuenta.setSaldo(nuevoSaldo);
+                        cuentaRepository.save(cuenta);
 
-    autorizacionRepository.save(autorizacion);
+                        // Crear pago con el monto ORIGINAL (en la moneda de la transacción)
+                        Pago pago = new Pago();
+                        pago.setTransaccion(transaccion);
+                        pago.setMonto(monto); // en la divisa seleccionada por el usuario
+                        pago.setMetodo(metodo);
+                        pago.setTipoMoneda(monedaTransaccion);
 
-    // ---------- 6) CREAR REPORTE_TRANSACCION ----------
-    StringBuilder comentario = new StringBuilder();
-    comentario.append("Transacción ")
-            .append(aprobado ? "aprobada" : "rechazada")
-            .append(" por ")
-            .append(monto)
-            .append(" (moneda ID=")
-            .append(request.getIdTipoMoneda())
-            .append(") para el servicio ")
-            .append(servicio.getDescripcion());
+                        pagoRepository.save(pago);
+                }
 
-    if (request.getDestino() != null && !request.getDestino().isBlank()) {
-        comentario.append(". Destino: ").append(request.getDestino());
-    }
-    if (request.getDetalle() != null && !request.getDetalle().isBlank()) {
-        comentario.append(". Detalle: ").append(request.getDetalle());
-    }
+                // ---------- 5) CREAR AUTORIZACION ----------
+                Autorizacion autorizacion = new Autorizacion();
+                autorizacion.setTransaccion(transaccion);
+                autorizacion.setCodigoRespuesta(codigoRespuesta);
+                autorizacion.setMensaje(mensajeRespuesta);
+                autorizacion.setAprobado(aprobado);
+                autorizacion.setFechaAutorizacion(LocalDateTime.now());
 
-    ReporteTransaccion reporte = new ReporteTransaccion();
-    reporte.setTransaccion(transaccion);
-    reporte.setFechaGenerado(LocalDateTime.now());
-    reporte.setComentario(comentario.toString());
+                autorizacionRepository.save(autorizacion);
 
-    reporte = reporteTransaccionRepository.save(reporte);
+                // ---------- 6) CREAR REPORTE_TRANSACCION ----------
+                StringBuilder comentario = new StringBuilder();
+                comentario.append("Transacción ")
+                                .append(aprobado ? "aprobada" : "rechazada")
+                                .append(" por ")
+                                .append(monto)
+                                .append(" (moneda transacción ID=")
+                                .append(request.getIdTipoMoneda())
+                                .append(") en cuenta con moneda ID=")
+                                .append(monedaCuenta != null ? monedaCuenta.getIdTipoMoneda() : null)
+                                .append(" para el servicio ")
+                                .append(servicio.getDescripcion());
 
-    // ---------- 7) CREAR BITÁCORA ----------
-    Bitacora bitacora = new Bitacora();
-    bitacora.setModulo("autorizar");
-    bitacora.setAccion("se agrego una transaccion");
-    bitacora.setFecha(LocalDateTime.now());
-    bitacora.setReporteTransaccion(reporte);
-    bitacora.setUsuario(usuario);
+                if (request.getDestino() != null && !request.getDestino().isBlank()) {
+                        comentario.append(". Destino: ").append(request.getDestino());
+                }
+                if (request.getDetalle() != null && !request.getDetalle().isBlank()) {
+                        comentario.append(". Detalle: ").append(request.getDetalle());
+                }
 
-    bitacoraRepository.save(bitacora);
+                ReporteTransaccion reporte = new ReporteTransaccion();
+                reporte.setTransaccion(transaccion);
+                reporte.setFechaGenerado(LocalDateTime.now());
+                reporte.setComentario(comentario.toString());
 
-    // ---------- 8) ARMAR RESPUESTA ----------
-    AutorizarTransaccionResponse response = new AutorizarTransaccionResponse();
-    response.setIdTransaccion(transaccion.getIdTransaccion());
-    response.setEstado(aprobado ? "APROBADA" : "RECHAZADA");
-    response.setCodigoRespuesta(codigoRespuesta);
-    response.setMensaje(mensajeRespuesta);
-    response.setLatenciaMs(latenciaMs);
+                reporte = reporteTransaccionRepository.save(reporte);
 
-    return response;
-}
+                // ---------- 7) CREAR BITÁCORA ----------
+                Bitacora bitacora = new Bitacora();
+                bitacora.setModulo("autorizar");
+                if (aprobado) {
+                        bitacora.setAccion("Se autorizó una transacción exitosamente");
+                } else {
+                        bitacora.setAccion("Se rechazó una transacción");
+                }
+                bitacora.setFecha(LocalDateTime.now());
+                bitacora.setReporteTransaccion(reporte);
+                bitacora.setUsuario(usuario);
+
+                bitacoraRepository.save(bitacora);
+
+                // ---------- 8) ARMAR RESPUESTA ----------
+                AutorizarTransaccionResponse response = new AutorizarTransaccionResponse();
+                response.setIdTransaccion(transaccion.getIdTransaccion());
+                response.setEstado(aprobado ? "APROBADA" : "RECHAZADA");
+                response.setCodigoRespuesta(codigoRespuesta);
+                response.setMensaje(mensajeRespuesta);
+                response.setLatenciaMs(latenciaMs);
+
+                return response;
+        }
+
+        private static final BigDecimal TIPO_CAMBIO_USD_CRC = new BigDecimal("500.00");
+
+        // Determina si una moneda es USD según su descripción (ajusta al nombre real
+        // que tengas en BD)
+        private boolean esDolar(TipoMoneda moneda) {
+                if (moneda == null)
+                        return false;
+
+                String desc = moneda.getDescripcion(); 
+                if (desc == null)
+                        return false;
+
+                String upper = desc.toUpperCase();
+                return upper.contains("DOLAR") || upper.contains("DÓLAR") || upper.contains("USD");
+        }
+
+        private BigDecimal convertirMonto(BigDecimal monto, TipoMoneda origen, TipoMoneda destino) {
+                if (monto == null || origen == null || destino == null) {
+                        return BigDecimal.ZERO;
+                }
+
+                boolean origenEsDolar = esDolar(origen);
+                boolean destinoEsDolar = esDolar(destino);
+
+                // Misma moneda → no se hace nada
+                if (origenEsDolar == destinoEsDolar) {
+                        return monto;
+                }
+
+                // USD → CRC
+                if (origenEsDolar && !destinoEsDolar) {
+                        return monto.multiply(TIPO_CAMBIO_USD_CRC);
+                }
+
+                // CRC → USD
+                if (!origenEsDolar && destinoEsDolar) {
+                        // dividimos con escala y redondeo para evitar ArithmeticException
+                        return monto.divide(TIPO_CAMBIO_USD_CRC, 2, java.math.RoundingMode.HALF_UP);
+                }
+
+                // Por si acaso
+                return monto;
+        }
+
 }

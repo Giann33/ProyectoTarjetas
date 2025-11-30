@@ -12,6 +12,12 @@ document.addEventListener("DOMContentLoaded", () => {
   const inputSucursal = document.getElementById("sucursal");
   const inputSaldo = document.getElementById("saldo");
 
+  // Tipo de cambio usado para la conversión (ajústalo a lo que uses en backend)
+  const TIPO_CAMBIO_DOLAR = 500; // 1 USD = 500 CRC
+
+  // Siempre vamos a guardar el saldo base en colones
+  let saldoBaseColones = null;
+
   const btnCancelar = document.getElementById("btn-cancelar");
 
   // Panel admin
@@ -126,7 +132,7 @@ document.addEventListener("DOMContentLoaded", () => {
   //  Estado actual
   // =======================
 
-  
+
   let numeroCuentaOriginal = null;
   let idUsuarioActual = obtenerIdUsuario();
   const rolActual = obtenerRolUsuario(); // 1 = admin, 2 = usuario, etc.
@@ -195,52 +201,52 @@ document.addEventListener("DOMContentLoaded", () => {
 
     sinCuentasMsg.classList.add("hidden");
 
-  cuentas.forEach((cuenta) => {
-  // Valor REAL que viene de la BD
-  const numeroCuentaReal = cuenta.numeroCuenta ?? "";
+    cuentas.forEach((cuenta) => {
+      // Valor REAL que viene de la BD
+      const numeroCuentaReal = cuenta.numeroCuenta ?? "";
 
-  // Texto que se muestra en pantalla
-  const numeroCuentaTexto = numeroCuentaReal || "N/D";
+      // Texto que se muestra en pantalla
+      const numeroCuentaTexto = numeroCuentaReal || "N/D";
 
-  // Saldo numérico de la cuenta
-  const saldo = cuenta.saldo ?? 0; // por si viene null
+      // Saldo numérico de la cuenta
+      const saldo = cuenta.saldo ?? 0; // por si viene null
 
-  // Si quieres, lo formateas (opcional)
-  const saldoTexto = saldo; // o por ejemplo: saldo.toFixed(2)
+      // Si quieres, lo formateas (opcional)
+      const saldoTexto = saldo; // o por ejemplo: saldo.toFixed(2)
 
-  let tipoCuenta;
-  if (cuenta.idTipoCuenta == 1) {
-    tipoCuenta = "Ahorros";
-  } else if (cuenta.idTipoCuenta == 2) {
-    tipoCuenta = "Corriente";
-  } else {
-    tipoCuenta = "N/D";
-  }
+      let tipoCuenta;
+      if (cuenta.idTipoCuenta == 1) {
+        tipoCuenta = "Ahorros";
+      } else if (cuenta.idTipoCuenta == 2) {
+        tipoCuenta = "Corriente";
+      } else {
+        tipoCuenta = "N/D";
+      }
 
-  let moneda;
-  if (cuenta.idTipoMoneda == 1) {
-    moneda = "Colones";
-  } else if (cuenta.idTipoMoneda == 2) {
-    moneda = "Dólares";
-  } else {
-    moneda = "N/D";
-  }
+      let moneda;
+      if (cuenta.idTipoMoneda == 1) {
+        moneda = "Colones";
+      } else if (cuenta.idTipoMoneda == 2) {
+        moneda = "Dólares";
+      } else {
+        moneda = "N/D";
+      }
 
-  let sucursal;
-  if (cuenta.sucursal == 1) {
-    sucursal = "Central";
-  } else if (cuenta.sucursal == 2) {
-    sucursal = "Heredia";
-  } else if (cuenta.sucursal == 3) {
-    sucursal = "Cartago";
-  } else {
-    sucursal = "N/D";
-  }
+      let sucursal;
+      if (cuenta.sucursal == 1) {
+        sucursal = "Central";
+      } else if (cuenta.sucursal == 2) {
+        sucursal = "Heredia";
+      } else if (cuenta.sucursal == 3) {
+        sucursal = "Cartago";
+      } else {
+        sucursal = "N/D";
+      }
 
-  const card = document.createElement("article");
-  card.className = "cuenta-card";
+      const card = document.createElement("article");
+      card.className = "cuenta-card";
 
-  card.innerHTML = `
+      card.innerHTML = `
     <div class="cuenta-header">
       <h4>${tipoCuenta}</h4>
       <span class="cuenta-moneda">${moneda}</span>
@@ -263,8 +269,8 @@ document.addEventListener("DOMContentLoaded", () => {
     </div>
   `;
 
-  contenedorCuentas.appendChild(card);
-});
+      contenedorCuentas.appendChild(card);
+    });
 
     contenedorCuentas
       .querySelectorAll(".btn-edit-card")
@@ -280,78 +286,91 @@ document.addEventListener("DOMContentLoaded", () => {
 
 
 
-function seleccionarCuenta(numeroCuenta, cuentas) {
+  function seleccionarCuenta(numeroCuenta, cuentas) {
 
     numeroCuentaOriginal = numeroCuenta;
-   console.log("numeroCuentaOriginal:", numeroCuentaOriginal);
+    console.log("numeroCuentaOriginal:", numeroCuentaOriginal);
 
-  const card = Array.from(
-    contenedorCuentas.querySelectorAll(".cuenta-card")
-  ).find((c) =>
-    c
-      .querySelector(".btn-edit-card")
-      ?.getAttribute("data-numero") === numeroCuenta
-  );
+    const card = Array.from(
+      contenedorCuentas.querySelectorAll(".cuenta-card")
+    ).find((c) =>
+      c
+        .querySelector(".btn-edit-card")
+        ?.getAttribute("data-numero") === numeroCuenta
+    );
 
-  if (!card) return;
+    if (!card) return;
 
-  // Texto que viene de la tarjeta
-  const tipo = card.querySelector("h4")?.textContent?.trim() || "";
-  const monedaTexto = card.querySelector(".cuenta-moneda")?.textContent?.trim() || "";
-  const saldoTexto = card.querySelector(".cuenta-saldo")?.textContent || "";
-  const sucursalTexto = card
-    .querySelector(".cuenta-sucursal")
-    ?.textContent?.replace("Sucursal:", "")
-    .trim() || "";
+    // Texto que viene de la tarjeta
+    const tipo = card.querySelector("h4")?.textContent?.trim() || "";
+    const monedaTexto = card.querySelector(".cuenta-moneda")?.textContent?.trim() || "";
+    const saldoTexto = card.querySelector(".cuenta-saldo")?.textContent || "";
+    const sucursalTexto = card
+      .querySelector(".cuenta-sucursal")
+      ?.textContent?.replace("Sucursal:", "")
+      .trim() || "";
 
-  // ==========================
-  // Mapeo sucursal: texto → id
-  // ==========================
-  let sucursalValue = "";
-  if (sucursalTexto === "Central") {
-    sucursalValue = "1";
-  } else if (sucursalTexto === "Heredia") {
-    sucursalValue = "2";
-  } else if (sucursalTexto === "Cartago") {
-    sucursalValue = "3";
+    // ==========================
+    // Mapeo sucursal: texto → id
+    // ==========================
+    let sucursalValue = "";
+    if (sucursalTexto === "Central") {
+      sucursalValue = "1";
+    } else if (sucursalTexto === "Heredia") {
+      sucursalValue = "2";
+    } else if (sucursalTexto === "Cartago") {
+      sucursalValue = "3";
+    }
+
+    let tipoCuenta = "";
+
+
+
+    const tipoLower = tipo.toLowerCase();
+
+    if (tipoLower.includes("ahorro")) {
+      tipoCuenta = "1";
+    } else if (tipoLower.includes("corriente") || tipoLower.includes("ahorros")) {
+      tipoCuenta = "2";
+    }
+
+    // ==========================
+    // Mapeo moneda: texto → id
+    // ==========================
+    let monedaValue = "";
+    const monedaLower = monedaTexto.toLowerCase();
+    if (monedaLower.includes("colones")) {
+      monedaValue = "1";
+    } else if (monedaLower.includes("dólares") || monedaLower.includes("dolares")) {
+      monedaValue = "2";
+    }
+
+    // Extraer número del saldo
+    const saldoExtraido = extraerNumero(saldoTexto);
+
+    // Guardar saldo base en colones
+    if (saldoExtraido != null) {
+      if (monedaValue === "1") { // 1 = Colones
+        saldoBaseColones = saldoExtraido;
+      } else if (monedaValue === "2") { // 2 = Dólares
+        saldoBaseColones = saldoExtraido * TIPO_CAMBIO_DOLAR;
+      } else {
+        saldoBaseColones = null;
+      }
+    } else {
+      saldoBaseColones = null;
+    }
+
+    // Rellenar el formulario de edición
+    inputNumeroCuenta.value = numeroCuenta || "";
+    inputTipoCuenta.value = tipoCuenta;
+    inputMoneda.value = monedaValue;   // ← aquí ya va el id (1 o 2)
+    inputSucursal.value = sucursalValue; // ← aquí ya va el id (1,2,3)
+    inputSaldo.value = saldoExtraido ?? "";
+
+    editSection.classList.remove("hidden");
+    editSection.scrollIntoView({ behavior: "smooth", block: "start" });
   }
-
-let tipoCuenta = "";
-
-
-
-const tipoLower = tipo.toLowerCase();
-
-if (tipoLower.includes("ahorro")) {
-    tipoCuenta = "1";
-} else if (tipoLower.includes("corriente") || tipoLower.includes("ahorros")) {
-    tipoCuenta = "2";
-} 
-
-  // ==========================
-  // Mapeo moneda: texto → id
-  // ==========================
-  let monedaValue = "";
-  const monedaLower = monedaTexto.toLowerCase();
-  if (monedaLower.includes("colones")) {
-    monedaValue = "1";
-  } else if (monedaLower.includes("dólares") || monedaLower.includes("dolares")) {
-    monedaValue = "2";
-  }
-
-  // Extraer número del saldo
-  const saldoExtraido = extraerNumero(saldoTexto);
-
-  // Rellenar el formulario de edición
-  inputNumeroCuenta.value = numeroCuenta || "";
-  inputTipoCuenta.value = tipoCuenta;
-  inputMoneda.value = monedaValue;   // ← aquí ya va el id (1 o 2)
-  inputSucursal.value = sucursalValue; // ← aquí ya va el id (1,2,3)
-  inputSaldo.value = saldoExtraido ?? "";
-
-  editSection.classList.remove("hidden");
-  editSection.scrollIntoView({ behavior: "smooth", block: "start" });
-}
 
 
 
@@ -362,55 +381,80 @@ if (tipoLower.includes("ahorro")) {
     return match ? Number(match[1]) : null;
   }
 
-  // Guardar cambios
-formEditar?.addEventListener("submit", async (e) => {
-  e.preventDefault();
+  inputMoneda?.addEventListener("change", () => {
+    if (saldoBaseColones == null) return; // No hay saldo cargado
 
-  if (!numeroCuentaOriginal) {
-    alert("No se pudo determinar la cuenta original a editar.");
-    return;
-  }
+    const valorMoneda = inputMoneda.value;
+    let nuevoSaldo;
 
-  const numeroCuentaNuevo = (inputNumeroCuenta.value || "").trim();
-  const tipoCuenta = Number(inputTipoCuenta.value);
-  const moneda = Number(inputMoneda.value);
-  const sucursal = Number(inputSucursal.value);
-
-  const payload = {
-    numeroCuentaNuevo: numeroCuentaNuevo,
-    idTipoCuenta: tipoCuenta,
-    idTipoMoneda: moneda,
-    sucursal: sucursal,
-    idUsuario:
-      rolActual === 1 && adminUserIdInput?.value
-        ? Number(adminUserIdInput.value)
-        : null,
-  };
-
-  console.log("URL PUT:", `${baseUrl}/api/cuentas/${numeroCuentaOriginal}`);
-  console.log("Payload PUT:", payload);
-
-  try {
-    const resp = await fetch(
-      `${baseUrl}/api/cuentas/${encodeURIComponent(numeroCuentaOriginal)}`,
-      {
-        method: "PUT",
-        headers: { "Content-Type": "application/json" },
-        body: JSON.stringify(payload),
-      }
-    );
-
-    if (!resp.ok) {
-      throw new Error(`Error al actualizar la cuenta: ${resp.status}`);
+    if (valorMoneda === "1") {
+      // Colones
+      nuevoSaldo = saldoBaseColones;
+    } else if (valorMoneda === "2") {
+      // Dólares
+      nuevoSaldo = saldoBaseColones / TIPO_CAMBIO_DOLAR;
+    } else {
+      return;
     }
 
-    alert("Cuenta actualizada correctamente.");
-    // ocultar formulario, recargar cuentas, etc.
-  } catch (err) {
-    console.error("Error al actualizar la cuenta:", err);
-    alert("Ocurrió un error al guardar los cambios.");
-  }
-});
+    // Mostrar con 2 decimales
+    inputSaldo.value = nuevoSaldo.toFixed(2);
+  });
+
+  // Guardar cambios
+  formEditar?.addEventListener("submit", async (e) => {
+    e.preventDefault();
+
+    if (!numeroCuentaOriginal) {
+      alert("No se pudo determinar la cuenta original a editar.");
+      return;
+    }
+
+    const numeroCuentaNuevo = (inputNumeroCuenta.value || "").trim();
+    const tipoCuenta = Number(inputTipoCuenta.value);
+    const moneda = Number(inputMoneda.value);
+    const sucursal = Number(inputSucursal.value);
+
+    const saldo = Number(inputSaldo.value);
+
+
+
+    const payload = {
+      numeroCuentaNuevo: numeroCuentaNuevo,
+      idTipoCuenta: tipoCuenta,
+      idTipoMoneda: moneda,
+      sucursal: sucursal,
+      saldo: Number.isFinite(saldo) ? saldo : null,
+      idUsuario:
+        rolActual === 1 && adminUserIdInput?.value
+          ? Number(adminUserIdInput.value)
+          : null,
+    };
+
+    console.log("URL PUT:", `${baseUrl}/api/cuentas/${numeroCuentaOriginal}`);
+    console.log("Payload PUT:", payload);
+
+    try {
+      const resp = await fetch(
+        `${baseUrl}/api/cuentas/${encodeURIComponent(numeroCuentaOriginal)}`,
+        {
+          method: "PUT",
+          headers: { "Content-Type": "application/json" },
+          body: JSON.stringify(payload),
+        }
+      );
+
+      if (!resp.ok) {
+        throw new Error(`Error al actualizar la cuenta: ${resp.status}`);
+      }
+
+      alert("Cuenta actualizada correctamente.");
+      // ocultar formulario, recargar cuentas, etc.
+    } catch (err) {
+      console.error("Error al actualizar la cuenta:", err);
+      alert("Ocurrió un error al guardar los cambios.");
+    }
+  });
 
   btnCancelar?.addEventListener("click", () => {
     editSection.classList.add("hidden");
