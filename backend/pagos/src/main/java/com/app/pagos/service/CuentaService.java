@@ -8,6 +8,7 @@ import org.springframework.stereotype.Service;
 
 import com.app.pagos.dto.ActualizarCuentaRequest;
 import com.app.pagos.dto.CuentaView;
+import com.app.pagos.dto.CuentaViewSimple;
 import com.app.pagos.entity.Cuenta;
 import com.app.pagos.entity.Usuario;
 import com.app.pagos.repository.CuentaRepository;
@@ -22,7 +23,7 @@ public class CuentaService {
     private final CuentaRepository repo;
     private final UsuarioRepository usuarioRepository;
 
-     public CuentaService(CuentaRepository repo, UsuarioRepository usuarioRepository) {
+    public CuentaService(CuentaRepository repo, UsuarioRepository usuarioRepository) {
         this.repo = repo;
         this.usuarioRepository = usuarioRepository;
     }
@@ -84,11 +85,11 @@ public class CuentaService {
 
         if (data.idUsuario() != null) {
 
-    Usuario usuario = usuarioRepository.findById(data.idUsuario())
-            .orElseThrow(() -> new EntityNotFoundException("Usuario no encontrado"));
+            Usuario usuario = usuarioRepository.findById(data.idUsuario())
+                    .orElseThrow(() -> new EntityNotFoundException("Usuario no encontrado"));
 
-    cuenta.setUsuario(usuario);
-}
+            cuenta.setUsuario(usuario);
+        }
 
         // 4) Guardar
         repo.save(cuenta);
@@ -116,11 +117,11 @@ public class CuentaService {
         // Estos setters existen porque ya se usan en actualizarCuenta
         cuenta.setNumeroCuenta(data.numeroCuenta());
         // 1) Buscar el usuario por ID
-Usuario usuario = usuarioRepository.findById(data.idUsuario())
-        .orElseThrow(() -> new EntityNotFoundException("Usuario no encontrado"));
+        Usuario usuario = usuarioRepository.findById(data.idUsuario())
+                .orElseThrow(() -> new EntityNotFoundException("Usuario no encontrado"));
 
-// 2) Asignar la entidad Usuario a la cuenta
-cuenta.setUsuario(usuario);
+        // 2) Asignar la entidad Usuario a la cuenta
+        cuenta.setUsuario(usuario);
         cuenta.setCatalogo_tipo_cuenta_idTipoCuenta(data.tipoCuenta());
         cuenta.setCatalogo_tipo_moneda_idTipoMoneda(data.tipoMoneda());
         cuenta.setSucursal(data.sucursal());
@@ -132,15 +133,21 @@ cuenta.setUsuario(usuario);
     }
 
     public void eliminarCuentaPorNumero(String numeroCuenta) {
-    if (numeroCuenta == null || numeroCuenta.isBlank()) {
-        throw new IllegalArgumentException("El número de cuenta es obligatorio");
+        if (numeroCuenta == null || numeroCuenta.isBlank()) {
+            throw new IllegalArgumentException("El número de cuenta es obligatorio");
+        }
+
+        Cuenta cuenta = repo.findByNumero(numeroCuenta)
+                .orElseThrow(() -> new IllegalArgumentException("No existe una cuenta con ese número"));
+
+        repo.delete(cuenta);
     }
 
-    Cuenta cuenta = repo.findByNumero(numeroCuenta)
-            .orElseThrow(() -> new IllegalArgumentException("No existe una cuenta con ese número"));
-
-    repo.delete(cuenta);
-}
-
+    public List<CuentaViewSimple> obtenerCuentasPorUsuario(Integer idUsuario) {
+        return repo.findByUsuarioIdUsuario(idUsuario)
+                .stream()
+                .map(CuentaViewSimple::from)
+                .toList();
+    }
 
 }

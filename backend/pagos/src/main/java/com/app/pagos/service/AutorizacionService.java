@@ -94,7 +94,7 @@ public class AutorizacionService {
         BigDecimal monto = request.getMonto();
         boolean aprobado = monto.compareTo(new BigDecimal("100000")) <= 0; // regla de ejemplo
 
-        String codigoRespuesta = aprobado ? "00" : "51";
+        String codigoRespuesta = aprobado ? "01" : "51";
         String mensajeRespuesta = aprobado ? "Transacción aprobada" : "Fondos insuficientes";
 
         long latenciaMs = java.time.Duration

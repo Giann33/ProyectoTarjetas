@@ -1,69 +1,155 @@
 <!DOCTYPE html>
 <html lang="es">
-
 <head>
     <meta charset="UTF-8">
-    <title>Editar Tarjeta</title>
+    <title>Dunamys – Editar Tarjeta</title>
+
     <link rel="stylesheet" href="CSS/Base.css">
     <link rel="stylesheet" href="CSS/Agregar_Tarjeta.css">
+    <link rel="stylesheet" href="CSS/tarjetas.css">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.0/css/all.min.css">
+    <script src="JS/Logout.js" defer></script>
 </head>
 
 <body>
-    <div class="main-container">
-        <div class="card-form">
-            <h2>Editar Tarjeta</h2>
-            <form id="formEditar">
+    <div class="shell">
+        <div class="panel">
+            <!-- SIDEBAR -->
+            <aside class="sidebar">
+                <div class="brand-aside">Dunamys</div>
+                <ul class="nav">
+                    <li>
+                        <button class="nav-btn" onclick="window.location.href='Consultas.html'">
+                            <i class="fa-solid fa-house"></i><span>Consultas</span>
+                        </button>
+                    </li>
+                    <li>
+                        <button class="nav-btn active" onclick="window.location.href='Mantenimientos.html'">
+                            <i class="fa-solid fa-user-pen"></i><span>Mantenimientos</span>
+                        </button>
+                    </li>
+                    <li>
+                        <button class="nav-btn" onclick="window.location.href='Reportes.html'">
+                            <i class="fa-solid fa-file-pdf"></i><span>Reportes</span>
+                        </button>
+                    </li>
+                    <li>
+                        <button class="nav-btn" onclick="window.location.href='Reversos.html'">
+                            <i class="fa-solid fa-right-left"></i><span>Reversos Y Devoluciones</span>
+                        </button>
+                    </li>
+                    <li>
+                        <button class="nav-btn" onclick="window.location.href='Autorizar.html'">
+                            <i class="fa-solid fa-check"></i><span>Autorizar Transacciones</span>
+                        </button>
+                    </li>
+                    <li>
+                        <button class="nav-btn" onclick="window.location.href='Conciliar.html'">
+                            <i class="fa-solid fa-users-line"></i><span>Conciliación</span>
+                        </button>
+                    </li>
+                    <li>
+                        <button class="nav-btn" onclick="window.location.href='Notificaciones.html'">
+                            <i class="fa-solid fa-envelope"></i><span>Notificaciones</span>
+                        </button>
+                    </li>
+                </ul>
 
-                <input type="hidden" id="idTarjeta">
-
-                <div class="form-group">
-                    <label>Número de Tarjeta</label>
-                    <input type="text" id="numTarjeta" maxlength="16" required>
+                <div class="subhead">Configuración</div>
+                <ul class="nav">
+                    <li>
+                        <button class="nav-btn">
+                            <i class="fa-solid fa-circle-question"></i><span>Ayuda</span>
+                        </button>
+                    </li>
+                    <li>
+                        <button class="nav-btn">
+                            <i class="fa-solid fa-envelope"></i><span>Contáctenos</span>
+                        </button>
+                    </li>
+                </ul>
+                <div class="subhead cerrar">
+                    <button class="nav-btn" id="btn-logout">
+                        <i class="fa-solid fa-right-from-bracket"></i><span>Cerrar Sesión</span>
+                    </button>
                 </div>
+            </aside>
 
-                <div class="form-group">
-                    <label>Vencimiento (MM/YY)</label>
-                    <input type="text" id="fechaExp" required>
+            <!-- HEADER -->
+            <header class="header">
+                <div class="logo">
+                    <img src="IMG/Dunamys_Logo.png" alt="Logo Dunamys" class="logo-img">
+                    <span class="word">DUNAMYS</span>
                 </div>
+            </header>
 
-                <div class="row">
-                    <div class="form-group half">
-                        <label>CVV</label>
-                        <input type="text" id="cvv" maxlength="4" required>
+            <!-- MAIN -->
+            <main class="content">
+                <!-- === CONTENIDO ORIGINAL === -->
+                <div class="main-container">
+                    <div class="card-form">
+                        <h2>Editar Tarjeta</h2>
+                        <form id="formEditar">
+                            <input type="hidden" id="idTarjeta">
+
+                            <div class="form-group">
+                                <label>Número de Tarjeta</label>
+                                <input type="text" id="numTarjeta" maxlength="16" required>
+                            </div>
+
+                            <div class="form-group">
+                                <label>Vencimiento (MM/YY)</label>
+                                <input type="text" id="fechaExp" required>
+                            </div>
+
+                            <div class="row">
+                                <div class="form-group half">
+                                    <label>CVV</label>
+                                    <input type="text" id="cvv" maxlength="4" required>
+                                </div>
+                                <div class="form-group half">
+                                    <label>PIN</label>
+                                    <input type="text" id="pin" maxlength="4" required>
+                                </div>
+                            </div>
+
+                            <div class="form-group">
+                                <label>Emisor</label>
+                                <select id="emisor">
+                                    <option value="1">Visa</option>
+                                    <option value="2">Mastercard</option>
+                                </select>
+                            </div>
+
+                            <div class="form-group">
+                                <label>Tipo</label>
+                                <select id="tipoTarjeta">
+                                    <option value="1">Débito</option>
+                                    <option value="2">Crédito</option>
+                                </select>
+                            </div>
+
+                            <div class="form-group">
+                                <label>Cuenta Asociada</label>
+                                <select id="idCuenta" required>
+                                    <option value="">-- Seleccione una cuenta --</option>
+                                </select>
+                            </div>
+
+                            <button type="submit" class="btn-save" style="background-color: #007bff;">
+                                Actualizar Datos
+                            </button>
+                        </form>
+                        <a href="Consultar_Tarjetas.html" class="back-link">Cancelar y Volver</a>
                     </div>
-                    <div class="form-group half">
-                        <label>PIN</label>
-                        <input type="text" id="pin" maxlength="4" required>
-                    </div>
                 </div>
-
-                <div class="form-group">
-                    <label>Emisor</label>
-                    <select id="emisor">
-                        <option value="1">Visa</option>
-                        <option value="2">Mastercard</option>
-                    </select>
-                </div>
-
-                <div class="form-group">
-                    <label>Tipo</label>
-                    <select id="tipoTarjeta">
-                        <option value="1">Débito</option>
-                        <option value="2">Crédito</option>
-                    </select>
-                </div>
-
-                <div class="form-group">
-                    <label>ID Cuenta Asociada</label>
-                    <input type="number" id="idCuenta" required>
-                </div>
-
-                <button type="submit" class="btn-save" style="background-color: #007bff;">Actualizar Datos</button>
-            </form>
-            <a href="Consultar_Tarjetas.html" class="back-link">Cancelar y Volver</a>
+                <!-- === FIN CONTENIDO ORIGINAL === -->
+            </main>
         </div>
+
+        <footer class="foot">Dunamys</footer>
     </div>
+
     <script src="JS/Editar_Tarjeta.js"></script>
 </body>
-
 </html>

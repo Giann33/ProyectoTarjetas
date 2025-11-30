@@ -22,6 +22,7 @@ import org.springframework.web.bind.annotation.PathVariable;
 
 import com.app.pagos.dto.ActualizarCuentaRequest;
 import com.app.pagos.dto.CuentaView;
+import com.app.pagos.dto.CuentaViewSimple;
 import com.app.pagos.service.CuentaService;
 
 @RestController
@@ -44,6 +45,13 @@ public class CuentaController {
     public ResponseEntity<List<CuentaView>> porUsuario(@PathVariable int idUsuario) {
         return ResponseEntity.ok(service.consultarPorIdUsuario(idUsuario));
     }
+
+    @GetMapping("/usuario/{idUsuario}")
+    public ResponseEntity<List<CuentaViewSimple>> obtenerPorUsuario(
+            @PathVariable Integer idUsuario) {
+        return ResponseEntity.ok(service.obtenerCuentasPorUsuario(idUsuario));
+    }
+    
     /*
      * @GetMapping("/existe/{numeroCuenta}")
      * public ResponseEntity<Boolean> existe(@PathVariable String numeroCuenta) {

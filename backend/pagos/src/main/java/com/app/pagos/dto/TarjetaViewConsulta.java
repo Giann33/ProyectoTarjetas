@@ -15,22 +15,17 @@ public class TarjetaViewConsulta {
     public static TarjetaViewConsulta from(Tarjeta t) {
     TarjetaViewConsulta v = new TarjetaViewConsulta();
 
-    v.idTarjeta = t.getIdTarjeta();
-    v.numeroTarjeta = t.getNumeroTarjeta();
-    v.fechaExpiracion = t.getFechaExpiracion();
+    v.setIdTarjeta(t.getIdTarjeta());
+    v.setNumeroTarjeta(t.getNumeroTarjeta());
+    v.setFechaExpiracion(t.getFechaExpiracion());
+    v.setIdEmisor(t.getIdEmisor());
+    v.setIdTipoTarjeta(t.getIdTipoTarjeta());
+    v.setActivo(t.getActivo());
 
-    // Estos campos ya existen directamente en la entidad como Integer
-    v.idEmisor = t.getIdEmisor();
-    v.idTipoTarjeta = t.getIdTipoTarjeta();
-
-    // idCuenta NO está en Tarjeta, está en la relación Cuenta
+    // Solo necesitamos el ID de la cuenta, no toda la cuenta
     if (t.getCuenta() != null) {
-        v.idCuenta = t.getCuenta().getIdCuenta();   // <-- aquí usamos getCuenta().getIdCuenta()
+        v.setIdCuenta(t.getCuenta().getIdCuenta());
     }
-
-    // Activo es Integer, no boolean; usamos getActivo()
-    Integer activo = t.getActivo(); // puede ser null
-    v.activo = (activo != null) ? activo : 0;       // si viene null, lo dejamos en 0
 
     return v;
 }

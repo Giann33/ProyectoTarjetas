@@ -65,17 +65,21 @@ public ResponseEntity<?> guardar(@RequestBody CrearTarjetaRequest req) {
         tarjeta.setIdTipoTarjeta(req.getIdTipoTarjeta());
         tarjeta.setActivo(1);  // nueva tarjeta siempre activa
 
-        // 🔥 aquí está la parte importante: asignar la cuenta
+        // Asignar la cuenta
         Cuenta cuenta = cuentaRepository.findById(req.getIdCuenta())
-                .orElseThrow(() -> new RuntimeException("No existe la cuenta con id " + req.getIdCuenta()));
+                .orElseThrow(() -> new RuntimeException(
+                        "No existe la cuenta con id " + req.getIdCuenta()));
         tarjeta.setCuenta(cuenta);
 
         Tarjeta guardada = tarjetaRepository.save(tarjeta);
-        // si quieres, puedes devolver TarjetaView.from(guardada)
-        return ResponseEntity.ok(guardada);
+
+        // 🔹 devolvemos un DTO, no la entidad
+        TarjetaViewConsulta view = TarjetaViewConsulta.from(guardada);
+        return ResponseEntity.ok(view);
 
     } catch (Exception e) {
-        return ResponseEntity.status(500).body("Error al guardar: " + e.getMessage());
+        return ResponseEntity.status(500)
+                .body("Error al guardar: " + e.getMessage());
     }
 }
 

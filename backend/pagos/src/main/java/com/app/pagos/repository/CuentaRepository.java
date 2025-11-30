@@ -40,6 +40,8 @@ public interface CuentaRepository extends JpaRepository<Cuenta, Integer> {
       """, nativeQuery = true)
   List<CuentaView> findByIdUsuario(@Param("idUsuario") Integer idUsuario);
 
+  List<Cuenta> findByUsuarioIdUsuario(Integer idUsuario);
+
   @Query("SELECT c FROM Cuenta c WHERE c.numeroCuenta = :numeroCuenta")
   Optional<Cuenta> findByNumero(@Param("numeroCuenta") String numeroCuenta);        // ESTE ES PARA ACTUALIZAR
 
