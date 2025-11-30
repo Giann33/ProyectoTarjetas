@@ -27,27 +27,39 @@ async function obtenerCuentasUsuario() {
 
 async function cargarTarjetas() {
 
-    // 1. Obtener cuentas para traducir idCuenta → numeroCuenta
+    // Verificar usuario en sesión
+    const usuario = obtenerUsuarioEnSesion();
+    if (!usuario) {
+        alert("No hay sesión activa. Vuelve a iniciar sesión.");
+        window.location.href = "Login.html"; // ajusta si tu login se llama distinto
+        return;
+    }
+
+    // 1. Obtener cuentas del usuario para traducir idCuenta → numeroCuenta
     const cuentas = await obtenerCuentasUsuario();
     const mapaCuentas = {};
     cuentas.forEach(c => {
         mapaCuentas[c.idCuenta] = c.numeroCuenta;
     });
 
-    // 2. Obtener tarjetas
+    // 2. Obtener TODAS las tarjetas del sistema
     fetch("http://localhost:8081/api/tarjetas")
         .then(response => response.json())
         .then(tarjetas => {
 
+            // 3. Filtrar solo las tarjetas cuyas cuentas pertenecen al usuario
+            const tarjetasUsuario = tarjetas.filter(t => mapaCuentas.hasOwnProperty(t.idCuenta));
+
             const tbody = document.querySelector("#tablaTarjetas tbody");
             tbody.innerHTML = "";
 
-            if (tarjetas.length === 0) {
-                tbody.innerHTML = "<tr><td colspan='8' style='text-align:center'>No hay tarjetas registradas.</td></tr>";
+            if (tarjetasUsuario.length === 0) {
+                tbody.innerHTML = "<tr><td colspan='8' style='text-align:center'>No tienes tarjetas registradas.</td></tr>";
                 return;
             }
 
-            tarjetas.forEach(t => {
+            // 4. Dibujar solo las tarjetas del usuario
+            tarjetasUsuario.forEach(t => {
 
                 const fila = document.createElement("tr");
 
@@ -55,7 +67,6 @@ async function cargarTarjetas() {
                 let tipoTexto = t.idTipoTarjeta === 1 ? "Débito" : (t.idTipoTarjeta === 2 ? "Crédito" : "Otro");
                 const estado = t.activo === 1 ? "Activo" : "Inactivo";
 
-                // Aquí cambiamos idCuenta por numeroCuenta
                 const numeroCuenta = mapaCuentas[t.idCuenta] || "(Cuenta no encontrada)";
 
                 fila.innerHTML = `
