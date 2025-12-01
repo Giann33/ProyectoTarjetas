@@ -1,12 +1,15 @@
 package com.app.pagos.service;
 
 import java.time.LocalDateTime;
+import java.util.ArrayList;
+import java.util.List;
 
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
 import com.app.pagos.dto.TransaccionRequest;
+import com.app.pagos.dto.TransaccionViewConsulta;
 import com.app.pagos.entity.Cuenta;
 import com.app.pagos.entity.EstadoTransaccion;
 import com.app.pagos.entity.MetodoPago;
@@ -21,86 +24,119 @@ import com.app.pagos.repository.PagoRepository;
 import com.app.pagos.repository.TarjetaRepository;
 import com.app.pagos.repository.TipoMonedaRepository;
 import com.app.pagos.repository.TransaccionRepository;
+import com.app.pagos.repository.UsuarioRepository;
 
 @Service
 public class TransaccionService {
 
-    @Autowired
-    private TarjetaRepository tarjetaRepository;
-    @Autowired
-    private CuentaRepository cuentaRepository;
-    @Autowired
-    private TransaccionRepository transaccionRepository;
-    @Autowired
-    private PagoRepository pagoRepository;
-    @Autowired
-private MetodoPagoRepository metodoPagoRepository;
+        @Autowired
+        private TarjetaRepository tarjetaRepository;
+        @Autowired
+        private CuentaRepository cuentaRepository;
+        @Autowired
+        private TransaccionRepository transaccionRepository;
+        @Autowired
+        private PagoRepository pagoRepository;
+        @Autowired
+        private MetodoPagoRepository metodoPagoRepository;
 
-@Autowired
-private EstadoTransaccionRepository estadoTransaccionRepository;
+        @Autowired
+        private EstadoTransaccionRepository estadoTransaccionRepository;
 
-@Autowired
-private TipoMonedaRepository tipoMonedaRepository;
+        @Autowired
+        private TipoMonedaRepository tipoMonedaRepository;
 
-    @Transactional
-    public void procesarPago(TransaccionRequest request) throws Exception {
+        @Autowired
+        private UsuarioRepository usuarioRepository;
 
-        // 1. CORRECCIÓN: Quitamos Long.valueOf(...)
-        // Si request.getIdTarjeta() ya es un número, lo pasamos directo.
-        // Si fuera String, usaríamos Integer.valueOf()
-        Tarjeta tarjeta = tarjetaRepository.findById(request.getIdTarjeta())
-                .orElseThrow(() -> new Exception("Tarjeta no encontrada"));
+        @Transactional
+        public void procesarPago(TransaccionRequest request) throws Exception {
 
-        // 2. Obtener el ID de la cuenta desde la tarjeta
-        Integer idCuenta = tarjeta.getCuenta().getIdCuenta();
+                // 1. CORRECCIÓN: Quitamos Long.valueOf(...)
+                // Si request.getIdTarjeta() ya es un número, lo pasamos directo.
+                // Si fuera String, usaríamos Integer.valueOf()
+                Tarjeta tarjeta = tarjetaRepository.findById(request.getIdTarjeta())
+                                .orElseThrow(() -> new Exception("Tarjeta no encontrada"));
 
-        // 3. CORRECCIÓN: Quitamos Long.valueOf(...)
-        // idCuenta ya es Integer, así que lo pasamos directo
-        Cuenta cuenta = cuentaRepository.findById(idCuenta)
-                .orElseThrow(() -> new Exception("Cuenta asociada a la tarjeta no encontrada"));
+                // 2. Obtener el ID de la cuenta desde la tarjeta
+                Integer idCuenta = tarjeta.getCuenta().getIdCuenta();
 
-        // 4. VALIDAR FONDOS
-        if (cuenta.getSaldo().compareTo(request.getMonto()) < 0) {
-            throw new Exception("Fondos insuficientes en la cuenta");
+                // 3. CORRECCIÓN: Quitamos Long.valueOf(...)
+                // idCuenta ya es Integer, así que lo pasamos directo
+                Cuenta cuenta = cuentaRepository.findById(idCuenta)
+                                .orElseThrow(() -> new Exception("Cuenta asociada a la tarjeta no encontrada"));
+
+                // 4. VALIDAR FONDOS
+                if (cuenta.getSaldo().compareTo(request.getMonto()) < 0) {
+                        throw new Exception("Fondos insuficientes en la cuenta");
+                }
+
+                // 5. DESCONTAR DINERO
+                cuenta.setSaldo(cuenta.getSaldo().subtract(request.getMonto()));
+                cuentaRepository.save(cuenta);
+
+                // 6. REGISTRAR LA TRANSACCIÓN
+                Transaccion nuevaTransaccion = new Transaccion();
+                nuevaTransaccion.setFecha(LocalDateTime.now());
+
+                // Asignamos la tarjeta encontrada
+                nuevaTransaccion.setTarjeta(tarjeta);
+
+                final int ESTADO_APROBADA_ID = 1; // ajusta al ID real de tu catálogo
+
+                EstadoTransaccion estado = estadoTransaccionRepository
+                                .findById(ESTADO_APROBADA_ID)
+                                .orElseThrow(() -> new IllegalArgumentException("Estado de transacción no encontrado"));
+
+                nuevaTransaccion.setEstado(estado); // 1 = Aprobado
+                nuevaTransaccion.setTipo(request.getIdTipoTransaccion());
+
+                Transaccion transaccionGuardada = transaccionRepository.save(nuevaTransaccion);
+
+                // 7. REGISTRAR EL PAGO
+                Pago nuevoPago = new Pago();
+                nuevoPago.setMonto(request.getMonto());
+                nuevoPago.setTransaccion(transaccionGuardada);
+
+                // Aquí decides qué IDs usar. Por ahora usas 1 fijo:
+                MetodoPago metodo = metodoPagoRepository.findById(1)
+                                .orElseThrow(() -> new Exception("Método de pago no encontrado"));
+
+                TipoMoneda tipoMoneda = tipoMonedaRepository.findById(1)
+                                .orElseThrow(() -> new Exception("Tipo de moneda no encontrado"));
+
+                nuevoPago.setMetodo(metodo); 
+                nuevoPago.setTipoMoneda(tipoMoneda); 
+
+                pagoRepository.save(nuevoPago);
         }
 
-        // 5. DESCONTAR DINERO
-        cuenta.setSaldo(cuenta.getSaldo().subtract(request.getMonto()));
-        cuentaRepository.save(cuenta);
+        public List<TransaccionViewConsulta> consultarTransacciones(Integer idUsuario) {
 
-        // 6. REGISTRAR LA TRANSACCIÓN
-        Transaccion nuevaTransaccion = new Transaccion();
-        nuevaTransaccion.setFecha(LocalDateTime.now());
+                // 1) Buscar usuario y su rol
+                var usuario = usuarioRepository.findById(idUsuario)
+                                .orElseThrow(() -> new IllegalArgumentException("Usuario no encontrado"));
 
-        // Asignamos la tarjeta encontrada
-        nuevaTransaccion.setTarjeta(tarjeta);
+                Integer idRol = usuario.getRol() != null ? usuario.getRol().getIdRol() : null;
 
-final int ESTADO_APROBADA_ID = 1; // ajusta al ID real de tu catálogo
+                // 2) Si es admin (rol 1) → todas las transacciones
+                List<Transaccion> lista;
+                if (idRol != null && idRol == 1) {
+                        lista = transaccionRepository.findAll();
+                } else {
+                        // Usuario normal → solo sus transacciones
+                        lista = transaccionRepository.findByIdUsuario(idUsuario);
+                }
 
-EstadoTransaccion estado = estadoTransaccionRepository
-        .findById(ESTADO_APROBADA_ID)
-        .orElseThrow(() -> new IllegalArgumentException("Estado de transacción no encontrado"));
-        
-        nuevaTransaccion.setEstado(estado); // 1 = Aprobado
-        nuevaTransaccion.setTipo(request.getIdTipoTransaccion());
+                // 3) Armar DTO con transacción + pago
+                List<TransaccionViewConsulta> resultado = new ArrayList<>();
 
-        Transaccion transaccionGuardada = transaccionRepository.save(nuevaTransaccion);
+                for (Transaccion t : lista) {
+                        var pagoOpt = pagoRepository.findByTransaccion_IdTransaccion(t.getIdTransaccion());
+                        var pago = pagoOpt.orElse(null);
+                        resultado.add(TransaccionViewConsulta.from(t, pago));
+                }
 
-        // 7. REGISTRAR EL PAGO
-        Pago nuevoPago = new Pago();
-        nuevoPago.setMonto(request.getMonto());
-        nuevoPago.setTransaccion(transaccionGuardada);
-
-        // Aquí decides qué IDs usar. Por ahora usas 1 fijo:
-MetodoPago metodo = metodoPagoRepository.findById(1)
-        .orElseThrow(() -> new Exception("Método de pago no encontrado"));
-
-TipoMoneda tipoMoneda = tipoMonedaRepository.findById(1)
-        .orElseThrow(() -> new Exception("Tipo de moneda no encontrado"));
-
-       nuevoPago.setMetodo(metodo);         // ✅ ahora recibe un MetodoPago
-nuevoPago.setTipoMoneda(tipoMoneda); // ✅ ahora recibe un TipoMoneda
-
-        pagoRepository.save(nuevoPago);
-    }
+                return resultado;
+        }
 }
