@@ -1,5 +1,6 @@
 package com.app.pagos.controller;
 
+import com.app.pagos.repository.ReportesRepository;
 import org.springframework.web.bind.annotation.*;
 
 import java.math.BigDecimal;
@@ -10,22 +11,48 @@ import java.util.List;
 public class ReportesController {
 
     // === DTOs locales (puedes moverlos a dto/ más adelante) ===
-    record PingDTO(String ok) {}
-    record PageDTO<T>(List<T> items, int pagina, int tamanio, int totalPaginas, long totalItems) {}
-    record ReporteEstadoDTO(String estado, String comercio, BigDecimal monto, String fecha, String factura) {}
-    record ReporteDuplicadasDTO(String idTransaccion, String comercio, BigDecimal monto, String fecha, String motivo) {}
-    record ReporteNotificacionesDTO(String idNotificacion, String tipo, String destinatario, String estado, String fechaEnvio) {}
-    // 6.1.4
-    record ReporteCargaPuntoDTO(String hora, int trafico) {}
-    record ReporteCargaDTO(List<ReporteCargaPuntoDTO> serie) {}
-    // 6.1.5
-    record ReporteRespuestaDTO(String endpoint, String metodo, int promedioMs, int p95Ms, int p99Ms, int minMs, int maxMs, String fecha) {}
+    public record PageDTO<T>(List<T> items, int pagina, int tamanio, int totalPaginas, long totalItems) {}
 
-    // Health check
-  /*  @GetMapping("/ping")
-    public PingDTO ping() {
-        return new PingDTO("reportes-up");
-    }*/
+    public record ReporteEstadoDTO(
+            String estado,
+            String comercio,
+            BigDecimal monto,
+            String fecha,
+            String factura
+    ) {}
+
+    public record ReporteDuplicadasDTO(
+            String idTransaccion,
+            String comercio,
+            BigDecimal monto,
+            String fecha,
+            String motivo
+    ) {}
+
+    // === NUEVO: DTO para reporte de auditoría de bitácora ===
+    public record ReporteBitacoraDTO(
+            String fecha,
+            String modulo,
+            String accion,
+            Integer idUsuario,
+            String nombreCompleto,
+            String correo,
+            String rol,
+            Integer idReporte,
+            Integer idTransaccion,
+            String estadoTransaccion,
+            String tipoTransaccion,
+            String servicio,
+            BigDecimal monto,
+            String moneda
+    ) {}
+
+    private final ReportesRepository reportesRepository;
+
+    // Inyección por constructor
+    public ReportesController(ReportesRepository reportesRepository) {
+        this.reportesRepository = reportesRepository;
+    }
 
     // === 6.1.1 Reporte diario de transacciones autorizadas/rechazadas ===
     @GetMapping("/reporte-estado")
@@ -35,13 +62,20 @@ public class ReportesController {
                                                    @RequestParam(defaultValue = "10") int tamanio,
                                                    @RequestParam(defaultValue = "FACTURA") String orden) {
 
-        var items = List.of(
-            new ReporteEstadoDTO("Completada", "ACME", new BigDecimal("1220000.00"), fecha, "39842-231"),
-            new ReporteEstadoDTO("Rechazada",  "ACME", new BigDecimal("220000.00"),  fecha, "39842-000"),
-            new ReporteEstadoDTO("Completada", "John Doe Ltd.", new BigDecimal("2233000.00"), fecha, "39841-231")
-        );
+        // Traemos todos los registros que calzan con los filtros desde la BD
+        List<ReporteEstadoDTO> items = reportesRepository.obtenerReporteEstado(fecha, estado, orden);
 
-        return new PageDTO<>(items, pagina, tamanio, 5, 44);
+        // Paginación sencilla en memoria
+        int totalItems = items.size();
+        int fromIndex = Math.max(0, (pagina - 1) * tamanio);
+        int toIndex = Math.min(totalItems, fromIndex + tamanio);
+
+        List<ReporteEstadoDTO> pageItems =
+                (fromIndex < toIndex) ? items.subList(fromIndex, toIndex) : List.of();
+
+        int totalPaginas = (int) Math.ceil(totalItems / (double) tamanio);
+
+        return new PageDTO<>(pageItems, pagina, tamanio, totalPaginas, totalItems);
     }
 
     // === 6.1.2 Reporte de operaciones duplicadas ===
@@ -51,63 +85,46 @@ public class ReportesController {
                                                            @RequestParam(defaultValue = "1") int pagina,
                                                            @RequestParam(defaultValue = "10") int tamanio) {
 
-        var items = List.of(
-            new ReporteDuplicadasDTO("TXN-1001", "ACME",        new BigDecimal("10500.00"), fechaInicio, "Autorización repetida"),
-            new ReporteDuplicadasDTO("TXN-1002", "GlobalPay",   new BigDecimal("6000.00"),  fechaInicio, "Transacción duplicada en lote"),
-            new ReporteDuplicadasDTO("TXN-1003", "SuperTienda", new BigDecimal("15500.00"), fechaFin,    "Intento repetido en menos de 2s")
-        );
+        // Traemos todos los registros del rango desde la BD
+        List<ReporteDuplicadasDTO> items = reportesRepository.obtenerReporteDuplicadas(fechaInicio, fechaFin);
 
-        return new PageDTO<>(items, pagina, tamanio, 3, 30);
+        // Paginación sencilla en memoria
+        int totalItems = items.size();
+        int fromIndex = Math.max(0, (pagina - 1) * tamanio);
+        int toIndex = Math.min(totalItems, fromIndex + tamanio);
+
+        List<ReporteDuplicadasDTO> pageItems =
+                (fromIndex < toIndex) ? items.subList(fromIndex, toIndex) : List.of();
+
+        int totalPaginas = (int) Math.ceil(totalItems / (double) tamanio);
+
+        return new PageDTO<>(pageItems, pagina, tamanio, totalPaginas, totalItems);
     }
 
-    // === 6.1.3 Reporte de notificaciones enviadas ===
-    @GetMapping("/reporte-notificaciones")
-    public PageDTO<ReporteNotificacionesDTO> reporteNotificaciones(@RequestParam String fechaInicio,
-                                                                   @RequestParam String fechaFin,
-                                                                   @RequestParam(defaultValue = "1") int pagina,
-                                                                   @RequestParam(defaultValue = "10") int tamanio) {
+    // === 6.1.6 Reporte de auditoría de bitácora ===
+    @GetMapping("/reporte-bitacora")
+    public PageDTO<ReporteBitacoraDTO> reporteBitacora(@RequestParam String fechaInicio,
+                                                       @RequestParam String fechaFin,
+                                                       @RequestParam(defaultValue = "TODOS") String modulo,
+                                                       @RequestParam(defaultValue = "1") int pagina,
+                                                       @RequestParam(defaultValue = "10") int tamanio) {
 
-        var items = List.of(
-            new ReporteNotificacionesDTO("NTF-001", "Correo", "cliente@acme.com", "Enviada", fechaInicio),
-            new ReporteNotificacionesDTO("NTF-002", "SMS",    "50688997744",      "Fallida", fechaInicio),
-            new ReporteNotificacionesDTO("NTF-003", "Push",   "user123",          "Enviada", fechaFin)
-        );
+        // Traemos todos los registros del rango desde la BD
+        List<ReporteBitacoraDTO> items =
+                reportesRepository.obtenerReporteBitacora(fechaInicio, fechaFin, modulo);
 
-        return new PageDTO<>(items, pagina, tamanio, 2, 20);
-    }
+        // Paginación sencilla en memoria
+        int totalItems = items.size();
+        int fromIndex = Math.max(0, (pagina - 1) * tamanio);
+        int toIndex = Math.min(totalItems, fromIndex + tamanio);
 
-    // === 6.1.4 Reporte de carga transaccional ===
-    @GetMapping("/reporte-carga")
-    public ReporteCargaDTO reporteCarga(@RequestParam(defaultValue = "diario") String rango) {
-        var serie = List.of(
-            new ReporteCargaPuntoDTO("08:00", 12),
-            new ReporteCargaPuntoDTO("10:00", 24),
-            new ReporteCargaPuntoDTO("13:00", 48),
-            new ReporteCargaPuntoDTO("16:00", 36),
-            new ReporteCargaPuntoDTO("19:00", 68),
-            new ReporteCargaPuntoDTO("22:00", 18)
-        );
-        return new ReporteCargaDTO(serie);
-    }
+        List<ReporteBitacoraDTO> pageItems =
+                (fromIndex < toIndex) ? items.subList(fromIndex, toIndex) : List.of();
 
-    // === 6.1.5 Reporte de tiempos de respuesta ===
-    @GetMapping("/reporte-respuesta")
-    public PageDTO<ReporteRespuestaDTO> reporteRespuesta(@RequestParam String fechaInicio,
-                                                         @RequestParam String fechaFin,
-                                                         @RequestParam(defaultValue = "1") int pagina,
-                                                         @RequestParam(defaultValue = "10") int tamanio) {
+        int totalPaginas = (int) Math.ceil(totalItems / (double) tamanio);
 
-        var items = List.of(
-            new ReporteRespuestaDTO("/api/pagos/autorizar", "POST", 180, 350, 520, 90,  720, fechaInicio),
-            new ReporteRespuestaDTO("/api/pagos/consulta",  "GET",   95, 180, 290, 40,  420, fechaInicio),
-            new ReporteRespuestaDTO("/api/pagos/anular",    "POST", 210, 420, 610, 110, 820, fechaFin)
-        );
-
-        return new PageDTO<>(items, pagina, tamanio, 2, 20);
+        return new PageDTO<>(pageItems, pagina, tamanio, totalPaginas, totalItems);
     }
 }
-
-
-
 
 

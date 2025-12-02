@@ -1,7 +1,6 @@
-// Frontend/public/js/reportes/reporteEstado.js
-
+// Frontend/public/js/reportes/reporteBitacora.js
 (function () {
-  var API = '/api/reportes/reporte-estado';
+  var API = '/api/reportes/reporte-bitacora';
   var pagina = 1;
   var tamanio = 10;
 
@@ -16,43 +15,62 @@
   }
 
   function construirParams() {
-    var fecha  = qs('fFecha').value || new Date().toISOString().slice(0,10);
-    var estado = qs('fEstado').value;
-    var orden  = qs('fOrden').value;
+    var fi = qs('fInicio').value;
+    var ff = qs('fFin').value;
+    var modulo = qs('fModulo').value.trim();
+    if (!modulo) modulo = 'TODOS';
 
     var p = new URLSearchParams();
-    p.set('fecha', fecha);
-    p.set('estado', estado);
+    p.set('fechaInicio', fi);
+    p.set('fechaFin', ff);
+    p.set('modulo', modulo);
     p.set('pagina', String(pagina));
     p.set('tamanio', String(tamanio));
-    p.set('orden', orden);
     return p.toString();
   }
 
   function renderTabla(items) {
     var tbody = qs('grid');
-    tbody.innerHTML = items.map(function (x) {
-      return (
+    tbody.innerHTML = (items || []).map(function (x) {
+      return '' +
         '<tr>' +
-          '<td>' + x.estado + '</td>' +
-          '<td>' + x.comercio + '</td>' +
-          '<td>' + formatearCRC(x.monto) + '</td>' +
           '<td>' + x.fecha + '</td>' +
-          '<td>' + x.factura + '</td>' +
-        '</tr>'
-      );
+          '<td>' + x.modulo + '</td>' +
+          '<td>' + x.nombreCompleto + ' (ID ' + x.idUsuario + ')</td>' +
+          '<td>' + x.rol + '</td>' +
+          '<td>' + x.correo + '</td>' +
+          '<td>' + x.idTransaccion + '</td>' +
+          '<td>' + x.estadoTransaccion + '</td>' +
+          '<td>' + x.tipoTransaccion + '</td>' +
+          '<td>' + x.servicio + '</td>' +
+          '<td>' + (x.monto != null ? formatearCRC(x.monto) : '') + '</td>' +
+          '<td>' + (x.moneda || '') + '</td>' +
+          '<td class="col-accion">' + x.accion + '</td>' +
+        '</tr>';
     }).join('');
   }
 
   function renderPaginacion(data) {
     var el = qs('paginacion');
     if (!el) return;
-    el.textContent = 'Pagina ' + data.pagina + ' / ' + data.totalPaginas + ' - Total items: ' + data.totalItems;
+    el.textContent = 'Pagina ' + data.pagina + ' / ' + data.totalPaginas +
+                     ' - Total items: ' + data.totalItems;
   }
 
   function cargar() {
+    var fi = qs('fInicio').value;
+    var ff = qs('fFin').value;
+    if (!fi || !ff) {
+      alert('Debe seleccionar fecha inicio y fecha fin');
+      return;
+    }
+    if (fi > ff) {
+      alert('La fecha inicio no puede ser mayor que la fecha fin');
+      return;
+    }
+
     var url = API + '?' + construirParams();
-    return fetch(url, { headers: { 'Content-Type': 'application/json' } })
+    fetch(url, { headers: { 'Content-Type': 'application/json' } })
       .then(function (r) {
         if (!r.ok) throw new Error('HTTP ' + r.status);
         return r.json();
@@ -66,44 +84,46 @@
       });
   }
 
-  // =========================
-  // Helpers para XLSX
-  // =========================
-  function exportToXLSXEstado(filename, headers, rows) {
-    function esc(v) {
-      return String(v == null ? "" : v)
-        .replace(/&/g, "&amp;")
-        .replace(/</g, "&lt;")
-        .replace(/>/g, "&gt;");
-    }
+  // ================== XLSX helpers (JSZip) ==================
+  function escXml(v) {
+    return String(v == null ? "" : v)
+      .replace(/&/g, "&amp;")
+      .replace(/</g, "&lt;")
+      .replace(/>/g, "&gt;");
+  }
 
-    function colLetter(index) {
-      var letters = "";
-      var n = index;
-      while (n >= 0) {
-        letters = String.fromCharCode((n % 26) + 65) + letters;
-        n = Math.floor(n / 26) - 1;
-      }
-      return letters;
+  function colLetter(index) {
+    var letters = "";
+    var n = index;
+    while (n >= 0) {
+      letters = String.fromCharCode((n % 26) + 65) + letters;
+      n = Math.floor(n / 26) - 1;
     }
+    return letters;
+  }
 
+  function exportToXLSXBitacora(filename, headers, rows) {
     var sheetRows = "";
 
-    // Encabezados fila 1
+    // Encabezado
     sheetRows += "<row>";
-    headers.forEach(function(h, i) {
+    headers.forEach(function (h, i) {
       var ref = colLetter(i) + "1";
-      sheetRows += '<c r="' + ref + '" t="inlineStr"><is><t>' + esc(h) + '</t></is></c>';
+      sheetRows += '<c r="' + ref + '" t="inlineStr"><is><t>' +
+                   escXml(h) +
+                   '</t></is></c>';
     });
     sheetRows += "</row>";
 
-    // Filas de datos
-    rows.forEach(function(row, rIndex) {
+    // Filas
+    rows.forEach(function (row, rIndex) {
       var rowNumber = rIndex + 2;
       sheetRows += "<row>";
-      row.forEach(function(cell, cIndex) {
+      row.forEach(function (cell, cIndex) {
         var ref = colLetter(cIndex) + rowNumber;
-        sheetRows += '<c r="' + ref + '" t="inlineStr"><is><t>' + esc(cell) + '</t></is></c>';
+        sheetRows += '<c r="' + ref + '" t="inlineStr"><is><t>' +
+                     escXml(cell) +
+                     '</t></is></c>';
       });
       sheetRows += "</row>";
     });
@@ -123,7 +143,7 @@
         '<workbook xmlns="http://schemas.openxmlformats.org/spreadsheetml/2006/main" ' +
                   'xmlns:r="http://schemas.openxmlformats.org/officeDocument/2006/relationships">' +
           '<sheets>' +
-            '<sheet name="Estado" sheetId="1" r:id="rId1"/>' +
+            '<sheet name="Bitacora" sheetId="1" r:id="rId1"/>' +
           '</sheets>' +
         '</workbook>'
       ),
@@ -149,11 +169,11 @@
     };
 
     var zip = new JSZip();
-    Object.keys(files).forEach(function(path) {
+    Object.keys(files).forEach(function (path) {
       zip.file(path, files[path]);
     });
 
-    zip.generateAsync({ type: "blob" }).then(function(blob) {
+    zip.generateAsync({ type: "blob" }).then(function (blob) {
       var link = document.createElement("a");
       link.href = URL.createObjectURL(blob);
       link.download = filename.endsWith(".xlsx") ? filename : filename + ".xlsx";
@@ -164,19 +184,26 @@
     });
   }
 
-  function exportarXLSX() {
+  function exportar() {
     var trs = document.querySelectorAll('#grid tr');
     if (!trs.length) {
       alert('No hay datos para exportar.');
       return;
     }
 
-    var headers = ['Estado', 'Comercio', 'Monto', 'Fecha', 'Factura'];
+    var headers = [
+      'Fecha','Módulo','Usuario','Rol','Correo',
+      'ID Transacción','Estado','Tipo','Servicio',
+      'Monto','Moneda','Acción'
+    ];
+
     var rows = Array.from(trs).map(function (tr) {
-      return Array.from(tr.children).map(function (td) { return td.textContent; });
+      return Array.from(tr.children).map(function (td) {
+        return td.textContent;
+      });
     });
 
-    exportToXLSXEstado('ReporteEstado', headers, rows);
+    exportToXLSXBitacora('ReporteBitacora', headers, rows);
   }
 
   function wireEvents() {
@@ -190,25 +217,26 @@
       };
     }
     if (btnExportar) {
-      btnExportar.onclick = exportarXLSX;
+      btnExportar.onclick = exportar;
     }
   }
 
   function init() {
-    // valores iniciales
-    var hoy = new Date().toISOString().slice(0,10);
-    var fFecha = qs('fFecha');
-    if (fFecha && !fFecha.value) fFecha.value = hoy;
+    // Rango inicial: últimos 7 días
+    var hoy = new Date();
+    var h7  = new Date();
+    h7.setDate(hoy.getDate() - 7);
+
+    if (qs('fInicio')) qs('fInicio').value = h7.toISOString().slice(0, 10);
+    if (qs('fFin'))    qs('fFin').value    = hoy.toISOString().slice(0, 10);
 
     wireEvents();
     cargar();
   }
 
-  // Espera a que el DOM esté listo por si el script se carga en <head>
   if (document.readyState === 'loading') {
     document.addEventListener('DOMContentLoaded', init);
   } else {
     init();
   }
 })();
-

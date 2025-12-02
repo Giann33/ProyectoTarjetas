@@ -40,17 +40,117 @@
       .catch(function(err){ alert('Error cargando reporte: ' + err.message); });
   }
 
+  // =========================
+  // Helpers para exportar a XLSX
+  // =========================
+  function exportToXLSXDuplicadas(filename, headers, rows) {
+    function esc(v) {
+      return String(v == null ? "" : v)
+        .replace(/&/g, "&amp;")
+        .replace(/</g, "&lt;")
+        .replace(/>/g, "&gt;");
+    }
+
+    function colLetter(index) {
+      var letters = "";
+      var n = index;
+      while (n >= 0) {
+        letters = String.fromCharCode((n % 26) + 65) + letters;
+        n = Math.floor(n / 26) - 1;
+      }
+      return letters;
+    }
+
+    var sheetRows = "";
+
+    // Encabezados (fila 1)
+    sheetRows += "<row>";
+    headers.forEach(function(h, i) {
+      var ref = colLetter(i) + "1";
+      sheetRows += '<c r="' + ref + '" t="inlineStr"><is><t>' + esc(h) + '</t></is></c>';
+    });
+    sheetRows += "</row>";
+
+    // Datos (desde fila 2)
+    rows.forEach(function(row, rIndex) {
+      var rowNumber = rIndex + 2;
+      sheetRows += "<row>";
+      row.forEach(function(cell, cIndex) {
+        var ref = colLetter(cIndex) + rowNumber;
+        sheetRows += '<c r="' + ref + '" t="inlineStr"><is><t>' + esc(cell) + '</t></is></c>';
+      });
+      sheetRows += "</row>";
+    });
+
+    var sheetData = "<sheetData>" + sheetRows + "</sheetData>";
+
+    var files = {
+      "[Content_Types].xml": (
+        '<Types xmlns="http://schemas.openxmlformats.org/package/2006/content-types">' +
+          '<Override PartName="/xl/workbook.xml" ContentType="application/vnd.openxmlformats-officedocument.spreadsheetml.sheet.main+xml"/>' +
+          '<Override PartName="/xl/worksheets/sheet1.xml" ContentType="application/vnd.openxmlformats-officedocument.spreadsheetml.worksheet+xml"/>' +
+          '<Default Extension="rels" ContentType="application/vnd.openxmlformats-package.relationships+xml"/>' +
+          '<Default Extension="xml" ContentType="application/xml"/>' +
+        '</Types>'
+      ),
+      "xl/workbook.xml": (
+        '<workbook xmlns="http://schemas.openxmlformats.org/spreadsheetml/2006/main" ' +
+                  'xmlns:r="http://schemas.openxmlformats.org/officeDocument/2006/relationships">' +
+          '<sheets>' +
+            '<sheet name="Duplicadas" sheetId="1" r:id="rId1"/>' +
+          '</sheets>' +
+        '</workbook>'
+      ),
+      "xl/_rels/workbook.xml.rels": (
+        '<Relationships xmlns="http://schemas.openxmlformats.org/package/2006/relationships">' +
+          '<Relationship Id="rId1" ' +
+                       'Type="http://schemas.openxmlformats.org/officeDocument/2006/relationships/worksheet" ' +
+                       'Target="worksheets/sheet1.xml"/>' +
+        '</Relationships>'
+      ),
+      "xl/worksheets/sheet1.xml": (
+        '<worksheet xmlns="http://schemas.openxmlformats.org/spreadsheetml/2006/main">' +
+          sheetData +
+        '</worksheet>'
+      ),
+      "_rels/.rels": (
+        '<Relationships xmlns="http://schemas.openxmlformats.org/package/2006/relationships">' +
+          '<Relationship Id="rId1" ' +
+                       'Type="http://schemas.openxmlformats.org/officeDocument/2006/relationships/officeDocument" ' +
+                       'Target="xl/workbook.xml"/>' +
+        '</Relationships>'
+      )
+    };
+
+    var zip = new JSZip();
+    Object.keys(files).forEach(function(path) {
+      zip.file(path, files[path]);
+    });
+
+    zip.generateAsync({ type: "blob" }).then(function(blob) {
+      var link = document.createElement("a");
+      link.href = URL.createObjectURL(blob);
+      link.download = filename.endsWith(".xlsx") ? filename : filename + ".xlsx";
+      document.body.appendChild(link);
+      link.click();
+      document.body.removeChild(link);
+      URL.revokeObjectURL(link.href);
+    });
+  }
+
   function exportar(){
-    var filas = Array.from(document.querySelectorAll('#grid tr')).map(function(tr){
+    var trs = document.querySelectorAll('#grid tr');
+    if (!trs.length) {
+      alert('No hay datos para exportar.');
+      return;
+    }
+
+    var headers = ['ID Transacción','Comercio','Monto','Fecha','Motivo'];
+    var rows = Array.from(trs).map(function(tr){
       return Array.from(tr.children).map(function(td){ return td.textContent; });
     });
-    var csv = [['ID Transaccion','Comercio','Monto','Fecha','Motivo']].concat(filas)
-      .map(function(row){ return row.map(function(c){ c=String(c).replace(/"/g,'""'); return '"'+c+'"'; }).join(','); })
-      .join('\n');
 
-    var blob = new Blob([csv], {type:'text/csv;charset=utf-8;'});
-    var url = URL.createObjectURL(blob), a = document.createElement('a');
-    a.href = url; a.download = 'ReporteDuplicadas.csv'; a.click();
+    exportToXLSXDuplicadas('ReporteDuplicadas', headers, rows);
   }
 
   function init(){
@@ -66,3 +166,4 @@
 
   if(document.readyState==='loading') document.addEventListener('DOMContentLoaded', init); else init();
 })();
+
