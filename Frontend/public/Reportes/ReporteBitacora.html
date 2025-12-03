@@ -2,190 +2,131 @@
 <html lang="es">
 <head>
   <meta charset="utf-8" />
-  <title>Dunamys – Reporte de auditoría de bitácora</title>
+  <title>Dunamys – Reporte de bitácora</title>
 
   <link rel="stylesheet" href="../CSS/Base.css">
   <link rel="stylesheet" href="../CSS/styles.css">
   <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.0/css/all.min.css">
 
   <style>
-    /* HEADER */
-    .header-section {
-      margin-bottom: 18px;
-    }
-    .header-section h1 {
-      margin: 0 0 6px;
-      font-size: 22px;
-    }
-    .header-section p {
-      margin: 0;
-      color: var(--muted);
-      font-size: 14px;
-    }
+    .header-section { margin-bottom: 18px; }
+    .header-section h1 { margin: 0 0 6px; font-size: 22px; }
+    .header-section p { margin: 0; color: var(--muted); font-size: 14px; }
 
-    /* CARD */
     .table-card {
-      background: #ffffff;
+      background: #fff;
       border-radius: 6px;
       padding: 16px 18px;
       box-shadow: 0 2px 6px rgba(0,0,0,.04);
     }
-    .table-card h2 {
-      margin: 0 0 12px;
-      font-size: 16px;
-    }
+    .table-card h2 { margin: 0 0 12px; font-size: 16px; }
 
-    /* CONTENEDOR TABLA */
     .table-container {
       width: 100%;
       overflow-x: auto;
     }
 
-    /* TABLA */
-    table {
-      width: 100%;
-      border-collapse: collapse;
-      font-size: 13px;
-    }
-    thead {
-      background: #f5f5f5;
-    }
-    th, td {
-      padding: 8px 10px;
-      border-bottom: 1px solid #e9eceb;
-      text-align: left;
-      vertical-align: top;
-    }
-    th {
-      font-weight: 600;
-      white-space: nowrap;
-    }
-    tbody tr:hover {
-      background: #f9fafb;
-    }
+    table { width: 100%; border-collapse: collapse; font-size: 13px; }
+    thead { background: #f5f5f5; }
+    th, td { padding: 8px 10px; border-bottom: 1px solid #e9eceb; text-align: left; }
+    th { font-weight: 600; white-space: nowrap; }
+    tbody tr:hover { background: #f9fafb; }
 
-    /* TOOLBAR */
     .toolbar {
-      display: flex;
-      gap: 8px;
-      align-items: end;
-      flex-wrap: wrap;
-      margin: 12px 0 16px;
+      display: flex; gap: 8px; align-items: end;
+      flex-wrap: wrap; margin: 12px 0 16px;
     }
     .toolbar label {
-      display: block;
+      display: block; font-size: 13px; color: #374151; margin-bottom: 4px;
+    }
+    .toolbar input, .toolbar select, .toolbar button {
+      padding: 8px 10px; border: 1px solid #e5e7eb;
+      border-radius: 6px; background: #fff;
       font-size: 13px;
-      color: #374151;
-      margin-bottom: 4px;
     }
-    .toolbar input,
-    .toolbar button {
-      padding: 8px 10px;
-      border: 1px solid #e5e7eb;
-      border-radius: 6px;
-      background: #fff;
-      font-size: 13px;
-      box-sizing: border-box;
-    }
-    .toolbar button {
-      cursor: pointer;
-    }
-    .toolbar button.primary {
-      background: #111;
-      color: #fff;
-      border-color: #111;
-    }
+    .toolbar button.primary { background: #111; color: #fff; border-color: #111; cursor: pointer; }
 
-    /* WRAP */
-    .wrap {
-      max-width: 1100px;
-      margin: 24px auto;
-      padding: 0 12px;
-    }
+    .wrap { max-width: 1200px; margin: 24px auto; padding: 0 12px; }
 
-    /* PAGINACIÓN */
-    #paginacion {
-      margin-top: 10px;
-      font-size: 13px;
-      color: var(--muted);
-    }
-
-    /* Columna de acción un poco más ancha y con wrap */
-    .col-accion {
-      max-width: 260px;
-      white-space: normal;
-    }
+    #paginacion { margin-top: 10px; font-size: 13px; color: var(--muted); }
   </style>
 </head>
+
 <body>
-  <div class="wrap">
-    <!-- ENCABEZADO -->
-    <div class="header-section">
-      <h1>Reporte de auditoría de bitácora</h1>
-      <p>Revisá las acciones registradas en la bitácora sobre las transacciones del sistema.</p>
-    </div>
+<div class="wrap">
 
-    <!-- CARD PRINCIPAL -->
-    <div class="table-card">
-      <h2>6.1.6 Auditoría de bitácora</h2>
-
-      <!-- FILTROS -->
-      <div class="toolbar">
-        <div>
-          <label for="fInicio">Fecha inicio</label>
-          <input id="fInicio" type="date" />
-        </div>
-        <div>
-          <label for="fFin">Fecha fin</label>
-          <input id="fFin" type="date" />
-        </div>
-        <div>
-          <label for="fModulo">Módulo (opcional)</label>
-          <input id="fModulo" type="text" placeholder="Ej: Pagos, Reportes, Notificaciones" />
-        </div>
-
-        <button id="btnBuscar" class="primary">
-          <i class="fa-solid fa-magnifying-glass" style="margin-right:6px;"></i>Buscar
-        </button>
-        <button id="btnExportar">
-          <i class="fa-solid fa-file-arrow-down" style="margin-right:6px;"></i>Exportar
-        </button>
-      </div>
-
-      <!-- TABLA -->
-      <div class="table-container">
-        <table>
-          <thead>
-            <tr>
-              <th>Fecha</th>
-              <th>Módulo</th>
-              <th>Usuario</th>
-              <th>Rol</th>
-              <th>Correo</th>
-              <th>ID Transacción</th>
-              <th>Estado</th>
-              <th>Tipo</th>
-              <th>Servicio</th>
-              <th>Monto</th>
-              <th>Moneda</th>
-              <th>Acción</th>
-            </tr>
-          </thead>
-          <tbody id="grid">
-            <!-- Filas generadas por JS -->
-          </tbody>
-        </table>
-      </div>
-
-      <!-- PAGINACIÓN -->
-      <div id="paginacion" class="mensaje-estado"></div>
-    </div>
+  <div class="header-section">
+    <h1>Reporte de Bitácora</h1>
+    <p>Registros detallados de acciones de los usuarios en el sistema.</p>
   </div>
 
-  <!-- JSZip para exportar a XLSX -->
-  <script src="https://cdnjs.cloudflare.com/ajax/libs/jszip/3.10.1/jszip.min.js"></script>
+  <div class="table-card">
+    <h2>6.1.6 Bitácora de auditoría</h2>
 
-  <!-- JS del reporte -->
-  <script src="../js/reportes/reporteBitacora.js"></script>
+    <!-- FILTROS -->
+    <div class="toolbar">
+
+      <div>
+        <label for="fInicio">Fecha inicio</label>
+        <input id="fInicio" type="date">
+      </div>
+
+      <div>
+        <label for="fFin">Fecha fin</label>
+        <input id="fFin" type="date">
+      </div>
+
+      <div>
+        <label for="fModulo">Módulo</label>
+        <select id="fModulo">
+          <option value="TODOS">Todos</option>
+          <option value="AUTORIZACION">Autorización</option>
+          <option value="PAGOS">Pagos</option>
+          <option value="REPORTES">Reportes</option>
+          <option value="SEGURIDAD">Seguridad</option>
+        </select>
+      </div>
+
+      <button id="btnBuscar" class="primary">
+        <i class="fa-solid fa-magnifying-glass" style="margin-right:6px;"></i>Buscar
+      </button>
+
+      <button id="btnExportar">
+        <i class="fa-solid fa-file-arrow-down" style="margin-right:6px;"></i>Exportar
+      </button>
+    </div>
+
+    <!-- TABLA -->
+    <div class="table-container">
+      <table>
+        <thead>
+          <tr>
+            <th>Fecha</th>
+            <th>Módulo</th>
+            <th>Acción</th>
+            <th>Usuario</th>
+            <th>Correo</th>
+            <th>Rol</th>
+            <th>ID Reporte</th>
+            <th>ID Transacción</th>
+            <th>Estado</th>
+            <th>Tipo</th>
+            <th>Servicio</th>
+            <th>Moneda</th>
+            <th>Monto</th>
+          </tr>
+        </thead>
+        <tbody id="grid">
+        </tbody>
+      </table>
+    </div>
+
+    <div id="paginacion" class="mensaje-estado"></div>
+  </div>
+</div>
+
+<script src="https://cdnjs.cloudflare.com/ajax/libs/jszip/3.10.1/jszip.min.js"></script>
+<script src="../js/reportes/reporteBitacora.js"></script>
 </body>
 </html>
+

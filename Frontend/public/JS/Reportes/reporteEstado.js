@@ -3,7 +3,7 @@
 (function () {
   var API = '/api/reportes/reporte-estado';
   var pagina = 1;
-  var tamanio = 10;
+  var tamano = 10;
 
   function qs(id) { return document.getElementById(id); }
 
@@ -24,7 +24,7 @@
     p.set('fecha', fecha);
     p.set('estado', estado);
     p.set('pagina', String(pagina));
-    p.set('tamanio', String(tamanio));
+    p.set('tamano', String(tamano));
     p.set('orden', orden);
     return p.toString();
   }
@@ -34,11 +34,12 @@
     tbody.innerHTML = items.map(function (x) {
       return (
         '<tr>' +
-          '<td>' + x.estado + '</td>' +
+          '<td>' + x.estado   + '</td>' +
+          '<td>' + x.servicio + '</td>' +
           '<td>' + x.comercio + '</td>' +
           '<td>' + formatearCRC(x.monto) + '</td>' +
-          '<td>' + x.fecha + '</td>' +
-          '<td>' + x.factura + '</td>' +
+          '<td>' + x.fecha    + '</td>' +
+          '<td>' + x.factura  + '</td>' +
         '</tr>'
       );
     }).join('');
@@ -171,7 +172,8 @@
       return;
     }
 
-    var headers = ['Estado', 'Comercio', 'Monto', 'Fecha', 'Factura'];
+    // Misma estructura que la tabla: Estado, Servicio, Comercio, Monto, Fecha, Factura
+    var headers = ['Estado', 'Servicio', 'Comercio', 'Monto', 'Fecha', 'Factura'];
     var rows = Array.from(trs).map(function (tr) {
       return Array.from(tr.children).map(function (td) { return td.textContent; });
     });
@@ -211,4 +213,5 @@
     init();
   }
 })();
+
 

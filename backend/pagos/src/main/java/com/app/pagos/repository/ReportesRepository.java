@@ -18,19 +18,26 @@ public class ReportesRepository {
     }
 
     // ============ 6.1.1 Reporte de estado ============
-    public List<ReporteEstadoDTO> obtenerReporteEstado(String fecha, String estadoFiltro, String orden) {
+
+    public List<ReporteEstadoDTO> obtenerReporteEstado(String fecha,
+                                                       String estadoFiltro,
+                                                       String orden) {
 
         String sql = """
-            SELECT 
-                ce.Descripcion AS estado,
-                s.Descripcion AS comercio,
-                p.Monto AS monto,
-                DATE(t.Fecha) AS fecha,
-                t.detalle AS factura
+            SELECT
+                ce.Descripcion  AS estado,
+                s.Descripcion   AS servicio,
+                t.destino       AS comercio,
+                p.Monto         AS monto,
+                DATE(t.Fecha)   AS fecha,
+                t.detalle       AS factura
             FROM transaccion t
-            JOIN catalogo_estado_transaccion ce ON ce.idEstadoTransaccion = t.Estado
-            JOIN servicio s ON s.idServicio = t.servicio_idServicio
-            JOIN pago p ON p.Transaccion_idTransaccion = t.idTransaccion
+            JOIN catalogo_estado_transaccion ce
+                 ON ce.idEstadoTransaccion = t.Estado
+            JOIN servicio s
+                 ON s.idServicio = t.servicio_idServicio
+            JOIN pago p
+                 ON p.Transaccion_idTransaccion = t.idTransaccion
             WHERE DATE(t.Fecha) = ?
             """;
 
@@ -43,7 +50,7 @@ public class ReportesRepository {
         sql += switch (orden.toUpperCase()) {
             case "MONTO" -> " ORDER BY p.Monto ";
             case "FECHA" -> " ORDER BY t.Fecha ";
-            default -> " ORDER BY t.detalle ";
+            default      -> " ORDER BY t.detalle ";
         };
 
         if (estadoFiltro.equalsIgnoreCase("TODOS")) {
@@ -51,6 +58,7 @@ public class ReportesRepository {
                     sql,
                     (rs, rowNum) -> new ReporteEstadoDTO(
                             rs.getString("estado"),
+                            rs.getString("servicio"),
                             rs.getString("comercio"),
                             rs.getBigDecimal("monto"),
                             rs.getString("fecha"),
@@ -63,6 +71,7 @@ public class ReportesRepository {
                     sql,
                     (rs, rowNum) -> new ReporteEstadoDTO(
                             rs.getString("estado"),
+                            rs.getString("servicio"),
                             rs.getString("comercio"),
                             rs.getBigDecimal("monto"),
                             rs.getString("fecha"),
@@ -75,12 +84,15 @@ public class ReportesRepository {
     }
 
     // ============ 6.1.2 Reporte de operaciones duplicadas ============
-    public List<ReporteDuplicadasDTO> obtenerReporteDuplicadas(String fechaInicio, String fechaFin) {
+
+    public List<ReporteDuplicadasDTO> obtenerReporteDuplicadas(String fechaInicio,
+                                                               String fechaFin) {
 
         String sql = """
             SELECT
                 t.idTransaccion      AS idTransaccion,
-                s.Descripcion        AS comercio,
+                s.Descripcion        AS servicio,
+                t.destino            AS comercio,
                 p.Monto              AS monto,
                 r.Fecha_Reverso      AS fecha,
                 r.Motivo             AS motivo
@@ -99,6 +111,7 @@ public class ReportesRepository {
                 sql,
                 (rs, rowNum) -> new ReporteDuplicadasDTO(
                         String.valueOf(rs.getInt("idTransaccion")),
+                        rs.getString("servicio"),
                         rs.getString("comercio"),
                         rs.getBigDecimal("monto"),
                         rs.getString("fecha"),
@@ -110,6 +123,7 @@ public class ReportesRepository {
     }
 
     // ============ 6.1.6 Reporte de auditoría de bitácora ============
+
     public List<ReporteBitacoraDTO> obtenerReporteBitacora(String fechaInicio,
                                                            String fechaFin,
                                                            String moduloFiltro) {
@@ -129,6 +143,7 @@ public class ReportesRepository {
                 ce.Descripcion          AS estadoTransaccion,
                 ct.Descripcion          AS tipoTransaccion,
                 s.Descripcion           AS servicio,
+                t.destino               AS comercio,
                 pgo.Monto               AS monto,
                 mon.Simbolo             AS moneda
             FROM bitacora b
@@ -169,7 +184,6 @@ public class ReportesRepository {
                 ? new Object[]{fechaInicio, fechaFin, moduloFiltro}
                 : new Object[]{fechaInicio, fechaFin};
 
-        // Usamos la sobrecarga no deprecada: sql + RowMapper + varargs
         return jdbcTemplate.query(
                 sql,
                 (rs, rowNum) -> new ReporteBitacoraDTO(
@@ -185,6 +199,7 @@ public class ReportesRepository {
                         rs.getString("estadoTransaccion"),
                         rs.getString("tipoTransaccion"),
                         rs.getString("servicio"),
+                        rs.getString("comercio"),
                         rs.getBigDecimal("monto"),
                         rs.getString("moneda")
                 ),
@@ -192,7 +207,6 @@ public class ReportesRepository {
         );
     }
 }
-
 
 
 
