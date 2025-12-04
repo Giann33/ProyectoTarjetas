@@ -75,10 +75,8 @@ public class ReportesController {
                                                    @RequestParam(defaultValue = "10") int tamano,
                                                    @RequestParam(defaultValue = "FACTURA") String orden) {
 
-        // Traemos todos los registros que calzan con los filtros desde la BD
         List<ReporteEstadoDTO> items = reportesRepository.obtenerReporteEstado(fecha, estado, orden);
 
-        // Paginación en memoria
         int totalItems = items.size();
         int fromIndex = Math.max(0, (pagina - 1) * tamano);
         int toIndex = Math.min(totalItems, fromIndex + tamano);
@@ -98,10 +96,8 @@ public class ReportesController {
                                                            @RequestParam(defaultValue = "1") int pagina,
                                                            @RequestParam(defaultValue = "10") int tamano) {
 
-        // Traemos todos los registros del rango desde la BD
         List<ReporteDuplicadasDTO> items = reportesRepository.obtenerReporteDuplicadas(fechaInicio, fechaFin);
 
-        // Paginación en memoria
         int totalItems = items.size();
         int fromIndex = Math.max(0, (pagina - 1) * tamano);
         int toIndex = Math.min(totalItems, fromIndex + tamano);
@@ -137,5 +133,6 @@ public class ReportesController {
         return new PageDTO<>(pageItems, pagina, tamano, totalPaginas, totalItems);
     }
 }
+
 
 

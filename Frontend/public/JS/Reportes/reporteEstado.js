@@ -1,7 +1,8 @@
 // Frontend/public/js/reportes/reporteEstado.js
 
 (function () {
-  var API = '/api/reportes/reporte-estado';
+  // Backend en 8081
+  var API = 'http://localhost:8081/api/reportes/reporte-estado';
   var pagina = 1;
   var tamano = 10;
 
@@ -24,7 +25,7 @@
     p.set('fecha', fecha);
     p.set('estado', estado);
     p.set('pagina', String(pagina));
-    p.set('tamano', String(tamano));
+    p.set('tamano', String(tamano));   // mismo nombre que en el controller
     p.set('orden', orden);
     return p.toString();
   }
@@ -48,7 +49,8 @@
   function renderPaginacion(data) {
     var el = qs('paginacion');
     if (!el) return;
-    el.textContent = 'Pagina ' + data.pagina + ' / ' + data.totalPaginas + ' - Total items: ' + data.totalItems;
+    el.textContent = 'Página ' + data.pagina + ' / ' + data.totalPaginas +
+                     ' - Total ítems: ' + data.totalItems;
   }
 
   function cargar() {
@@ -67,9 +69,7 @@
       });
   }
 
-  // =========================
-  // Helpers para XLSX
-  // =========================
+  // ======== Helpers XLSX (mismo de antes) ========
   function exportToXLSXEstado(filename, headers, rows) {
     function esc(v) {
       return String(v == null ? "" : v)
@@ -90,7 +90,6 @@
 
     var sheetRows = "";
 
-    // Encabezados fila 1
     sheetRows += "<row>";
     headers.forEach(function(h, i) {
       var ref = colLetter(i) + "1";
@@ -98,7 +97,6 @@
     });
     sheetRows += "</row>";
 
-    // Filas de datos
     rows.forEach(function(row, rIndex) {
       var rowNumber = rIndex + 2;
       sheetRows += "<row>";
@@ -172,7 +170,6 @@
       return;
     }
 
-    // Misma estructura que la tabla: Estado, Servicio, Comercio, Monto, Fecha, Factura
     var headers = ['Estado', 'Servicio', 'Comercio', 'Monto', 'Fecha', 'Factura'];
     var rows = Array.from(trs).map(function (tr) {
       return Array.from(tr.children).map(function (td) { return td.textContent; });
@@ -197,7 +194,6 @@
   }
 
   function init() {
-    // valores iniciales
     var hoy = new Date().toISOString().slice(0,10);
     var fFecha = qs('fFecha');
     if (fFecha && !fFecha.value) fFecha.value = hoy;
@@ -206,12 +202,13 @@
     cargar();
   }
 
-  // Espera a que el DOM esté listo por si el script se carga en <head>
   if (document.readyState === 'loading') {
     document.addEventListener('DOMContentLoaded', init);
   } else {
     init();
   }
 })();
+
+
 
 

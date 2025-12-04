@@ -24,33 +24,31 @@ public class ReportesRepository {
                                                        String orden) {
 
         String sql = """
-            SELECT
-                ce.Descripcion  AS estado,
-                s.Descripcion   AS servicio,
-                t.destino       AS comercio,
-                p.Monto         AS monto,
-                DATE(t.Fecha)   AS fecha,
-                t.detalle       AS factura
-            FROM transaccion t
-            JOIN catalogo_estado_transaccion ce
+            SELECT 
+                ce.Descripcion              AS estado,
+                s.Descripcion               AS servicio,
+                t.Destino                   AS comercio,
+                p.Monto                     AS monto,
+                DATE(t.Fecha)               AS fecha,
+                t.Detalle                   AS factura
+            FROM sistemapagotarjeta.transaccion t
+            JOIN sistemapagotarjeta.catalogo_estado_transaccion ce 
                  ON ce.idEstadoTransaccion = t.Estado
-            JOIN servicio s
+            JOIN sistemapagotarjeta.servicio s 
                  ON s.idServicio = t.servicio_idServicio
-            JOIN pago p
+            JOIN sistemapagotarjeta.pago p 
                  ON p.Transaccion_idTransaccion = t.idTransaccion
             WHERE DATE(t.Fecha) = ?
             """;
 
-        // === Filtrado por estado ===
         if (!estadoFiltro.equalsIgnoreCase("TODOS")) {
             sql += " AND ce.Descripcion = ? ";
         }
 
-        // === Ordenamiento ===
         sql += switch (orden.toUpperCase()) {
             case "MONTO" -> " ORDER BY p.Monto ";
             case "FECHA" -> " ORDER BY t.Fecha ";
-            default      -> " ORDER BY t.detalle ";
+            default -> " ORDER BY t.Detalle ";
         };
 
         if (estadoFiltro.equalsIgnoreCase("TODOS")) {
@@ -85,23 +83,22 @@ public class ReportesRepository {
 
     // ============ 6.1.2 Reporte de operaciones duplicadas ============
 
-    public List<ReporteDuplicadasDTO> obtenerReporteDuplicadas(String fechaInicio,
-                                                               String fechaFin) {
+    public List<ReporteDuplicadasDTO> obtenerReporteDuplicadas(String fechaInicio, String fechaFin) {
 
         String sql = """
             SELECT
-                t.idTransaccion      AS idTransaccion,
-                s.Descripcion        AS servicio,
-                t.destino            AS comercio,
-                p.Monto              AS monto,
-                r.Fecha_Reverso      AS fecha,
-                r.Motivo             AS motivo
-            FROM reverso_devolucion r
-            JOIN transaccion t
+                t.idTransaccion                         AS idTransaccion,
+                s.Descripcion                           AS servicio,
+                t.Destino                               AS comercio,
+                p.Monto                                 AS monto,
+                r.Fecha_Reverso                         AS fecha,
+                r.Motivo                                AS motivo
+            FROM sistemapagotarjeta.reverso_devolucion r
+            JOIN sistemapagotarjeta.transaccion t
                   ON t.idTransaccion = r.idTransaccion
-            JOIN servicio s
+            JOIN sistemapagotarjeta.servicio s
                   ON s.idServicio = t.servicio_idServicio
-            JOIN pago p
+            JOIN sistemapagotarjeta.pago p
                   ON p.Transaccion_idTransaccion = t.idTransaccion
             WHERE DATE(r.Fecha_Reverso) BETWEEN ? AND ?
             ORDER BY r.Fecha_Reverso DESC
@@ -130,49 +127,49 @@ public class ReportesRepository {
 
         String sql = """
             SELECT
-                b.Fecha                 AS fecha,
-                b.Modulo                AS modulo,
-                b.Accion                AS accion,
-                u.idUsuario             AS idUsuario,
-                per.Nombre              AS nombre,
-                per.apellido            AS apellido,
-                per.Correo              AS correo,
-                rol.Descripcion         AS rol,
-                rt.idReporte            AS idReporte,
-                t.idTransaccion         AS idTransaccion,
-                ce.Descripcion          AS estadoTransaccion,
-                ct.Descripcion          AS tipoTransaccion,
-                s.Descripcion           AS servicio,
-                t.destino               AS comercio,
-                pgo.Monto               AS monto,
-                mon.Simbolo             AS moneda
-            FROM bitacora b
-            JOIN usuario u
+                b.Fecha                                 AS fecha,
+                b.Modulo                                AS modulo,
+                b.Accion                                AS accion,
+                u.idUsuario                             AS idUsuario,
+                per.Nombre                              AS nombre,
+                per.apellido                            AS apellido,
+                per.Correo                              AS correo,
+                rol.Descripcion                         AS rol,
+                rt.idReporte                            AS idReporte,
+                t.idTransaccion                         AS idTransaccion,
+                ce.Descripcion                          AS estadoTransaccion,
+                ct.Descripcion                          AS tipoTransaccion,
+                s.Descripcion                           AS servicio,
+                t.Destino                               AS comercio,
+                pgo.Monto                               AS monto,
+                mon.Simbolo                             AS moneda
+            FROM sistemapagotarjeta.bitacora b
+            JOIN sistemapagotarjeta.Usuario u
                  ON u.idUsuario = b.Usuario_idCliente
-            JOIN persona per
+            JOIN sistemapagotarjeta.Persona per
                  ON per.idPersona = u.Persona_idUsuario
-            JOIN catalogo_rol_usuario rol
+            JOIN sistemapagotarjeta.catalogo_rol_usuario rol
                  ON rol.idRol = u.catalogo_rol_usuario_idRol
-            JOIN reporte_transaccion rt
+            JOIN sistemapagotarjeta.reporte_transaccion rt
                  ON rt.idReporte = b.reporte_transaccion_idReporte
-            JOIN transaccion t
+            JOIN sistemapagotarjeta.transaccion t
                  ON t.idTransaccion = rt.Transaccion_idTransaccion
-            JOIN catalogo_estado_transaccion ce
+            JOIN sistemapagotarjeta.catalogo_estado_transaccion ce
                  ON ce.idEstadoTransaccion = t.Estado
-            JOIN catalogo_tipo_transaccion ct
+            JOIN sistemapagotarjeta.catalogo_tipo_transaccion ct
                  ON ct.idTipoTransaccion = t.Tipo
-            JOIN servicio s
+            JOIN sistemapagotarjeta.servicio s
                  ON s.idServicio = t.servicio_idServicio
-            LEFT JOIN pago pgo
+            LEFT JOIN sistemapagotarjeta.pago pgo
                  ON pgo.Transaccion_idTransaccion = t.idTransaccion
-            LEFT JOIN catalogo_tipo_moneda mon
+            LEFT JOIN sistemapagotarjeta.catalogo_tipo_moneda mon
                  ON mon.idTipoMoneda = pgo.catalogo_tipo_moneda_idTipoMoneda
             WHERE DATE(b.Fecha) BETWEEN ? AND ?
             """;
 
-        boolean filtraModulo = (moduloFiltro != null &&
-                                !moduloFiltro.isBlank() &&
-                                !"TODOS".equalsIgnoreCase(moduloFiltro));
+        boolean filtraModulo = moduloFiltro != null
+                && !moduloFiltro.isBlank()
+                && !"TODOS".equalsIgnoreCase(moduloFiltro);
 
         if (filtraModulo) {
             sql += " AND b.Modulo = ? ";
@@ -207,6 +204,4 @@ public class ReportesRepository {
         );
     }
 }
-
-
 

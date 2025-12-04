@@ -1,7 +1,7 @@
 // Frontend/public/js/reportes/reporteDuplicadas.js
 (function () {
-  var API = '/api/reportes/reporte-duplicadas';
-  var pagina = 1, tamanio = 10;
+  var API = 'http://localhost:8081/api/reportes/reporte-duplicadas';
+  var pagina = 1, tamano = 10;
 
   function qs(id){ return document.getElementById(id); }
   function formatearCRC(n){
@@ -14,7 +14,7 @@
     p.set('fechaInicio', qs('fInicio').value);
     p.set('fechaFin', qs('fFin').value);
     p.set('pagina', String(pagina));
-    p.set('tamanio', String(tamanio));
+    p.set('tamano', String(tamano));   // mismo que en controller
     return p.toString();
   }
 
@@ -23,11 +23,11 @@
     tbody.innerHTML = (data.items || []).map(function(x){
       return '<tr>'
         + '<td>' + x.idTransaccion + '</td>'
-        + '<td>' + x.servicio + '</td>'
-        + '<td>' + x.comercio + '</td>'
+        + '<td>' + x.servicio      + '</td>'
+        + '<td>' + x.comercio      + '</td>'
         + '<td>' + formatearCRC(x.monto) + '</td>'
-        + '<td>' + x.fecha + '</td>'
-        + '<td>' + x.motivo + '</td>'
+        + '<td>' + x.fecha         + '</td>'
+        + '<td>' + x.motivo        + '</td>'
         + '</tr>';
     }).join('');
 
@@ -59,7 +59,6 @@
       return Array.from(tr.children).map(function(td){ return td.textContent; });
     });
 
-    // Encabezados actualizados con Servicio + Comercio
     var encabezado = ['ID Transacción','Servicio','Comercio','Monto','Fecha','Motivo'];
 
     var csv = [encabezado].concat(filas)
@@ -87,7 +86,7 @@
     qs('fInicio').value = h7.toISOString().slice(0,10);
     qs('fFin').value    = hoy.toISOString().slice(0,10);
 
-    qs('btnBuscar').onclick  = function(){ pagina = 1; cargar(); };
+    qs('btnBuscar').onclick   = function(){ pagina = 1; cargar(); };
     qs('btnExportar').onclick = exportar;
 
     cargar();
@@ -99,5 +98,8 @@
     init();
   }
 })();
+
+
+
 
 

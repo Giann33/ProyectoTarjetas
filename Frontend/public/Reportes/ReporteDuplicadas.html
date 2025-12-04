@@ -9,18 +9,9 @@
   <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.0/css/all.min.css">
 
   <style>
-    .header-section {
-      margin-bottom: 18px;
-    }
-    .header-section h1 {
-      margin: 0 0 6px;
-      font-size: 22px;
-    }
-    .header-section p {
-      margin: 0;
-      color: var(--muted);
-      font-size: 14px;
-    }
+    .header-section { margin-bottom: 18px; }
+    .header-section h1 { margin: 0 0 6px; font-size: 22px; }
+    .header-section p { margin: 0; color: var(--muted); font-size: 14px; }
 
     .table-card {
       background: #ffffff;
@@ -28,64 +19,30 @@
       padding: 16px 18px;
       box-shadow: 0 2px 6px rgba(0, 0, 0, .04);
     }
-    .table-card h2 {
-      margin: 0 0 12px;
-      font-size: 16px;
-    }
+    .table-card h2 { margin: 0 0 12px; font-size: 16px; }
 
-    .table-container {
-      width: 100%;
-      overflow-x: auto;
-    }
+    .table-container { width: 100%; overflow-x: auto; }
 
-    table {
-      width: 100%;
-      border-collapse: collapse;
-      font-size: 13px;
-    }
-    thead {
-      background: #f5f5f5;
-    }
-    th,
-    td {
+    table { width: 100%; border-collapse: collapse; font-size: 13px; }
+    thead { background: #f5f5f5; }
+    th, td {
       padding: 8px 10px;
       border-bottom: 1px solid #e9eceb;
       text-align: left;
     }
-    th {
-      font-weight: 600;
-      white-space: nowrap;
-    }
-    tbody tr:hover {
-      background: #f9fafb;
-    }
+    th { font-weight: 600; white-space: nowrap; }
+    tbody tr:hover { background: #f9fafb; }
 
-    .mensaje-estado {
-      margin-top: 10px;
-      font-size: 13px;
-      color: var(--muted);
-    }
-    .mensaje-estado.error {
-      color: #b42318;
-      font-weight: 500;
-    }
+    .mensaje-estado { margin-top: 10px; font-size: 13px; color: var(--muted); }
 
-    /* Barra de filtros/acciones */
     .toolbar {
-      display: flex;
-      gap: 8px;
-      align-items: end;
-      flex-wrap: wrap;
-      margin: 12px 0 16px;
+      display: flex; gap: 8px; align-items: end;
+      flex-wrap: wrap; margin: 12px 0 16px;
     }
     .toolbar label {
-      display: block;
-      font-size: 13px;
-      color: #374151;
-      margin-bottom: 4px;
+      display: block; font-size: 13px; color: #374151; margin-bottom: 4px;
     }
-    .toolbar input,
-    .toolbar button {
+    .toolbar input, .toolbar button {
       padding: 8px 10px;
       border: 1px solid #e5e7eb;
       border-radius: 6px;
@@ -93,43 +50,28 @@
       font-size: 13px;
       box-sizing: border-box;
     }
-    .toolbar button {
-      cursor: pointer;
-    }
+    .toolbar button { cursor: pointer; }
     .toolbar button.primary {
       background: #111;
       color: #fff;
       border-color: #111;
     }
 
-    /* Contenedor principal */
-    .wrap {
-      max-width: 1100px;
-      margin: 24px auto;
-      padding: 0 12px;
-    }
+    .wrap { max-width: 1100px; margin: 24px auto; padding: 0 12px; }
 
-    /* Paginación con estilo similar al mensaje-estado */
-    #paginacion {
-      margin-top: 10px;
-      font-size: 13px;
-      color: var(--muted);
-    }
+    #paginacion { margin-top: 10px; font-size: 13px; color: var(--muted); }
   </style>
 </head>
 <body>
   <div class="wrap">
-    <!-- Encabezado de sección -->
     <div class="header-section">
       <h1>Reporte de operaciones duplicadas</h1>
       <p>Identificá transacciones potencialmente duplicadas dentro de un rango de fechas.</p>
     </div>
 
-    <!-- Tarjeta principal -->
     <div class="table-card">
       <h2>6.1.2 Operaciones duplicadas</h2>
 
-      <!-- Filtros -->
       <div class="toolbar">
         <div>
           <label for="fInicio">Fecha inicio</label>
@@ -148,7 +90,6 @@
         </button>
       </div>
 
-      <!-- Tabla -->
       <div class="table-container">
         <table id="tablaDuplicadas">
           <thead>
@@ -161,13 +102,10 @@
               <th>Motivo</th>
             </tr>
           </thead>
-          <tbody id="grid">
-            <!-- Filas generadas por JS -->
-          </tbody>
+          <tbody id="grid"></tbody>
         </table>
       </div>
 
-      <!-- Paginación / estado -->
       <div id="paginacion" class="mensaje-estado"></div>
     </div>
   </div>
@@ -175,6 +113,7 @@
   <script src="../js/reportes/reporteDuplicadas.js"></script>
 </body>
 </html>
+
 
 
 
