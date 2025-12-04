@@ -16,6 +16,7 @@ import org.springframework.web.bind.annotation.RestController;
 
 import com.app.pagos.dto.CrearTarjetaRequest;
 import com.app.pagos.dto.EditarTarjetaRequest;
+import com.app.pagos.dto.TarjetaView;
 import com.app.pagos.dto.TarjetaViewConsulta;
 import com.app.pagos.entity.Cuenta;
 import com.app.pagos.entity.Tarjeta;
@@ -70,6 +71,16 @@ public class TarjetaController {
             return ResponseEntity.status(500).body("Error al guardar: " + e.getMessage());
         }
     }
+
+    
+   
+
+    @GetMapping("/por-usuario/{idUsuario}")
+    public List<TarjetaView> obtenerTarjetasPorUsuario(@PathVariable Integer idUsuario) {
+        return tarjetaService.obtenerTarjetasPorUsuario(idUsuario);
+    }
+
+    // 1. LISTAR (Para Consultar_Tarjetas.html y Eliminar_Tarjetas.html)
 
     // ... Mantén los métodos eliminar y actualizar como estaban, usando el servicio
     // ...
