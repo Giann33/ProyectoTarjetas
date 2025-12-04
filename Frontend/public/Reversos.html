@@ -1,197 +1,101 @@
 <!DOCTYPE html>
 <html lang="es">
+
 <head>
-  <meta charset="UTF-8" />
-  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-  <title>Dunamys – Reversos y Devoluciones</title>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>Dunamys – Reversos y Devoluciones</title>
 
-  <!-- Estilos base del proyecto -->
-  <link rel="stylesheet" href="CSS/Base.css">
-  <!-- Estilos específicos de esta página -->
-  <link rel="stylesheet" href="CSS/Reversos.css">
+    <link rel="stylesheet" href="CSS/Base.css">
 
-  <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.0/css/all.min.css">
+    <link rel="stylesheet" href="CSS/Reversos.css">
 
-  <!-- Scripts -->
-  <script src="JS/Logout.js" defer></script>
-  <script src="JS/Reversos.js" defer></script>
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.0/css/all.min.css">
+
+    <script src="JS/Reversos.js" defer></script>
+    <script src="JS/Logout.js" defer></script>
 </head>
 
 <body>
-  <div class="shell">
-    <div class="panel">
-      <!-- Sidebar -->
-      <aside class="sidebar">
-        <div class="brand-aside">Dunamys</div>
-        <ul class="nav">
-          <li><button class="nav-btn" onclick="window.location.href='Consultas.html'"><i class="fa-solid fa-house"></i><span>Consultas</span></button></li>
-          <li><button class="nav-btn" onclick="window.location.href='Mantenimientos.html'"><i class="fa-solid fa-user-pen"></i><span>Mantenimientos</span></button></li>
-          <li><button class="nav-btn" onclick="window.location.href='Reportes.html'"><i class="fa-solid fa-file-pdf"></i><span>Reportes</span></button></li>
-          <li><button class="nav-btn" onclick="window.location.href='Reversos.html'"><i class="fa-solid fa-right-left"></i><span>Reversos y Devoluciones</span></button></li>
-          <li><button class="nav-btn" onclick="window.location.href='Autorizar.html'"><i class="fa-solid fa-check"></i><span>Autorizar Transacciones</span></button></li>
-          <li><button class="nav-btn" onclick="window.location.href='Conciliar.html'"><i class="fa-solid fa-users-line"></i><span>Conciliación con Adquirentes/Emisores</span></button></li>
-          <li><button class="nav-btn" onclick="window.location.href='Notificaciones.html'"><i class="fa-solid fa-envelope"></i><span>Notificaciones y Mensajes</span></button></li>
-        </ul>
+    <div class="shell">
+        <div class="panel">
+            <aside class="sidebar">
+                <div class="brand-aside">Dunamys</div>
+                <ul class="nav">
+                    <li><button class="nav-btn" onclick="window.location.href='Consultas.html'"><i class="fa-solid fa-house"></i><span>Consultas</span></button></li>
+                    <li><button class="nav-btn" onclick="window.location.href='Mantenimientos.html'"><i class="fa-solid fa-user-pen"></i><span>Mantenimientos</span></button></li>
+                    <li><button class="nav-btn" onclick="window.location.href='Reportes.html'"><i class="fa-solid fa-file-pdf"></i><span>Reportes</span></button></li>
+                    <li><button class="nav-btn active" onclick="window.location.href='Reversos.html'"><i class="fa-solid fa-right-left"></i><span>Reversos y Devoluciones</span></button></li>
+                    <li><button class="nav-btn" onclick="window.location.href='Autorizar.html'"><i class="fa-solid fa-check"></i><span>Autorizar Transacciones</span></button></li>
+                    <li><button class="nav-btn" onclick="window.location.href='Conciliacion.html'"><i class="fa-solid fa-users-line"></i><span>Conciliación con Adquirentes/Emisores</span></button></li>
+                    <li><button class="nav-btn" onclick="window.location.href='Notificaciones.html'"><i class="fa-solid fa-envelope"></i><span>Notificaciones y Mensajes</span></button></li>
+                </ul>
 
-        <div class="subhead">Configuración</div>
-        <ul class="nav">
-          <li><button class="nav-btn"><i class="fa-solid fa-circle-question"></i><span>Ayuda</span></button></li>
-          <li><button class="nav-btn"><i class="fa-solid fa-envelope"></i><span>Contáctenos</span></button></li>
-        </ul>
-        <div class="subhead muted cerrar">
-          <button class="nav-btn" id="btn-logout"><i class="fa-solid fa-right-from-bracket"></i><span>Cerrar Sesión</span></button>
+                <div class="subhead">Configuración</div>
+                <ul class="nav">
+                    <li><button class="nav-btn"><i class="fa-solid fa-circle-question"></i><span>Ayuda</span></button></li>
+                    <li><button class="nav-btn"><i class="fa-solid fa-envelope"></i><span>Contáctenos</span></button></li>
+                </ul>
+                <div class="subhead cerrar">
+                    <button class="nav-btn" id="btn-logout"><i class="fa-solid fa-right-from-bracket"></i><span>Cerrar Sesión</span></button>
+                </div>
+            </aside>
+
+            <header class="header">
+                <div class="logo">
+                    <img src="IMG/Dunamys_Logo.png" alt="Logo Dunamys" class="logo-img">
+                    <span class="word">DUNAMYS</span>
+                </div>
+            </header>
+
+            <main class="content">
+                <div class="main-container">
+                    <h2>Gestión de Reversos</h2>
+                    <p>Herramienta para detectar transacciones duplicadas y gestionar devoluciones.</p>
+
+                    <div class="card-container">
+
+                        <div style="display: flex; justify-content: space-between; align-items: center; margin-bottom: 20px;">
+                            <div>
+                                <h3><i class="fas fa-exclamation-triangle"></i> Posibles Duplicados</h3>
+                                <p>Detecta automáticamente pagos repetidos (misma tarjeta, monto y destino).</p>
+                            </div>
+
+                            <button onclick="cargarDuplicados()" class="btn-consultar">
+                    <i class="fas fa-search"></i> Analizar Duplicados
+                </button>
+                        </div>
+
+                        <div class="table-responsive">
+                            <table>
+                                <thead>
+                                    <tr>
+                                        <th>ID Transacción</th>
+                                        <th>Fecha</th>
+                                        <th>Tarjeta</th>
+                                        <th>Monto</th>
+                                        <th>Destino</th>
+                                        <th>Estado</th>
+                                        <th>Acción</th>
+                                    </tr>
+                                </thead>
+                                <tbody id="tabla-duplicados">
+                                </tbody>
+                            </table>
+                        </div>
+
+                        <p id="mensaje-vacio" style="text-align: center; margin-top: 20px; display: none;">
+                            No se encontraron duplicados en el sistema.
+                        </p>
+
+                    </div>
+                </div>
+            </main>
         </div>
-      </aside>
 
-      <!-- Header -->
-      <header class="header">
-        <div class="logo" aria-label="Dunamys">
-          <img src="IMG/Dunamys_Logo.png" alt="Logo Dunamys" class="logo-img">
-          <span class="word">DUNAMYS</span>
-        </div>
-      </header>
-
-      <!-- ====== CONTENIDO: Reversos/Devoluciones ====== -->
-      <main class="content">
-        <div class="rev-container">
-          <h2><i class="fa-solid fa-right-left"></i> Reversos y Devoluciones</h2>
-          <p>Busca la transacción por <b>idTransaccion</b>, revisa los pagos asociados y registra reversos o devoluciones (totales o parciales).</p>
-
-          <!-- Búsqueda -->
-          <section class="card">
-            <h3><i class="fa-solid fa-magnifying-glass"></i> Buscar transacción</h3>
-            <div class="grid-3">
-              <div class="form-group">
-                <label for="idTransaccion">idTransaccion</label>
-                <input type="number" id="idTransaccion" placeholder="Ej. 10234" />
-              </div>
-              <div class="form-group">
-                <label for="fechaDesde">Desde</label>
-                <input type="date" id="fechaDesde" />
-              </div>
-              <div class="form-group">
-                <label for="fechaHasta">Hasta</label>
-                <input type="date" id="fechaHasta" />
-              </div>
-            </div>
-            <div class="actions">
-              <button class="btn-primary" id="btn-buscar"><i class="fa-solid fa-search"></i> Buscar</button>
-              <button class="btn-secondary" id="btn-limpiar"><i class="fa-solid fa-eraser"></i> Limpiar</button>
-            </div>
-          </section>
-
-          <!-- Resumen transacción -->
-          <section class="card" id="card-resumen" hidden>
-            <h3><i class="fa-solid fa-receipt"></i> Resumen de transacción</h3>
-            <div class="resumen-grid">
-              <div><span class="lbl">Transacción:</span> <strong id="r-id"></strong></div>
-              <div><span class="lbl">Fecha:</span> <strong id="r-fecha"></strong></div>
-              <div><span class="lbl">Tarjeta:</span> <strong id="r-tarjeta"></strong></div>
-              <div><span class="lbl">Emisor:</span> <strong id="r-emisor"></strong></div>
-              <div><span class="lbl">Moneda:</span> <strong id="r-moneda"></strong></div>
-              <div><span class="lbl">Monto total pagado:</span> <strong id="r-monto"></strong></div>
-            </div>
-          </section>
-
-          <!-- Pagos aplicables -->
-          <section class="card" id="card-pagos" hidden>
-            <h3><i class="fa-solid fa-credit-card"></i> Pagos asociados</h3>
-            <div class="table-responsive">
-              <table class="table" id="tablaPagos">
-                <thead>
-                  <tr>
-                    <th>#</th>
-                    <th>Pago (ID)</th>
-                    <th>Fecha</th>
-                    <th>Monto</th>
-                    <th>Moneda</th>
-                    <th>Seleccionar</th>
-                  </tr>
-                </thead>
-                <tbody><!-- JS --></tbody>
-              </table>
-            </div>
-          </section>
-
-          <!-- Form reverso/devolución -->
-          <section class="card" id="card-accion" hidden>
-            <h3><i class="fa-solid fa-arrow-rotate-left"></i> Registrar reverso / devolución</h3>
-
-            <div class="grid-2">
-              <div class="form-group">
-                <label for="tipoAccion">Tipo</label>
-                <select id="tipoAccion">
-                  <option value="reverso">Reverso</option>
-                  <option value="devolucion">Devolución</option>
-                </select>
-              </div>
-
-              <div class="form-group">
-                <label for="montoAccion">Monto a reversar/devolver</label>
-                <input type="number" id="montoAccion" placeholder="0.00" step="0.01" min="0" />
-                <small class="help">No debe exceder el total de los pagos seleccionados.</small>
-              </div>
-
-              <div class="form-group">
-                <label for="motivo">Motivo</label>
-                <select id="motivo">
-                  <option value="">Seleccione…</option>
-                  <option value="fraude_sospecha">Fraude/Sospecha</option>
-                  <option value="error_operativo">Error operativo</option>
-                  <option value="insatisfaccion">Insatisfacción del cliente</option>
-                  <option value="otros">Otros</option>
-                </select>
-              </div>
-
-              <div class="form-group">
-                <label for="observaciones">Observaciones</label>
-                <textarea id="observaciones" rows="3" placeholder="Detalle adicional…"></textarea>
-              </div>
-
-              <div class="form-group">
-                <label for="adjunto">Adjuntar evidencia (opcional)</label>
-                <input type="file" id="adjunto" accept=".pdf,.jpg,.png,.jpeg" />
-              </div>
-            </div>
-
-            <div class="actions">
-              <button class="btn-primary" id="btn-simular"><i class="fa-solid fa-calculator"></i> Simular</button>
-              <button class="btn-secondary" id="btn-generar"><i class="fa-solid fa-file-export"></i> Generar archivo</button>
-              <button class="btn-danger" id="btn-registrar"><i class="fa-solid fa-check"></i> Registrar</button>
-            </div>
-
-            <div id="simulacion" class="simulacion" hidden>
-              <div><span class="lbl">Total pagos seleccionados:</span> <strong id="s-total"></strong></div>
-              <div><span class="lbl">Monto a reversar/devolver:</span> <strong id="s-monto"></strong></div>
-              <div><span class="lbl">Restante:</span> <strong id="s-restante"></strong></div>
-            </div>
-          </section>
-
-          <!-- Bitácora local (vista rápida) -->
-          <section class="card" id="card-bitacora" hidden>
-            <h3><i class="fa-solid fa-book"></i> Últimos reversos/devoluciones</h3>
-            <div class="table-responsive">
-              <table class="table" id="tablaBitacora">
-                <thead>
-                  <tr>
-                    <th>Fecha</th>
-                    <th>Transacción</th>
-                    <th>Tipo</th>
-                    <th>Monto</th>
-                    <th>Motivo</th>
-                    <th>Estado</th>
-                  </tr>
-                </thead>
-                <tbody><!-- JS --></tbody>
-              </table>
-            </div>
-          </section>
-        </div>
-      </main>
-      <!-- ====== /CONTENIDO ====== -->
+        <footer class="foot">Dunamys</footer>
     </div>
 
-    <footer class="foot">Dunamys</footer>
-  </div>
 </body>
+
 </html>

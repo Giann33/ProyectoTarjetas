@@ -1,11 +1,15 @@
 package com.app.pagos.dto;
 
-public class TarjetaView {
+import lombok.Data; // Si usas Lombok
+// Si no usas Lombok, genera los Getters y Setters abajo
 
+@Data
+public class TarjetaView {
     private Integer idTarjeta;
     private String numeroEnmascarado;
     private String tipo;
 
+    // Getters y Setters manuales si no usas @Data
     public Integer getIdTarjeta() {
         return idTarjeta;
     }

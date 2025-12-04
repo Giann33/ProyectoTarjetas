@@ -1,57 +1,207 @@
-/* Contenedor */
-.rev-container {
-  max-width: 1100px;
-  margin: 30px auto;
-  padding: 24px 28px;
-  background: #fff;
-  border-radius: 8px;
-  box-shadow: 0 3px 10px rgba(0,0,0,.08);
+/* =========================================
+   VARIABLES DE DISEÑO (TEMA CLARO / LIGHT)
+   ========================================= */
+
+:root {
+    --bg-main: #f4f6f9;
+    /* Fondo gris muy suave (para diferenciarlo del blanco) */
+    --bg-card: #ffffff;
+    /* Fondo blanco puro para las tarjetas */
+    --text-primary: #333333;
+    /* Texto principal oscuro (casi negro) */
+    --text-secondary: #6c757d;
+    /* Gris medio para subtítulos */
+    --brand-color: #00a65a;
+    /* Tu verde corporativo (se mantiene) */
+    --brand-hover: #008d4c;
+    /* Verde un poco más oscuro para hover */
+    --border-color: #dee2e6;
+    /* Bordes gris claro */
+    --shadow-card: 0 0 15px rgba(0, 0, 0, 0.05);
+    /* Sombra muy suave y elegante */
+    --radius: 8px;
+    /* Bordes ligeramente redondeados */
 }
-.rev-container h2 {
-  text-align: center;
-  color: #0a5f4e;
-  margin: 0 0 12px;
+
+
+/* =========================================
+   ESTRUCTURA GENERAL
+   ========================================= */
+
+body {
+    background-color: var(--bg-main) !important;
+    color: var(--text-primary) !important;
+    font-family: 'Segoe UI', system-ui, -apple-system, sans-serif;
 }
-.rev-container p {
-  text-align: center;
-  color: #444;
-  margin: 0 0 18px;
+
+
+/* Títulos */
+
+h1 {
+    font-size: 1.8rem;
+    font-weight: 700;
+    margin-bottom: 1.5rem;
+    color: #1f2937;
+    /* Un gris muy oscuro, casi negro */
+    border-left: 5px solid var(--brand-color);
+    padding-left: 15px;
 }
 
-/* Tarjetas / formularios */
-.card { background: #f9f9f9; padding: 18px 22px; border-radius: 8px; margin-bottom: 18px; box-shadow: 0 0 0 1px rgba(0,0,0,.05) inset; }
-.card h3 { margin: 0 0 10px; color: #0d755f; font-size: 16px; display:flex; align-items:center; gap:8px; }
-
-.grid-2 { display:grid; grid-template-columns: repeat(auto-fit, minmax(240px,1fr)); gap: 14px; }
-.grid-3 { display:grid; grid-template-columns: repeat(auto-fit, minmax(200px,1fr)); gap: 14px; }
-
-.form-group { display:flex; flex-direction:column; }
-.form-group label { font-size: 14px; margin-bottom: 6px; color:#333; }
-.form-group input, .form-group select, .form-group textarea {
-  padding:10px; font-size:14px; border:1px solid #ccc; border-radius:6px; background:#fff; transition:border-color .2s;
+h3 {
+    color: var(--brand-color);
+    font-size: 1.25rem;
+    margin-bottom: 5px;
+    font-weight: 600;
 }
-.form-group input:focus, .form-group select:focus, .form-group textarea:focus { border-color:#0d755f; outline:none; }
-.help { color:#666; font-size:12px; }
 
-/* Botones */
-.actions { display:flex; justify-content:center; gap:12px; flex-wrap:wrap; margin-top: 12px; }
-.btn-primary { background:#0d755f; color:#fff; border:0; padding:10px 16px; border-radius:6px; cursor:pointer; font-weight:600; }
-.btn-primary:hover { background:#0a5f4e; }
-.btn-secondary { background:#e9eceb; color:#333; border:1px solid #ccc; padding:10px 16px; border-radius:6px; cursor:pointer; }
-.btn-secondary:hover { background:#d8d8d8; }
-.btn-danger { background:#c0392b; color:#fff; border:0; padding:10px 16px; border-radius:6px; cursor:pointer; }
-.btn-danger:hover { filter:brightness(0.95); }
+p {
+    color: var(--text-secondary);
+    font-size: 0.95rem;
+    line-height: 1.5;
+}
 
-/* Tabla */
-.table-responsive { overflow-x:auto; }
-.table { width:100%; border-collapse:collapse; background:#fff; }
-.table th, .table td { border:1px solid #ddd; padding:10px 12px; text-align:center; font-size:14px; }
-.table th { background:#0d755f; color:#fff; font-weight:600; }
-.table tr:nth-child(even) { background:#f9f9f9; }
-.table tr:hover { background:#eef8f6; }
 
-/* Resumen y simulación */
-.resumen-grid { display:grid; grid-template-columns: repeat(auto-fit, minmax(240px, 1fr)); gap:10px; }
-.lbl { color:#555; }
+/* =========================================
+   CONTENEDOR TIPO TARJETA (CARD)
+   ========================================= */
 
-.simulacion { margin-top: 10px; background:#f3f8f7; border-left:4px solid #0d755f; padding:10px 12px; border-radius:4px; }
+.card-container {
+    background-color: var(--bg-card);
+    border-radius: var(--radius);
+    padding: 30px;
+    box-shadow: var(--shadow-card);
+    border-top: 3px solid var(--brand-color);
+    /* Detalle elegante arriba */
+    margin-top: 20px;
+    animation: fadeIn 0.4s ease-out;
+}
+
+@keyframes fadeIn {
+    from {
+        opacity: 0;
+        transform: translateY(10px);
+    }
+    to {
+        opacity: 1;
+        transform: translateY(0);
+    }
+}
+
+
+/* =========================================
+   TABLA MODERNA (ESTILO CLARO)
+   ========================================= */
+
+.table-responsive {
+    margin-top: 25px;
+    border-radius: var(--radius);
+    overflow: hidden;
+    border: 1px solid var(--border-color);
+}
+
+table {
+    width: 100%;
+    border-collapse: collapse;
+    background-color: var(--bg-card);
+}
+
+thead {
+    background-color: #f8f9fa;
+    /* Fondo gris muy clarito para el encabezado */
+}
+
+th {
+    padding: 16px;
+    text-align: left;
+    color: #495057;
+    /* Texto gris oscuro */
+    font-weight: 700;
+    text-transform: uppercase;
+    font-size: 0.75rem;
+    letter-spacing: 0.5px;
+    border-bottom: 2px solid var(--border-color);
+}
+
+td {
+    padding: 16px;
+    border-bottom: 1px solid var(--border-color);
+    color: var(--text-primary);
+    vertical-align: middle;
+    font-size: 0.95rem;
+}
+
+
+/* Efecto Hover en las filas */
+
+tbody tr {
+    transition: background-color 0.2s ease;
+}
+
+tbody tr:hover {
+    background-color: #f1f3f5;
+    /* Gris muy suave al pasar el mouse */
+}
+
+
+/* =========================================
+   BOTONES
+   ========================================= */
+
+
+/* Botón Grande de Buscar */
+
+.btn-consultar {
+    background-color: var(--brand-color);
+    color: white;
+    padding: 10px 24px;
+    border: none;
+    border-radius: 5px;
+    font-weight: 600;
+    cursor: pointer;
+    box-shadow: 0 2px 4px rgba(0, 0, 0, 0.1);
+    transition: all 0.2s;
+    display: inline-flex;
+    align-items: center;
+    gap: 8px;
+    font-size: 0.95rem;
+}
+
+.btn-consultar:hover {
+    background-color: var(--brand-hover);
+    transform: translateY(-1px);
+    box-shadow: 0 4px 8px rgba(0, 0, 0, 0.15);
+}
+
+
+/* Botón Pequeño de Reversar */
+
+.btn-reversar {
+    background-color: white;
+    border: 1px solid #dc3545;
+    /* Rojo estándar */
+    color: #dc3545;
+    padding: 6px 14px;
+    border-radius: 50px;
+    /* Estilo píldora */
+    font-size: 0.8rem;
+    font-weight: 600;
+    cursor: pointer;
+    transition: all 0.2s;
+}
+
+.btn-reversar:hover {
+    background-color: #dc3545;
+    color: white;
+    box-shadow: 0 2px 5px rgba(220, 53, 69, 0.3);
+}
+
+
+/* Mensaje de vacío */
+
+#mensaje-vacio {
+    padding: 20px;
+    background-color: #f8f9fa;
+    border-radius: var(--radius);
+    border: 1px dashed var(--border-color);
+    color: var(--text-secondary);
+}

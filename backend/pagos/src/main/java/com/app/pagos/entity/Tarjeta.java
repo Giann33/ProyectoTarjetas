@@ -21,9 +21,10 @@ public class Tarjeta {
     @Column(name = "Numero_Tarjeta")
     private String numeroTarjeta;
 
-    // Lo cambiamos a String para guardar "12/28" sin problemas de conversión
+    // --- CAMBIO CLAVE: Ahora es String ---
     @Column(name = "Fecha_Expiracion")
     private String fechaExpiracion;
+    // -------------------------------------
 
     @Column(name = "CVV")
     private String cvv;
@@ -31,27 +32,20 @@ public class Tarjeta {
     @Column(name = "PIN")
     private String pin;
 
-    @Column(name = "Activo")
-    private Integer activo; // Usamos Integer (1 o 0) para mayor compatibilidad con MySQL
-
-    
-
-    // --- RELACIONES (Usamos IDs directos para evitar errores complejos) ---
-
-@ManyToOne
-@JoinColumn(name = "Cuenta_idCuenta") // así se llama en la BD
-private Cuenta cuenta;
+    @Column(name = "idEmisor")
+    private Integer idEmisor;
 
     @Column(name = "idTipoTarjeta")
     private Integer idTipoTarjeta;
 
-    @Column(name = "idEmisor")
-    private Integer idEmisor;
+    @Column(name = "Activo")
+    private Integer activo;
 
-    // ==========================================
-    // GETTERS Y SETTERS (Necesarios sin Lombok)
-    // ==========================================
+    @ManyToOne
+    @JoinColumn(name = "Cuenta_idCuenta")
+    private Cuenta cuenta;
 
+    // --- GETTERS Y SETTERS (Obligatorios para que el Controller funcione) ---
     public Integer getIdTarjeta() {
         return idTarjeta;
     }
@@ -68,6 +62,7 @@ private Cuenta cuenta;
         this.numeroTarjeta = numeroTarjeta;
     }
 
+    // Getter y Setter de Fecha como String
     public String getFechaExpiracion() {
         return fechaExpiracion;
     }
@@ -92,6 +87,22 @@ private Cuenta cuenta;
         this.pin = pin;
     }
 
+    public Integer getIdEmisor() {
+        return idEmisor;
+    }
+
+    public void setIdEmisor(Integer idEmisor) {
+        this.idEmisor = idEmisor;
+    }
+
+    public Integer getIdTipoTarjeta() {
+        return idTipoTarjeta;
+    }
+
+    public void setIdTipoTarjeta(Integer idTipoTarjeta) {
+        this.idTipoTarjeta = idTipoTarjeta;
+    }
+
     public Integer getActivo() {
         return activo;
     }
@@ -103,25 +114,8 @@ private Cuenta cuenta;
     public Cuenta getCuenta() {
         return cuenta;
     }
+
     public void setCuenta(Cuenta cuenta) {
         this.cuenta = cuenta;
     }
-
-    public Integer getIdTipoTarjeta() {
-        return idTipoTarjeta;
-    }
-
-    public void setIdTipoTarjeta(Integer idTipoTarjeta) {
-        this.idTipoTarjeta = idTipoTarjeta;
-    }
-
-    public Integer getIdEmisor() {
-        return idEmisor;
-    }
-
-    public void setIdEmisor(Integer idEmisor) {
-        this.idEmisor = idEmisor;
-    }
-
-    
 }

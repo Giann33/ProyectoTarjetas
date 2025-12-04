@@ -16,7 +16,6 @@ import org.springframework.web.bind.annotation.RestController;
 
 import com.app.pagos.dto.CrearTarjetaRequest;
 import com.app.pagos.dto.EditarTarjetaRequest;
-import com.app.pagos.dto.TarjetaView;
 import com.app.pagos.dto.TarjetaViewConsulta;
 import com.app.pagos.entity.Cuenta;
 import com.app.pagos.entity.Tarjeta;
@@ -26,87 +25,74 @@ import com.app.pagos.service.TarjetaService;
 
 @RestController
 @RequestMapping("/api/tarjetas")
-@CrossOrigin(origins = "*") // Permite que el HTML lea los datos
+@CrossOrigin(origins = "*")
 public class TarjetaController {
 
     @Autowired
     private TarjetaRepository tarjetaRepository;
-
-     @Autowired
+    @Autowired
+    private CuentaRepository cuentaRepository;
+    @Autowired
     private TarjetaService tarjetaService;
 
-    @Autowired
-private CuentaRepository cuentaRepository;
-
-    @GetMapping("/por-usuario/{idUsuario}")
-    public List<TarjetaView> obtenerTarjetasPorUsuario(@PathVariable Integer idUsuario) {
-        return tarjetaService.obtenerTarjetasPorUsuario(idUsuario);
+    @GetMapping
+    public List<TarjetaViewConsulta> listar() {
+        return tarjetaService.listarTodas();
     }
 
-    // 1. LISTAR (Para Consultar_Tarjetas.html y Eliminar_Tarjetas.html)
-    
-@GetMapping
-public List<TarjetaViewConsulta> listar() {
-    return tarjetaService.listarTodas();
-}
-    
-
-    // 2. GUARDAR (Para Agregar_Tarjeta.html)
     @PostMapping
-public ResponseEntity<?> guardar(@RequestBody CrearTarjetaRequest req) {
-    try {
-        Tarjeta tarjeta = new Tarjeta();
-
-        tarjeta.setNumeroTarjeta(req.getNumeroTarjeta());
-        tarjeta.setFechaExpiracion(req.getFechaExpiracion());
-        tarjeta.setCvv(req.getCvv());
-        tarjeta.setPin(req.getPin());
-        tarjeta.setIdEmisor(req.getIdEmisor());
-        tarjeta.setIdTipoTarjeta(req.getIdTipoTarjeta());
-        tarjeta.setActivo(1);  // nueva tarjeta siempre activa
-
-        // Asignar la cuenta
-        Cuenta cuenta = cuentaRepository.findById(req.getIdCuenta())
-                .orElseThrow(() -> new RuntimeException(
-                        "No existe la cuenta con id " + req.getIdCuenta()));
-        tarjeta.setCuenta(cuenta);
-
-        Tarjeta guardada = tarjetaRepository.save(tarjeta);
-
-        // 🔹 devolvemos un DTO, no la entidad
-        TarjetaViewConsulta view = TarjetaViewConsulta.from(guardada);
-        return ResponseEntity.ok(view);
-
-    } catch (Exception e) {
-        return ResponseEntity.status(500)
-                .body("Error al guardar: " + e.getMessage());
-    }
-}
-
-
-    // 3. ELIMINAR (Corregido)
-    @DeleteMapping("/{id}")
-    public ResponseEntity<?> eliminar(@PathVariable Integer id) {
+    public ResponseEntity<?> guardar(@RequestBody CrearTarjetaRequest req) {
         try {
-            // CORRECCIÓN: Quitamos "Long.valueOf" y pasamos "id" directo
-            if (!tarjetaRepository.existsById(id)) {
-                return ResponseEntity.notFound().build();
-            }
-            tarjetaRepository.deleteById(id);
+            Tarjeta tarjeta = new Tarjeta();
+            tarjeta.setNumeroTarjeta(req.getNumeroTarjeta());
 
-            return ResponseEntity.ok().body("{\"message\": \"Tarjeta eliminada\"}");
+            // --- CAMBIO: Guardamos el String directo (ej: "12/28") ---
+            tarjeta.setFechaExpiracion(req.getFechaExpiracion());
+            // ---------------------------------------------------------
+
+            tarjeta.setCvv(req.getCvv());
+            tarjeta.setPin(req.getPin());
+            tarjeta.setIdEmisor(req.getIdEmisor());
+            tarjeta.setIdTipoTarjeta(req.getIdTipoTarjeta());
+            tarjeta.setActivo(1);
+
+            if (req.getIdCuenta() != null) {
+                Cuenta cuenta = cuentaRepository.findById(req.getIdCuenta())
+                        .orElseThrow(() -> new RuntimeException("Cuenta no encontrada"));
+                tarjeta.setCuenta(cuenta);
+            }
+
+            Tarjeta guardada = tarjetaRepository.save(tarjeta);
+            return ResponseEntity.ok(TarjetaViewConsulta.from(guardada));
+
         } catch (Exception e) {
-            return ResponseEntity.status(500).body("Error al eliminar: " + e.getMessage());
+            e.printStackTrace();
+            return ResponseEntity.status(500).body("Error al guardar: " + e.getMessage());
         }
     }
 
-    // 4. ACTUALIZAR (Para Editar_Tarjeta.html)
-    @PutMapping("/{id}")
-    public ResponseEntity<TarjetaViewConsulta> actualizar(
-            @PathVariable Integer id,
-            @RequestBody EditarTarjetaRequest req) {
+    // ... Mantén los métodos eliminar y actualizar como estaban, usando el servicio
+    // ...
 
-        TarjetaViewConsulta view = tarjetaService.actualizarTarjeta(id, req);
-        return ResponseEntity.ok(view);
+    @DeleteMapping("/{id}")
+    public ResponseEntity<?> eliminar(@PathVariable Integer id) {
+        try {
+            if (!tarjetaRepository.existsById(id))
+                return ResponseEntity.notFound().build();
+            tarjetaRepository.deleteById(id);
+            return ResponseEntity.ok().body("{\"message\": \"Tarjeta eliminada\"}");
+        } catch (Exception e) {
+            return ResponseEntity.status(500).body("Error: " + e.getMessage());
+        }
+    }
+
+    @PutMapping("/{id}")
+    public ResponseEntity<?> actualizar(@PathVariable Integer id, @RequestBody EditarTarjetaRequest req) {
+        try {
+            TarjetaViewConsulta view = tarjetaService.actualizarTarjeta(id, req);
+            return ResponseEntity.ok(view);
+        } catch (Exception e) {
+            return ResponseEntity.status(500).body("Error: " + e.getMessage());
+        }
     }
 }
