@@ -2,136 +2,248 @@
 <html lang="es">
 
 <head>
-  <meta charset="UTF-8" />
-  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-  <title>Dunamys – Editar Cuentas</title>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>Dunamys – Consultar Cuentas</title>
 
-  <!-- Estilos base del proyecto -->
-  <link rel="stylesheet" href="CSS/Base.css">
-  <!-- Estilos específicos de Editar Cuentas -->
-  <link rel="stylesheet" href="CSS/Editar_Cuentas.css">
-<link rel="stylesheet" href="CSS/Consultar_Cuentas.css">
-  <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.0/css/all.min.css">
+    <link rel="stylesheet" href="CSS/Base.css">
+    <link rel="stylesheet" href="CSS/Consultar_Cuentas.css">
+    <link rel="stylesheet" href="CSS/Editar_Cuentas.css">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.0/css/all.min.css">
 
-  <!-- JS específico para esta pantalla -->
-  <script src="JS/Consultar_Cuentas.js" defer></script>
-  <script src="JS/Logout.js" defer></script>
+    <script src="JS/Consultar_Cuentas.js" defer></script>
+    <script src="JS/Logout.js" defer></script>
+
+    <style>
+        body {
+            overflow-x: hidden;
+        }
+        
+        .panel {
+            width: auto !important;
+            display: flex !important;
+            flex-direction: column;
+            position: relative;
+            z-index: 1;
+        }
+        /* Ajuste para centrar el main-container sin conflicto */
+        
+        .main-container {
+            max-width: 1200px;
+            margin: 0 auto;
+            width: 100%;
+            padding: 20px 0;
+        }
+    </style>
 </head>
 
 <body>
-  <div class="shell">
-    <div class="panel">
-      <!-- Sidebar -->
-      <aside class="sidebar">
-        <div class="brand-aside">Dunamys</div>
-        <ul class="nav">
-          <li><button class="nav-btn" onclick="window.location.href='Consultas.html'"><i class="fa-solid fa-house"></i><span>Consultas</span></button></li>
-          <li><button class="nav-btn" onclick="window.location.href='Mantenimientos.html'"><i class="fa-solid fa-user-pen"></i><span>Mantenimientos</span></button></li>
-          <li><button class="nav-btn" onclick="window.location.href='Reportes.html'"><i class="fa-solid fa-file-pdf"></i><span>Reportes</span></button></li>
-          <li><button class="nav-btn" onclick="window.location.href='Reversos.html'"><i class="fa-solid fa-right-left"></i><span>Reversos y Devoluciones</span></button></li>
-          <li><button class="nav-btn" onclick="window.location.href='Autorizar.html'"><i class="fa-solid fa-check"></i><span>Autorizar Transacciones</span></button></li>
-          <li><button class="nav-btn" onclick="window.location.href='Conciliacion.html'"><i class="fa-solid fa-users-line"></i><span>Conciliación con Adquirentes/Emisores</span></button></li>
-          <li><button class="nav-btn" onclick="window.location.href='Notificaciones.html'"><i class="fa-solid fa-envelope"></i><span>Notificaciones y Mensajes</span></button></li>
-        </ul>
+    <button class="mobile-menu-btn" onclick="toggleMobileMenu()">
+        <i class="fas fa-bars"></i>
+    </button>
 
-        <div class="subhead">Configuración</div>
-        <ul class="nav">
-          <li><button class="nav-btn"><i class="fa-solid fa-circle-question"></i><span>Ayuda</span></button></li>
-          <li><button class="nav-btn"><i class="fa-solid fa-envelope"></i><span>Contáctenos</span></button></li>
-        </ul>
-        <div class="subhead cerrar">
-          <button class="nav-btn" id="btn-logout"><i class="fa-solid fa-right-from-bracket"></i><span>Cerrar Sesión</span></button>
+    <aside class="sidebar" id="sidebar">
+        <div class="sidebar-header">
+            <a href="Inicio_Dunamys.html" class="brand">
+                <i class="fas fa-layer-group"></i> <span>DUNAMYS</span>
+            </a>
+            <button class="toggle-btn" id="toggleBtn" onclick="toggleSidebar()">
+                <i class="fas fa-chevron-left"></i>
+            </button>
         </div>
-      </aside>
 
-      <!-- Header -->
-      <header class="header">
-        <div class="logo">
-          <img src="IMG/Dunamys_Logo.png" alt="Logo Dunamys" class="logo-img">
-          <span class="word">DUNAMYS</span>
-        </div>
-      </header>
+        <nav class="nav-links">
+            <a href="Inicio_Dunamys.html" class="nav-item">
+                <i class="fas fa-home"></i> <span>Inicio</span>
+            </a>
 
-      <!-- Contenido principal -->
-      
+            <a href="Consultas.html" class="nav-item">
+                <i class="fas fa-search"></i> <span>Consultas</span>
+            </a>
+
+            <a href="Mantenimientos.html" class="nav-item">
+                <i class="fas fa-user-edit"></i> <span>Mantenimientos</span>
+            </a>
+
+            <a href="Reportes.html" class="nav-item">
+                <i class="fas fa-file-invoice"></i> <span>Reportes</span>
+            </a>
+
+            <a href="Reversos.html" class="nav-item">
+                <i class="fas fa-exchange-alt"></i> <span>Reversos y Devoluciones</span>
+            </a>
+
+            <a href="Autorizar.html" class="nav-item">
+                <i class="fas fa-check-circle"></i> <span>Autorizar Transacciones</span>
+            </a>
+
+            <a href="Conciliar.html" class="nav-item">
+                <i class="fas fa-users"></i> <span>Conciliación</span>
+            </a>
+
+            <a href="Notificaciones.html" class="nav-item">
+                <i class="fas fa-envelope"></i> <span>Notificaciones</span>
+            </a>
+
+            <div class="separator-line"></div>
+            <div class="section-label">Configuración</div>
+
+            <a href="Ayuda.html" class="nav-item">
+                <i class="fas fa-question-circle"></i> <span>Ayuda</span>
+            </a>
+
+            <a href="Contactenos.html" class="nav-item">
+                <i class="fas fa-envelope-open-text"></i> <span>Contáctenos</span>
+            </a>
+
+            <div style="margin-top: auto;">
+                <div class="separator-line"></div>
+                <a href="Login.html" class="nav-item" id="btn-logout">
+                    <i class="fas fa-sign-out-alt"></i> <span>Cerrar Sesión</span>
+                </a>
+            </div>
+        </nav>
+    </aside>
+
+    <div class="panel" id="mainContent">
+
+        <header class="header">
+            <div class="logo">
+                <img src="IMG/Dunamys_Logo.png" alt="Logo Dunamys" class="logo-img">
+            </div>
+        </header>
+
         <main class="content">
-          <div class="main-container">
-            <h2>Consultar Cuentas</h2>
-            <p>Consulta la información del usuario y las cuentas asociadas a su idUsuario.</p>
+            <div class="main-container">
+                <h2>Consultar Cuentas</h2>
+                <p>Consulta la información del usuario y las cuentas asociadas a su idUsuario.</p>
 
-            <!-- Panel administrador (idéntico al de Editar_Cuentas) -->
-            <section id="admin-panel" class="admin-panel hidden">
-              <h3><i class="fa-solid fa-user-gear"></i> Modo administrador</h3>
-              <p>Selecciona manualmente el <b>idUsuario</b> para consultar sus cuentas.</p>
-              <div class="admin-panel-row">
-                <label for="adminUserId">idUsuario:</label>
-                <input type="number" id="adminUserId" placeholder="Ej. 5" min="1" />
-                <button type="button" id="btn-admin-cargar" class="btn-primary btn-admin">
-                  <i class="fa-solid fa-magnifying-glass"></i> Cargar cuentas
-                </button>
-              </div>
-              <p class="admin-help">
-                Si no indicas ningún idUsuario se usarán los datos del usuario en sesión.
-              </p>
-            </section>
+                <section id="admin-panel" class="admin-panel hidden">
+                    <h3><i class="fa-solid fa-user-gear"></i> Modo administrador</h3>
+                    <p>Selecciona manualmente el <b>idUsuario</b> para consultar sus cuentas.</p>
+                    <div class="admin-panel-row">
+                        <label for="adminUserId">idUsuario:</label>
+                        <input type="number" id="adminUserId" placeholder="Ej. 5" min="1" />
+                        <button type="button" id="btn-admin-cargar" class="btn-primary btn-admin">
+                            <i class="fa-solid fa-magnifying-glass"></i> Cargar cuentas
+                        </button>
+                    </div>
+                    <p class="admin-help">
+                        Si no indicas ningún idUsuario se usarán los datos del usuario en sesión.
+                    </p>
+                </section>
 
-            <!-- Información del usuario/persona -->
-            <section class="user-info-section user-card">
-  <h3 class="user-title">Información del usuario</h3>
+                <section class="user-info-section user-card">
+                    <h3 class="user-title">Información del usuario</h3>
 
-  <div class="user-grid">
-    <div class="user-item">
-      <label>ID Usuario</label>
-      <span id="info-idUsuario">—</span>
-    </div>
+                    <div class="user-grid">
+                        <div class="user-item">
+                            <label>ID Usuario</label>
+                            <span id="info-idUsuario">—</span>
+                        </div>
 
-    <div class="user-item">
-      <label>Nombre</label>
-      <span id="info-nombre">—</span>
-    </div>
+                        <div class="user-item">
+                            <label>Nombre</label>
+                            <span id="info-nombre">—</span>
+                        </div>
 
-    <div class="user-item">
-      <label>Apellidos</label>
-      <span id="info-apellido1">—</span>
-    </div>
+                        <div class="user-item">
+                            <label>Apellidos</label>
+                            <span id="info-apellido1">—</span>
+                        </div>
 
-    <div class="user-item">
-      <label>Correo</label>
-      <span id="info-correo">—</span>
-    </div>
+                        <div class="user-item">
+                            <label>Correo</label>
+                            <span id="info-correo">—</span>
+                        </div>
 
-    <div class="user-item">
-      <label>Género</label>
-      <span id="info-genero">—</span>
-    </div>
+                        <div class="user-item">
+                            <label>Género</label>
+                            <span id="info-genero">—</span>
+                        </div>
 
-    <div class="user-item">
-      <label>Rol</label>
-      <span id="info-rol">—</span>
-    </div>
-  </div>
-</section>
+                        <div class="user-item">
+                            <label>Rol</label>
+                            <span id="info-rol">—</span>
+                        </div>
+                    </div>
+                </section>
 
-            <!-- Listado dinámico de cuentas (solo lectura) -->
-            <section class="accounts-section">
-              <h3>Mis cuentas</h3>
-              <div id="cuentas-container" class="cuentas-grid">
-                <!-- Aquí se crean las tarjetas de cuentas con JS -->
-              </div>
+                <section class="accounts-section">
+                    <h3>Mis cuentas</h3>
+                    <div id="cuentas-container" class="cuentas-grid">
+                    </div>
 
-              <!-- Mensaje cuando no hay cuentas -->
-              <p id="sin-cuentas-msg" class="sin-cuentas hidden">
-                No se encontraron cuentas asociadas al usuario.
-              </p>
-            </section>
+                    <p id="sin-cuentas-msg" class="sin-cuentas hidden">
+                        No se encontraron cuentas asociadas al usuario.
+                    </p>
+                </section>
 
-          </div>
+            </div>
         </main>
+
+        <footer class="foot">Dunamys</footer>
     </div>
 
-    <footer class="foot">Dunamys</footer>
-  </div>
+    <script>
+        // 1. LOGICA DEL MENU
+        const sidebar = document.getElementById('sidebar');
+        const mainContent = document.getElementById('mainContent');
+        const toggleBtnIcon = document.querySelector('#toggleBtn i');
 
+        function toggleSidebar() {
+            sidebar.classList.toggle('collapsed');
+            if (mainContent) {
+                mainContent.classList.toggle('expanded');
+            }
+
+            if (sidebar.classList.contains('collapsed')) {
+                toggleBtnIcon.classList.remove('fa-chevron-left');
+                toggleBtnIcon.classList.add('fa-chevron-right');
+            } else {
+                toggleBtnIcon.classList.remove('fa-chevron-right');
+                toggleBtnIcon.classList.add('fa-chevron-left');
+            }
+        }
+
+        function toggleMobileMenu() {
+            sidebar.classList.toggle('active');
+        }
+
+        document.addEventListener('click', (e) => {
+            const mobileBtn = document.querySelector('.mobile-menu-btn');
+            if (window.innerWidth <= 768 && sidebar.classList.contains('active')) {
+                if (!sidebar.contains(e.target) && !mobileBtn.contains(e.target)) {
+                    sidebar.classList.remove('active');
+                }
+            }
+        });
+
+        // 2. DETECCIÓN AUTOMÁTICA DE PÁGINA
+        document.addEventListener("DOMContentLoaded", function() {
+            const currentLocation = window.location.pathname;
+            const navLinks = document.querySelectorAll('.nav-item');
+
+            navLinks.forEach(link => {
+                // Comprobación más estricta para asegurar que "Consultas" sea activo solo en la página Consultas.html
+                const linkHref = link.getAttribute('href');
+
+                // Si el href es Consultas.html (o el nombre del archivo actual)
+                if (linkHref && currentLocation.includes(linkHref) && linkHref.length > 1) {
+                    // Si el archivo es Consultas.html, lo activa
+                    if (linkHref.includes("Consultas.html")) {
+                        link.classList.add('active-page');
+                    }
+                    // Si el archivo es Mantenimientos.html, lo activa, etc.
+                    else if (linkHref.includes("Mantenimientos.html")) {
+                        // Nota: Este archivo parece ser de Mantenimiento/Consulta, así que podría necesitar un ajuste manual
+                        // Sin embargo, basándonos en la URL, si la URL incluye 'Mantenimientos', se activará ese.
+                        link.classList.add('active-page');
+                    }
+                }
+            });
+        });
+    </script>
 </body>
 
 </html>

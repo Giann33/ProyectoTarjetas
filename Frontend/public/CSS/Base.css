@@ -1,16 +1,20 @@
 :root {
+    /* --- COLORES ORIGINALES --- */
     --green-900: #0a5f4e;
-    /* barra lateral */
+    /* Tu color principal */
     --green-700: #0d755f;
-    /* borde exterior */
     --panel: #ffffff;
-    /* panel blanco */
     --ink: #222;
     --muted: #6c6c6c;
     --frame: #6e6769;
-    /* marco gris tarjetas */
     --line: #0b0b0b;
-    /* línea negra interna */
+    /* --- NUEVAS VARIABLES PARA SIDEBAR --- */
+    --white: #ffffff;
+    --brand-light: #e6f7f4;
+    --sidebar-width: 280px;
+    --sidebar-width-collapsed: 70px;
+    /* Ancho cuando se cierra */
+    --transition-speed: 0.3s;
 }
 
 * {
@@ -25,306 +29,340 @@ body {
 body {
     margin: 0;
     font-family: system-ui, -apple-system, Segoe UI, Roboto, Helvetica, Arial;
-    background: var(--green-700);
-    /* borde verde exterior (como la captura) */
+    background: #f4f6f8;
+    /* Fondo suave para el dashboard */
     color: var(--ink);
+    overflow-x: hidden;
+    /* Evita scroll horizontal al animar */
 }
 
 
-/* Contenedor general: panel blanco centrado con sidebar */
+/* =========================================
+   SIDEBAR (BARRA LATERAL) - NUEVA LÓGICA
+   ========================================= */
 
-.shell {
-    min-height: 100vh;
-    display: grid;
-    grid-template-columns: 1fr;
-    grid-template-rows: auto 1fr auto;
-}
-
-
-/* Panel blanco con grid interno (sidebar + contenido) */
-
-.panel {
-    margin: 0;
-    /* elimina el borde verde alrededor */
-    width: 100vw;
-    /* ancho total de la ventana */
+.sidebar {
+    width: var(--sidebar-width);
+    background: var(--green-900);
+    color: #e8fffa;
+    display: flex;
+    flex-direction: column;
+    padding: 12px;
+    position: fixed;
+    /* Fija para que el contenido se mueva independiente */
     height: 100vh;
-    /* alto total de la ventana */
-    background: var(--panel);
-    border-radius: 0;
-    /* esquinas cuadradas */
-    display: grid;
-    grid-template-columns: 240px 1fr;
-    grid-template-rows: 72px 1fr;
+    z-index: 1000;
+    left: 0;
+    top: 0;
+    transition: width var(--transition-speed) ease;
+    box-shadow: 4px 0 10px rgba(0, 0, 0, 0.1);
+    white-space: nowrap;
+    /* Evita que el texto salte al encoger */
     overflow: hidden;
 }
 
 
-/* Sidebar */
+/* Estado Colapsado (Clase agregada por JS) */
 
-.sidebar{
-  grid-row: 1 / -1;
-  background: var(--green-900);
-  color: #e8fffa;
-  padding: 14px 12px;
-  display: flex;
-  flex-direction: column;
-  justify-content: space-between; /* mover elementos (brand / nav / cerrar) */
+.sidebar.collapsed {
+    width: var(--sidebar-width-collapsed);
 }
 
-.brand-aside{
-  font-weight: 700;
-  font-size: 14px;
-  letter-spacing: .3px;
-  padding: 8px 8px 12px;
+
+/* Cabecera del Sidebar */
+
+.sidebar-header {
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    margin-bottom: 1.5rem;
+    padding: 0 5px;
+    min-height: 50px;
 }
 
-.nav{ list-style: none; margin: 8px 0 0; padding: 0; }
-
-.nav li {
-  margin: 4px 0;
+.brand {
+    font-weight: 700;
+    font-size: 16px;
+    letter-spacing: .5px;
+    color: var(--white);
+    text-decoration: none;
+    display: flex;
+    align-items: center;
+    gap: 12px;
+    transition: opacity 0.2s;
 }
 
-.nav li:hover{ background: rgba(255,255,255,.06); }
-.icon{ width:16px; height:16px; background:#e8fffa; border-radius:3px; opacity:.85; }
-.subhead{ margin-top: 12px; font-size:12px; opacity:.85; }
-.muted{ opacity:.65; }
-.cerrar{ margin-top: auto; }
 
-/*
-.sidebar {
-    grid-row: 1 / -1;
-    background: var(--green-900);
-    color: #e8fffa;
-    padding: 14px 12px;
+/* Ocultar texto de marca al colapsar */
+
+.sidebar.collapsed .brand span {
+    display: none;
+    opacity: 0;
+}
+
+.sidebar.collapsed .brand {
+    justify-content: center;
+    width: 100%;
+}
+
+
+/* Botón de Colapsar (Flecha) */
+
+.toggle-btn {
+    background: none;
+    border: none;
+    color: rgba(255, 255, 255, 0.6);
+    cursor: pointer;
+    font-size: 1.1rem;
+    padding: 5px;
+    transition: 0.3s;
+}
+
+.toggle-btn:hover {
+    color: white;
+}
+
+.sidebar.collapsed .toggle-btn {
+    transform: rotate(180deg);
+    margin: 0 auto;
+    position: absolute;
+    right: 50%;
+    transform: translateX(50%) rotate(180deg);
+}
+
+
+/* Navegación */
+
+.nav-links {
     display: flex;
     flex-direction: column;
-    gap: 6px;
+    gap: 4px;
+    flex: 1;
+    overflow-y: auto;
+    overflow-x: hidden;
 }
 
-.brand-aside {
-    font-weight: 700;
-    font-size: 14px;
-    letter-spacing: .3px;
-    padding: 8px 8px 12px;
+
+/* Scrollbar fina para el menú */
+
+.nav-links::-webkit-scrollbar {
+    width: 4px;
 }
 
-.nav {
-    list-style: none;
-    margin: 8px 0 0;
-    padding: 0;
+.nav-links::-webkit-scrollbar-thumb {
+    background: rgba(255, 255, 255, 0.2);
+    border-radius: 4px;
 }
 
-.nav li {
+.nav-item {
     display: flex;
     align-items: center;
-    gap: 10px;
-    padding: 8px 10px;
-    border-radius: 6px;
-}
-
-.nav li:hover {
-    background: rgba(255, 255, 255, .06);
-} */
-
-.icon {
-    width: 16px;
-    height: 16px;
-    background: #e8fffa;
-    border-radius: 3px;
-    opacity: .85;
-}
-
-.subhead {
-    margin-top: 12px;
-    font-size: 12px;
-    opacity: .85;
-}
-
-.muted {
-    opacity: .65;
-}
-
-.cerrar {
-    margin-top: auto;
-}
-
-.nav-btn {
-    background: transparent;
-    border: none;
-    width: 100%;
-    color: #e8fffa;
-    display: flex;
-    align-items: center;
-    gap: 10px;
-    padding: 8px 10px;
+    padding: 12px 14px;
+    color: rgba(255, 255, 255, 0.85);
+    text-decoration: none;
     border-radius: 6px;
     font-size: 14px;
-    cursor: pointer;
-    text-align: left;
-    transition: background 0.2s, transform 0.1s;
+    transition: all 0.2s;
 }
 
-.nav-btn:hover {
-    background: rgba(255, 255, 255, 0.15);
+.nav-item:hover {
+    background: rgba(255, 255, 255, .1);
+    color: white;
 }
 
-.nav-btn:active {
-    transform: scale(0.98);
-    background: rgba(255, 255, 255, 0.25);
+
+/* Clase Active (página actual) */
+
+.nav-item.active-page {
+    background: rgba(255, 255, 255, 0.2);
+    color: var(--white);
+    border-left: 4px solid #4ade80;
+    /* Indicador visual */
+}
+
+.nav-item i {
+    min-width: 24px;
+    text-align: center;
+    font-size: 1.1rem;
+    margin-right: 12px;
+}
+
+
+/* Ajustes al colapsar items */
+
+.sidebar.collapsed .nav-item span {
+    display: none;
+}
+
+.sidebar.collapsed .nav-item {
+    justify-content: center;
+    padding: 12px 0;
+}
+
+.sidebar.collapsed .nav-item i {
+    margin-right: 0;
+    font-size: 1.3rem;
+}
+
+.sidebar.collapsed .section-label {
+    display: none;
+}
+
+.sidebar.collapsed .separator-line {
+    display: block;
+}
+
+
+/* Separadores */
+
+.section-label {
+    font-size: 11px;
+    text-transform: uppercase;
+    color: rgba(255, 255, 255, 0.5);
+    margin: 20px 0 5px 10px;
+    font-weight: 600;
+}
+
+.separator-line {
+    display: none;
+    height: 1px;
+    background: rgba(255, 255, 255, 0.1);
+    margin: 10px 5px;
+}
+
+
+/* =========================================
+   LAYOUT PRINCIPAL (EL PANEL BLANCO)
+   ========================================= */
+
+
+/* Eliminamos el GRID antiguo porque usaba columnas fijas.
+   Ahora usamos margin-left para empujar el contenido */
+
+.shell {
+    display: block;
+    /* Ya no es grid global */
+    min-height: 100vh;
+}
+
+.panel {
+    /* Esta clase ahora envuelve tu contenido a la derecha de la sidebar */
+    margin-left: var(--sidebar-width);
+    /* Deja espacio para la sidebar abierta */
+    background: var(--panel);
+    min-height: 100vh;
+    transition: margin-left var(--transition-speed) ease;
+    display: flex;
+    flex-direction: column;
+}
+
+
+/* Cuando la sidebar se cierra, el panel se estira */
+
+.main-content.expanded,
+.panel.expanded {
+    margin-left: var(--sidebar-width-collapsed);
+}
+
+
+/* =========================================
+   CONTENIDO INTERNO (TUS TARJETAS Y GRID)
+   ========================================= */
+
+.content {
+    padding: 28px;
+    flex: 1;
+    /* Ocupa el espacio restante */
+}
+
+.grid {
+    display: grid;
+    gap: 30px;
+    grid-template-columns: repeat(auto-fit, minmax(400px, 1fr));
+    /* Responsive automático */
+    align-items: start;
+}
+
+.header {
+    height: 72px;
+    display: flex;
+    align-items: center;
+    justify-content: flex-end;
+    /* Logo o usuario a la derecha */
+    padding: 0 24px;
+    border-bottom: 1px solid #e9eceb;
+    background: var(--white);
 }
 
 .logo-img {
     height: 40px;
-    /* ajustá según necesites */
     width: auto;
     object-fit: contain;
 }
 
 
-/* Header */
-
-.header {
-    display: flex;
-    align-items: center;
-    justify-content: flex-end;
-    padding: 0 24px;
-    background: var(--panel);
-    border-bottom: 1px solid #e9eceb;
-}
-
-.logo {
-    display: flex;
-    align-items: center;
-    gap: 10px;
-    color: var(--green-700);
-}
-
-.mark {
-    width: 28px;
-    height: 28px;
-    position: relative;
-}
-
-.mark::before {
-    content: "";
-    position: absolute;
-    inset: 0;
-    clip-path: polygon(0 100%, 0 0, 100% 50%);
-    background: var(--green-700);
-}
-
-.word {
-    font-weight: 800;
-    font-size: 22px;
-    letter-spacing: .5px;
-}
-
-
-/* Contenido */
-
-.content {
-    padding: 28px 28px 20px;
-    background: var(--panel);
-    overflow-y: auto; min-height: 100%; 
-}
-
-.main-container { overflow: visible; }
-
-.grid {
-    display: grid;
-    gap: 30px;
-    grid-template-columns: 1fr 1fr;
-    align-items: start;
-}
-
-.col h3 {
-    margin: 0 0 16px 8px;
-    font-size: 13px;
-    font-weight: 600;
-    color: #444;
-}
-
-
-/* Tarjetas con marco gris */
+/* Tarjetas (Estilo preservado) */
 
 .frame {
     background: var(--frame);
     padding: 20px;
     border-radius: 2px;
-    width: min(520px, 100%);
+    width: 100%;
 }
 
 .card {
     background: #fff;
-    border-radius: 2px;
-    padding: 22px 22px 18px;
+    border-radius: 4px;
+    padding: 22px;
     position: relative;
     min-height: 150px;
-    box-shadow: 0 0 0 1px rgba(0, 0, 0, .02) inset;
+    box-shadow: 0 2px 4px rgba(0, 0, 0, 0.05);
+    border: 1px solid #eee;
 }
 
 .card h4 {
     margin: 0;
-    font-size: 12px;
+    font-size: 14px;
     font-weight: 600;
     color: #222;
 }
 
 .sub {
     margin: 6px 0 14px;
-    font-size: 11px;
+    font-size: 12px;
     color: var(--muted);
 }
 
 .line {
-    height: 2px;
-    background: var(--line);
-    width: 70%;
-    margin: 8px 0 18px;
+    height: 1px;
+    background: #eee;
+    width: 100%;
+    margin: 15px 0;
 }
 
 .amount {
     position: absolute;
     right: 18px;
     bottom: 12px;
-    font-size: 12px;
-    color: #3b3b3b;
+    font-weight: bold;
+    color: var(--green-900);
 }
 
 
-/* Footer fino */
+/* Footer */
 
 .foot {
-    color: #d7efe9;
+    color: var(--muted);
     font-size: 12px;
-    letter-spacing: .2px;
-    display: flex;
-    align-items: center;
-    justify-content: center;
-    height: 32px;
+    text-align: center;
+    padding: 10px;
+    background: #f9f9f9;
 }
 
 
-/* Responsivo */
-
-@media (max-width: 720px) {
-    .panel {
-        grid-template-columns: 1fr;
-    }
-    .sidebar {
-        grid-row: 2;
-    }
-    .grid {
-        grid-template-columns: 1fr;
-    }
-}
-
-
-/* --- Fondo del login --- */
-
-
-/* Opción A: fondo en un pseudo-elemento para que la tarjeta quede arriba */
+/* =========================================
+   LOGIN (MANTENIDO INTACTO)
+   ========================================= */
 
 .login-panel {
     position: relative;
@@ -334,6 +372,8 @@ body {
     background: var(--panel);
     display: grid;
     grid-template-rows: 72px 1fr;
+    margin-left: 0 !important;
+    /* Importante: El login no tiene sidebar */
 }
 
 .login-panel::before {
@@ -345,64 +385,43 @@ body {
     pointer-events: none;
 }
 
-
-/* Mantén tu layout del login */
-
 .login-topbar {
     position: relative;
-    /* para quedar encima del fondo */
     display: flex;
     align-items: center;
     gap: 12px;
     padding: 0 20px;
     border-bottom: 1px solid #e9eceb;
     background: transparent;
-    /* sin barra sólida */
 }
 
 .login-body {
     position: relative;
-    /* para quedar encima del fondo */
     display: grid;
     place-items: center;
     padding: 24px;
 }
-
-
-/* Tarjeta */
 
 .login-card {
     width: min(420px, 92vw);
     background: rgba(60, 60, 60, .76);
     color: #fff;
     border-radius: 6px;
-    padding: 22px 22px 18px;
+    padding: 22px;
     box-shadow: 0 12px 30px rgba(0, 0, 0, .18);
     backdrop-filter: blur(2px);
 }
 
-
-/* Inputs y botón (si no los tenías ya) */
-
-.form-row {
-    margin: 12px 0;
-}
-
-.form-label {
-    display: block;
-    font-size: 12px;
-    margin: 0 0 6px;
-}
-
 .form-input {
     width: 100%;
-    height: 38px;
+    height: 40px;
     border-radius: 4px;
     padding: 8px 10px;
     border: 1px solid rgba(255, 255, 255, .22);
     background: rgba(255, 255, 255, .92);
     color: #111;
     outline: none;
+    margin-bottom: 10px;
 }
 
 .form-input:focus {
@@ -412,7 +431,7 @@ body {
 
 .btn-primary {
     width: 100%;
-    height: 38px;
+    height: 40px;
     border: 0;
     border-radius: 4px;
     cursor: pointer;
@@ -420,10 +439,11 @@ body {
     color: #fff;
     font-weight: 600;
     transition: transform .03s ease, filter .2s ease;
+    margin-top: 10px;
 }
 
 .btn-primary:hover {
-    filter: brightness(1.05);
+    filter: brightness(1.1);
 }
 
 .btn-primary:active {
@@ -433,8 +453,7 @@ body {
 .login-actions {
     display: flex;
     justify-content: space-between;
-    gap: 10px;
-    margin-top: 10px;
+    margin-top: 15px;
     font-size: 12px;
 }
 
@@ -444,15 +463,51 @@ body {
     border-bottom: 1px dashed rgba(230, 255, 246, .35);
 }
 
-.link:hover {
-    border-bottom-color: currentColor;
+
+/* =========================================
+   RESPONSIVO (MÓVIL)
+   ========================================= */
+
+.mobile-menu-btn {
+    display: none;
+    position: fixed;
+    top: 15px;
+    left: 15px;
+    z-index: 2000;
+    background: var(--green-900);
+    color: white;
+    border: none;
+    padding: 10px;
+    border-radius: 8px;
+    box-shadow: 0 4px 10px rgba(0, 0, 0, 0.2);
+    cursor: pointer;
 }
 
-.helper {
-    font-size: 12px;
-    color: #e8fffa;
-    opacity: .85;
-    text-align: center;
-    margin-top: 10px;
+@media (max-width: 768px) {
+    .sidebar {
+        transform: translateX(-100%);
+        width: var(--sidebar-width);
+    }
+    /* Ocultar sidebar */
+    .sidebar.active {
+        transform: translateX(0);
+    }
+    /* Mostrar sidebar */
+    .panel {
+        margin-left: 0;
+        width: 100%;
+    }
+    /* Panel ocupa todo */
+    .toggle-btn {
+        display: none;
+    }
+    /* Ocultar flecha de colapsar en móvil */
+    .mobile-menu-btn {
+        display: block;
+    }
+    /* Mostrar botón hamburguesa */
+    .header {
+        justify-content: center;
+    }
+    /* Centrar logo en móvil */
 }
-

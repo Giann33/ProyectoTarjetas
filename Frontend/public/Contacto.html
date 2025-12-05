@@ -1,48 +1,302 @@
 <!DOCTYPE html>
 <html lang="es">
+
 <head>
-  <meta charset="UTF-8">
-  <meta name="viewport" content="width=device-width, initial-scale=1.0">
-  <title>Contáctenos - DUNAMYS</title>
-  <link rel="stylesheet" href="./CSS/styles_Contacto.css">
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Dunamys – Contáctenos</title>
+
+    <link rel="stylesheet" href="CSS/Base.css">
+    <link rel="stylesheet" href="./CSS/styles_Contacto.css">
+
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.0/css/all.min.css">
+
+    <script src="./JS/Contacto.js" defer></script>
+    <script src="JS/Logout.js" defer></script>
+
+    <style>
+        /* 1. Reset de fondo a blanco (Sobrescribe cualquier fondo de Base.css o styles_Contacto.css) */
+        
+        body {
+            overflow-x: hidden;
+            display: flex;
+            min-height: 100vh;
+            /* Asegura un fondo blanco puro, eliminando el fondo de Base.css */
+            background-color: #ffffff !important;
+            background-image: none !important;
+        }
+        /* 2. Reglas base para la integración de la sidebar */
+        
+        .panel {
+            width: auto !important;
+            display: flex !important;
+            flex-direction: column;
+            position: relative;
+            z-index: 1;
+            margin-left: var(--sidebar-width);
+            transition: margin-left var(--transition-speed) ease;
+        }
+        /* 3. Ajuste para que el contenido se centre y respete el margen */
+        
+        main.content {
+            padding: 20px;
+            flex-grow: 1;
+        }
+        
+        .container {
+            max-width: 1000px;
+            /* Reducido para mejor visualización del contenido */
+            margin: 0 auto;
+            width: 100%;
+            padding: 20px 0;
+        }
+        /* 4. Estilos de la cuadrícula de contacto (Formulario y Mapa) */
+        
+        .contact-grid {
+            display: grid;
+            grid-template-columns: 1fr 1fr;
+            gap: 25px;
+            margin-top: 20px;
+        }
+        
+        .form-box,
+        .map-box {
+            background: #ffffff;
+            padding: 30px;
+            border-radius: 8px;
+            box-shadow: 0 4px 10px rgba(0, 0, 0, 0.05);
+        }
+        
+        .form-box h2,
+        .map-box h2 {
+            font-size: 1.5rem;
+            margin-top: 0;
+            margin-bottom: 20px;
+            color: var(--ink);
+        }
+        /* Estilos de formulario (asumiendo estilos básicos en styles_Contacto.css) */
+        
+        .form-box label {
+            display: block;
+            margin-top: 15px;
+            margin-bottom: 5px;
+            font-weight: 600;
+            font-size: 0.9rem;
+        }
+        
+        .form-box input[type="text"],
+        .form-box textarea {
+            width: 100%;
+            padding: 10px;
+            border: 1px solid #ddd;
+            border-radius: 4px;
+            box-sizing: border-box;
+        }
+        
+        .form-box textarea {
+            resize: vertical;
+            min-height: 100px;
+        }
+        
+        .btn-enviar {
+            width: 100%;
+            padding: 12px;
+            background-color: var(--green-900);
+            color: white;
+            border: none;
+            border-radius: 4px;
+            margin-top: 25px;
+            cursor: pointer;
+            font-size: 1rem;
+            transition: background-color 0.2s;
+        }
+        
+        .btn-enviar:hover {
+            background-color: var(--green-700);
+        }
+        /* Responsive */
+        
+        @media (max-width: 900px) {
+            .contact-grid {
+                grid-template-columns: 1fr;
+            }
+        }
+        
+        @media (max-width: 768px) {
+            .panel {
+                margin-left: 0;
+            }
+        }
+    </style>
 </head>
+
 <body>
-  <div class="container">
-   
-    <main>
-      <div class="form-box">
-        <h2>Contáctenos</h2>
-        <form>
-          <label for="nombre">Nombre</label>
-          <input type="text" id="nombre" placeholder="Nombre">
 
-          <label for="telefono">Teléfono</label>
-          <input type="text" id="telefono" placeholder="Teléfono">
+    <button class="mobile-menu-btn" onclick="toggleMobileMenu()">
+        <i class="fas fa-bars"></i>
+    </button>
 
-          <label for="asunto">Asunto</label>
-          <input type="text" id="asunto" placeholder="Asunto">
+    <aside class="sidebar" id="sidebar">
+        <div class="sidebar-header">
+            <a href="Inicio_Dunamys.html" class="brand">
+                <i class="fas fa-layer-group"></i> <span>DUNAMYS</span>
+            </a>
+            <button class="toggle-btn" id="toggleBtn" onclick="toggleSidebar()">
+                <i class="fas fa-chevron-left"></i>
+            </button>
+        </div>
 
-          <label for="mensaje">Mensaje</label>
-          <textarea id="mensaje" placeholder="Mensaje"></textarea>
+        <nav class="nav-links">
+            <a href="Inicio_Dunamys.html" class="nav-item">
+                <i class="fas fa-home"></i> <span>Inicio</span>
+            </a>
 
-          <button type="submit" class="btn-enviar">Enviar</button>
-        </form>
-      </div>
+            <a href="Consultas.html" class="nav-item">
+                <i class="fas fa-search"></i> <span>Consultas</span>
+            </a>
 
-      <div class="map-box">
-        <!-- Mapa insertado con iframe -->
-        <iframe 
-          src="https://www.google.com/maps/embed?pb=!1m18!1m12!1m3!1d62935.769922413846!2d-84.1541366!3d9.9355437!2m3!1f0!2f0!3f0!3m2!1i1024!2i768!4f13.1!3m3!1m2!1s0x8fa0e356a6b6b3d1%3A0x4b4b7f3c1778d2db!2sSan%20Jos%C3%A9%2C%20Costa%20Rica!5e0!3m2!1ses!2scr!4v1699653532000!5m2!1ses!2scr" 
-          width="400" 
-          height="300" 
-          style="border:0;" 
-          allowfullscreen="" 
-          loading="lazy" 
-          referrerpolicy="no-referrer-when-downgrade">
-        </iframe>
-      </div>
-    </main>
-  </div>
-  <script src="./JS/Contacto.js"></script>
+            <a href="Mantenimientos.html" class="nav-item">
+                <i class="fas fa-user-edit"></i> <span>Mantenimientos</span>
+            </a>
+
+            <a href="Reportes.html" class="nav-item">
+                <i class="fas fa-file-invoice"></i> <span>Reportes</span>
+            </a>
+
+            <a href="Reversos.html" class="nav-item">
+                <i class="fas fa-exchange-alt"></i> <span>Reversos y Devoluciones</span>
+            </a>
+
+            <a href="Autorizar.html" class="nav-item">
+                <i class="fas fa-check-circle"></i> <span>Autorizar Transacciones</span>
+            </a>
+
+            <a href="Conciliar.html" class="nav-item">
+                <i class="fas fa-users"></i> <span>Conciliación</span>
+            </a>
+
+            <a href="Notificaciones.html" class="nav-item">
+                <i class="fas fa-envelope"></i> <span>Notificaciones</span>
+            </a>
+
+            <div class="separator-line"></div>
+            <div class="section-label">Configuración</div>
+
+            <a href="Ayuda.html" class="nav-item">
+                <i class="fas fa-question-circle"></i> <span>Ayuda</span>
+            </a>
+
+            <a href="Contactenos.html" class="nav-item active-page">
+                <i class="fas fa-envelope-open-text"></i> <span>Contáctenos</span>
+            </a>
+
+            <div style="margin-top: auto;">
+                <div class="separator-line"></div>
+                <a href="Login.html" class="nav-item" id="btn-logout">
+                    <i class="fas fa-sign-out-alt"></i> <span>Cerrar Sesión</span>
+                </a>
+            </div>
+        </nav>
+    </aside>
+
+    <div class="panel" id="mainContent">
+
+        <header class="header">
+            <div class="logo">
+                <img src="IMG/Dunamys_Logo.png" alt="Logo Dunamys" class="logo-img">
+            </div>
+        </header>
+
+        <main class="content">
+            <div class="container">
+                <h1>Contáctenos y Ubicación</h1>
+                <p style="color: var(--muted); margin-bottom: 25px;">
+                    Envíenos un mensaje o visítenos en nuestra oficina principal.
+                </p>
+
+                <div class="contact-grid">
+                    <div class="form-box">
+                        <h2>Envía un Mensaje</h2>
+                        <form>
+                            <label for="nombre">Nombre</label>
+                            <input type="text" id="nombre" placeholder="Tu nombre completo">
+
+                            <label for="telefono">Teléfono</label>
+                            <input type="text" id="telefono" placeholder="Ej. 8888-8888">
+
+                            <label for="asunto">Asunto</label>
+                            <input type="text" id="asunto" placeholder="Motivo del contacto">
+
+                            <label for="mensaje">Mensaje</label>
+                            <textarea id="mensaje" placeholder="Escribe tu mensaje aquí..."></textarea>
+
+                            <button type="submit" class="btn-enviar">Enviar Mensaje</button>
+                        </form>
+                    </div>
+
+                    <div class="map-box">
+                        <h2>Nuestra Ubicación</h2>
+                        <p style="margin-bottom: 15px; font-size: 0.95rem;">
+                            Dirección: Sabana Norte, Edificio Dunamys. San José, Costa Rica.
+                        </p>
+                        <iframe src="https://www.google.com/maps/embed?pb=!1m18!1m12!1m3!1d3929.839848773956!2d-84.07548988450702!3d9.931215284534728!2m3!1f0!2f0!3f0!3m2!1i1024!2i768!4f13.1!3m3!1m2!1s0x8fa0e3b97b10280f%3A0x6d1b7a2e5d7f7e9a!2sSan%20Jos%C3%A9%2C%20Costa%20Rica!5e0!3m2!1ses!2scr!4v1677840000000!5m2!1ses!2scr"
+                            width="100%" height="350" style="border:0; border-radius: 6px;" allowfullscreen="" loading="lazy" referrerpolicy="no-referrer-when-downgrade">
+                        </iframe>
+                    </div>
+                </div>
+            </div>
+        </main>
+
+        <footer class="foot">Dunamys</footer>
+    </div>
+
+    <script>
+        // 1. LOGICA DEL MENU
+        const sidebar = document.getElementById('sidebar');
+        const mainContent = document.getElementById('mainContent');
+        const toggleBtnIcon = document.querySelector('#toggleBtn i');
+
+        function toggleSidebar() {
+            sidebar.classList.toggle('collapsed');
+            if (mainContent) {
+                mainContent.classList.toggle('expanded');
+            }
+
+            if (sidebar.classList.contains('collapsed')) {
+                toggleBtnIcon.classList.remove('fa-chevron-left');
+                toggleBtnIcon.classList.add('fa-chevron-right');
+            } else {
+                toggleBtnIcon.classList.remove('fa-chevron-right');
+                toggleBtnIcon.classList.add('fa-chevron-left');
+            }
+        }
+
+        function toggleMobileMenu() {
+            sidebar.classList.toggle('active');
+        }
+
+        document.addEventListener('click', (e) => {
+            const mobileBtn = document.querySelector('.mobile-menu-btn');
+            if (window.innerWidth <= 768 && sidebar.classList.contains('active')) {
+                if (!sidebar.contains(e.target) && !mobileBtn.contains(e.target)) {
+                    sidebar.classList.remove('active');
+                }
+            }
+        });
+
+        // 2. DETECCIÓN AUTOMÁTICA DE PÁGINA
+        document.addEventListener("DOMContentLoaded", function() {
+            const currentLocation = window.location.pathname;
+            const navLinks = document.querySelectorAll('.nav-item');
+
+            navLinks.forEach(link => {
+                if (link.getAttribute('href') !== "#" && currentLocation.includes(link.getAttribute('href'))) {
+                    link.classList.add('active-page');
+                }
+            });
+        });
+    </script>
+    <script src="./JS/Contacto.js"></script>
 </body>
+
 </html>
