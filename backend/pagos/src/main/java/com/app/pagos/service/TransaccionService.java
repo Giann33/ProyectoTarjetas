@@ -10,6 +10,7 @@ import org.springframework.transaction.annotation.Transactional;
 
 import com.app.pagos.dto.TransaccionRequest;
 import com.app.pagos.dto.TransaccionViewConsulta;
+import com.app.pagos.dto.TransaccionViewConsultar;
 import com.app.pagos.entity.Cuenta;
 import com.app.pagos.entity.EstadoTransaccion;
 import com.app.pagos.entity.MetodoPago;
@@ -111,7 +112,7 @@ public class TransaccionService {
                 pagoRepository.save(nuevoPago);
         }
 
-        public List<TransaccionViewConsulta> consultarTransacciones(Integer idUsuario) {
+        public List<TransaccionViewConsultar> consultarTransacciones(Integer idUsuario) {
 
                 // 1) Buscar usuario y su rol
                 var usuario = usuarioRepository.findById(idUsuario)
@@ -129,12 +130,12 @@ public class TransaccionService {
                 }
 
                 // 3) Armar DTO con transacción + pago
-                List<TransaccionViewConsulta> resultado = new ArrayList<>();
+                List<TransaccionViewConsultar> resultado = new ArrayList<>();
 
                 for (Transaccion t : lista) {
                         var pagoOpt = pagoRepository.findByTransaccion_IdTransaccion(t.getIdTransaccion());
                         var pago = pagoOpt.orElse(null);
-                        resultado.add(TransaccionViewConsulta.from(t, pago));
+                        resultado.add(TransaccionViewConsultar.from(t, pago));
                 }
 
                 return resultado;

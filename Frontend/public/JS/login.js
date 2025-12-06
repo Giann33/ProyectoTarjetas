@@ -1,131 +1,131 @@
 // Frontend/public/JS/login.js
 
 document.addEventListener("DOMContentLoaded", () => {
-    const baseUrl = "http://localhost:8081";
-    const form = document.getElementById("loginForm");
+  const baseUrl = "http://localhost:8081";
+  const form = document.getElementById("loginForm");
 
-    // Helper numérico
-    const N = (v) => {
-        const n = Number(v);
-        return Number.isFinite(n) ? n : null;
-    };
+  // Helper numérico
+  const N = (v) => {
+    const n = Number(v);
+    return Number.isFinite(n) ? n : null;
+  };
 
-    form ? .addEventListener("submit", async(e) => {
-        e.preventDefault();
+  form?.addEventListener("submit", async (e) => {
+    e.preventDefault();
 
-        // Ajusta los ids de tus inputs:
-        const userInput = document.getElementById("correo") ||
-            document.getElementById("email") ||
-            document.getElementById("usuario") ||
-            document.getElementById("username");
+    // Ajusta los ids de tus inputs:
+    const userInput = document.getElementById("correo") ||
+                      document.getElementById("email") ||
+                      document.getElementById("usuario") ||
+                      document.getElementById("username");
 
-        const passInput = document.getElementById("password") ||
-            document.getElementById("contrasena");
+    const passInput = document.getElementById("password") ||
+                      document.getElementById("contrasena");
 
-        const userValue = (userInput ? .value || "").trim();
-        const passValue = (passInput ? .value || "").trim();
+    const userValue = (userInput?.value || "").trim();
+    const passValue = (passInput?.value || "").trim();
 
-        if (!userValue || !passValue) {
-            alert("Completa usuario y contraseña.");
-            return;
-        }
+    if (!userValue || !passValue) {
+      alert("Completa usuario y contraseña.");
+      return;
+    }
 
-        // Construimos el payload aceptando email o username
-        const payload = { password: passValue };
-        if (userValue.includes("@")) {
-            payload.email = userValue;
-            payload.correo = userValue;
-        } else {
-            payload.username = userValue;
-            payload.usuario = userValue;
-        }
+    // Construimos el payload aceptando email o username
+    const payload = { password: passValue };
+    if (userValue.includes("@")) {
+      payload.email = userValue;
+      payload.correo = userValue;
+    } else {
+      payload.username = userValue;
+      payload.usuario  = userValue;
+    }
 
-        try {
-            const resp = await fetch(`${baseUrl}/auth/login`, {
-                method: "POST",
-                headers: {
-                    "Content-Type": "application/json",
-                    "Accept": "application/json",
-                },
-                body: JSON.stringify(payload),
-            });
+    try {
+      const resp = await fetch(`${baseUrl}/auth/login`, {
+        method: "POST",
+        headers: {
+          "Content-Type": "application/json",
+          "Accept": "application/json",
+        },
+        body: JSON.stringify(payload),
+      });
 
-            if (!resp.ok) {
-                const tx = await resp.text().catch(() => "");
-                console.warn("Login fallido:", resp.status, tx);
-                alert("Usuario o contraseña incorrectos.");
-                return;
-            }
+      if (!resp.ok) {
+        const tx = await resp.text().catch(() => "");
+        console.warn("Login fallido:", resp.status, tx);
+        alert("Usuario o contraseña incorrectos.");
+        return;
+      }
 
-            const data = await resp.json();
-            console.log("Respuesta login:", data); // 👈 útil para ver cómo viene el rol
+      const data = await resp.json();
+      console.log("Respuesta login:", data); // 👈 útil para ver cómo viene el rol
 
-            // =========================
-            // Normalizar campos
-            // =========================
+      // =========================
+      // Normalizar campos
+      // =========================
 
-            const token =
-                data.token ? ?
-                data.accessToken ? ?
-                data.jwt ? ?
-                data.id_token ? ?
-                null;
+      const token =
+        data.token ??
+        data.accessToken ??
+        data.jwt ??
+        data.id_token ??
+        null;
 
-            const idUsuario = N(
-                data.idUsuario ? ?
-                data.idCliente ? ?
-                data.usuarioId ? ?
-                data.userId ? ?
-                data.usuario ? .idUsuario ? ?
-                data.usuario ? .idCliente
-            );
+      const idUsuario = N(
+        data.idUsuario ??
+        data.idCliente ??
+        data.usuarioId ??
+        data.userId ??
+        data.usuario?.idUsuario ??
+        data.usuario?.idCliente
+      );
 
-            const personaId = N(
-                data.personaId ? ?
-                data.persona ? .idPersona ? ?
-                data.profile ? .personaId
-            );
+      const personaId = N(
+        data.personaId ??
+        data.persona?.idPersona ??
+        data.profile?.personaId
+      );
 
-            // 👇 AQUÍ OBTENEMOS EL ROL
-            const idRol = N(
-                data.idRol ? ? // caso más probable
-                data.rol ? ? // si el backend lo llama "rol"
-                data.idTipoUsuario ? ? // típico con catálogos de tipo usuario
-                data.tipoUsuarioId ? ? // otra variante
-                data.tipoUsuario ? .idTipoUsuario ? ?
-                data.usuario ? .idRol // si viene anidado en "usuario"
-            );
+      // 👇 AQUÍ OBTENEMOS EL ROL
+      const idRol = N(
+        data.idRol ??                 // caso más probable
+        data.rol ??                   // si el backend lo llama "rol"
+        data.idTipoUsuario ??         // típico con catálogos de tipo usuario
+        data.tipoUsuarioId ??         // otra variante
+        data.tipoUsuario?.idTipoUsuario ??
+        data.usuario?.idRol           // si viene anidado en "usuario"
+      );
 
-            // =========================
-            // Guardar sesión
-            // =========================
+      // =========================
+      // Guardar sesión
+      // =========================
 
-            const userObj = {
-                idUsuario,
-                personaId,
-                idRol, // 👈 ahora también guardamos el rol
-                token,
-            };
+      const userObj = {
+        idUsuario,
+        personaId,
+        idRol,   // 👈 ahora también guardamos el rol
+        token,
+      };
 
-            localStorage.setItem("user", JSON.stringify(userObj));
+      localStorage.setItem("user", JSON.stringify(userObj));
 
-            // Limpia posibles claves viejas
-            localStorage.removeItem("userId");
+      // Limpia posibles claves viejas
+      localStorage.removeItem("userId");
 
-            console.log("Sesión guardada:", {
-                idUsuario,
-                personaId,
-                idRol,
-                token: !!token,
-            });
+      console.log("Sesión guardada:", {
+        idUsuario,
+        personaId,
+        idRol,
+        token: !!token,
+      });
 
-            // Redirige donde corresponda
-            window.location.href = "Mantenimientos.html";
-        } catch (err) {
-            console.error("Error en login:", err);
-            alert("No se pudo conectar con el servidor.");
-        }
-    });
+      // Redirige donde corresponda
+      window.location.href = "Mantenimientos.html";
+    } catch (err) {
+      console.error("Error en login:", err);
+      alert("No se pudo conectar con el servidor.");
+    }
+  });
 });
 /*
 document.addEventListener('DOMContentLoaded', () => {
