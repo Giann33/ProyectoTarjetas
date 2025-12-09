@@ -225,14 +225,12 @@ public ResponseEntity<?> crearReverso(@PathVariable Integer idTransaccion) {
         // -----------------------------------------
         // 9) Registrar en Bitácora
         // -----------------------------------------
-        Usuario usuario = cuenta.getUsuario(); // asumiendo que Cuenta tiene getUsuario()
+        Usuario usuario = cuenta.getUsuario(); 
 
         Bitacora bitacora = new Bitacora();
         bitacora.setModulo("Reversos");
         bitacora.setAccion(
-                "Se reversó la transacción #" + idTransaccion +
-                " por " + montoOriginal + " (moneda pago: " + idMonedaPago +
-                ") y se devolvió " + montoADevolver + " (moneda cuenta: " + idMonedaCuenta + ")."
+                "Se reversó la transacción #" + idTransaccion
         );
         bitacora.setFecha(LocalDateTime.now());
         bitacora.setReporteTransaccion(reporte);
