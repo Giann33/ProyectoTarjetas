@@ -65,6 +65,7 @@ public class AuthService {
     // Datos automáticos
     persona.setFechaCreacion(LocalDateTime.now());
     persona.setFechaModificacion(LocalDateTime.now());
+    persona.setActivo(true); 
 
     // Guardamos Persona
     persona = personaRepository.save(persona);

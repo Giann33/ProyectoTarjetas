@@ -31,7 +31,8 @@ document.addEventListener("DOMContentLoaded", function() {
                 correo: correo,
                 contrasena: password,
                 genero: parseInt(genero),
-                idRol: 2
+                idRol: 2,
+                activo: 1
             };
 
             try {
