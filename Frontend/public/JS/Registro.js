@@ -1,39 +1,62 @@
-// --- registro.js ---
-// Este script valida el formulario de registro y simula el envío de datos al servidor.
+document.addEventListener("DOMContentLoaded", function() {
+    var baseUrl = "http://localhost:8081";
+    var form = document.getElementById("registroForm");
 
-document.addEventListener("DOMContentLoaded", () => {
-  const form = document.querySelector("form");
+    // Usamos un IF simple para evitar errores de sintaxis
+    if (form) {
+        form.addEventListener("submit", async function(e) {
+            e.preventDefault();
 
-  form.addEventListener("submit", (e) => {
-    e.preventDefault();
+            var elNombre = document.getElementById("nombre");
+            var elApellidos = document.getElementById("apellidos");
+            var elCorreo = document.getElementById("correo");
+            var elPass = document.getElementById("password");
+            var elGenero = document.getElementById("genero");
 
-    const iban = document.getElementById("iban").value.trim();
-    const nombre = document.getElementById("nombre").value.trim();
-    const apellidos = document.getElementById("apellidos").value.trim();
-    const correo = document.getElementById("correo").value.trim();
+            // Obtener valores de forma segura
+            var nombre = elNombre ? elNombre.value.trim() : "";
+            var apellidos = elApellidos ? elApellidos.value.trim() : "";
+            var correo = elCorreo ? elCorreo.value.trim() : "";
+            var password = elPass ? elPass.value.trim() : "";
+            var genero = elGenero ? elGenero.value : "";
 
-    // Validaciones básicas
-    if (!iban || !nombre || !apellidos || !correo) {
-      alert("Por favor, complete todos los campos.");
-      return;
+            if (!nombre || !correo || !password || !apellidos) {
+                alert("Por favor completa todos los campos.");
+                return;
+            }
+
+            var nuevoUsuario = {
+                nombre: nombre,
+                apellidos: apellidos,
+                correo: correo,
+                contrasena: password,
+                genero: parseInt(genero),
+                idRol: 2
+            };
+
+            try {
+                var response = await fetch(baseUrl + "/auth/register", {
+                    method: "POST",
+                    headers: {
+                        "Content-Type": "application/json",
+                        "Accept": "application/json"
+                    },
+                    body: JSON.stringify(nuevoUsuario)
+                });
+
+                if (response.ok) {
+                    alert("¡Registro exitoso! Ahora puedes iniciar sesión.");
+                    window.location.href = "index.html";
+                } else {
+                    var errorText = await response.text();
+                    console.warn("Error registro:", errorText);
+                    alert("Error al registrar: " + errorText);
+                }
+
+            } catch (error) {
+                console.error("Error de conexión:", error);
+                alert("No se pudo conectar con el servidor.");
+            }
+        });
     }
-
-    if (!/^[A-Z]{2}\d{2}/.test(iban)) {
-      alert("El IBAN debe comenzar con dos letras seguidas de números. Ejemplo: CR05...");
-      return;
-    }
-
-    if (!/\S+@\S+\.\S+/.test(correo)) {
-      alert("Por favor, ingrese un correo electrónico válido.");
-      return;
-    }
-
-    // Datos simulados que se enviarían al backend
-    const data = { iban, nombre, apellidos, correo };
-    console.log("Datos enviados al servidor:", data);
-
-    // Simulación de envío exitoso
-    alert("¡Registro exitoso!");
-    form.reset();
-  });
 });
