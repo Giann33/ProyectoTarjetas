@@ -55,27 +55,67 @@
   }
 
   function exportar(){
-    var filas = Array.from(document.querySelectorAll('#grid tr')).map(function(tr){
-      return Array.from(tr.children).map(function(td){ return td.textContent; });
+    // Tomamos las filas que ya están renderizadas en el tbody
+    var trs = document.querySelectorAll('#grid tr');
+    if (!trs.length) {
+      alert('No hay datos para exportar.');
+      return;
+    }
+
+    // Encabezados tal como están en el HTML
+    var headers = [
+      'ID Transacción',
+      'Servicio',
+      'Comercio',
+      'Monto',
+      'Fecha',
+      'Motivo'
+    ];
+
+    // Construimos un HTML de tabla para que Excel lo interprete como libro
+    var html = '<html><head><meta charset="UTF-8"></head><body>';
+    html += '<table border="1"><thead><tr>';
+
+    headers.forEach(function(h){
+      html += '<th>' + h + '</th>';
     });
 
-    var encabezado = ['ID Transacción','Servicio','Comercio','Monto','Fecha','Motivo'];
+    html += '</tr></thead><tbody>';
 
-    var csv = [encabezado].concat(filas)
-      .map(function(row){
-        return row.map(function(c){
-          c = String(c).replace(/"/g,'""');
-          return '"' + c + '"';
-        }).join(',');
-      })
-      .join('\n');
+    // Recorremos cada fila de la tabla visible
+    trs.forEach(function(tr){
+      html += '<tr>';
+      Array.from(tr.children).forEach(function(td){
+        var texto = td.textContent.replace(/\s+/g, ' ').trim();
 
-    var blob = new Blob([csv], {type:'text/csv;charset=utf-8;'});
+        // Escapar caracteres especiales básicos
+        texto = texto
+          .replace(/&/g, '&amp;')
+          .replace(/</g, '&lt;')
+          .replace(/>/g, '&gt;');
+
+        html += '<td>' + texto + '</td>';
+      });
+      html += '</tr>';
+    });
+
+    html += '</tbody></table></body></html>';
+
+    // Creamos el blob como "Excel"
+    var blob = new Blob([html], {
+      type: 'application/vnd.ms-excel;charset=utf-8;'
+    });
+
     var url = URL.createObjectURL(blob);
     var a = document.createElement('a');
+    var hoy = new Date().toISOString().slice(0,10);
+
     a.href = url;
-    a.download = 'ReporteDuplicadas.csv';
+    a.download = 'ReporteOperacionesDuplicadas_' + hoy + '.xls';
+    document.body.appendChild(a);
     a.click();
+    document.body.removeChild(a);
+    URL.revokeObjectURL(url);
   }
 
   function init(){
